@@ -14,20 +14,18 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import phucdvfx12504.swp490x_backend.constant.ERole;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private static final AntPathRequestMatcher[] WHITE_LIST_URLS = {
-            new AntPathRequestMatcher("/"),
-            new AntPathRequestMatcher("/home"),
-            new AntPathRequestMatcher("/h2-console/**"),
-    };
+    private AntPathRequestMatcher h2ConsoleUrl = new AntPathRequestMatcher("/h2-console/**");
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/h2-console/**");
-    }
+    // @Bean
+    // public WebSecurityCustomizer webSecurityCustomizer() {
+    // return (web) -> web.ignoring().requestMatchers("/**");
+    // }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -36,9 +34,16 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeHttpRequests().requestMatchers(WHITE_LIST_URLS).permitAll().anyRequest().authenticated();
         http
+                .cors().disable()
+                .csrf().disable()
+                .headers().frameOptions().disable();
+        http
+                .authorizeHttpRequests(
+                        requests -> requests
+                                .requestMatchers(h2ConsoleUrl).permitAll()
+                                .requestMatchers("/", "/home").permitAll()
+                                .anyRequest().authenticated())
                 .formLogin(form -> form.permitAll())
                 .logout(logout -> logout.permitAll());
         return http.build();
@@ -46,7 +51,8 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService detailsService() {
-        UserDetails user = User.withUsername("user").password(passwordEncoder().encode("123")).roles("USER").build();
+        UserDetails user = User.withUsername("admin").password(passwordEncoder().encode("123"))
+                .roles(ERole.ADMIN.toString()).build();
         return new InMemoryUserDetailsManager(user);
     }
 
