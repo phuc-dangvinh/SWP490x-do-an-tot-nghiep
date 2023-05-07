@@ -10,16 +10,25 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
-import phucdvfx12504.swp490x_backend.constant.ERole;
+import lombok.Getter;
+import lombok.Setter;
+import phucdvfx12504.swp490x_backend.constant.ERoleName;
 
 @Entity
+@Getter
+@Setter
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private ERole role;
+    private ERoleName name;
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
+
+    public Role(ERoleName name) {
+        this.name = name;
+    }
+
 }
