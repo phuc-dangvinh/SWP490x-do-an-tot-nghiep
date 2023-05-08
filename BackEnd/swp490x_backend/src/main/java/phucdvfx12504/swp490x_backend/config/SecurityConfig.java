@@ -4,16 +4,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import phucdvfx12504.swp490x_backend.constant.ERoleName;
 
 @Configuration
 @EnableWebSecurity
@@ -33,9 +27,10 @@ public class SecurityConfig {
 
     // @Bean
     // public UserDetailsService detailsService() {
-    //     UserDetails user = User.withUsername("admin").password(passwordEncoder().encode("123"))
-    //             .roles(ERoleName.ADMIN.toString()).build();
-    //     return new InMemoryUserDetailsManager(user);
+    // UserDetails user =
+    // User.withUsername("admin").password(passwordEncoder().encode("123"))
+    // .roles(ERoleName.ADMIN.toString()).build();
+    // return new InMemoryUserDetailsManager(user);
     // }
 
     @Bean
@@ -49,6 +44,7 @@ public class SecurityConfig {
                                 .requestMatchers(h2ConsoleUrl).permitAll()
                                 .requestMatchers("/api/user/register").permitAll()
                                 .anyRequest().authenticated())
+                // .anyRequest().permitAll())
                 .formLogin(form -> form.permitAll())
                 .logout(logout -> logout.permitAll()).build();
     }

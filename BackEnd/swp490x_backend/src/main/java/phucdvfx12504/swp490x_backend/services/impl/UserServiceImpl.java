@@ -29,8 +29,8 @@ public class UserServiceImpl implements UserService {
     public User register(User user) {
         if (!userRepository.existsByUsername(user.getUsername())) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            // Optional<Role> userRole = roleRepository.findByName(ERoleName.USER);
-            // user.setRoles(Set.of(userRole.isPresent() ? userRole.get() : null));
+            Optional<Role> userRole = roleRepository.findByName(ERoleName.USER);
+            user.setRoles(Set.of(userRole.isPresent() ? userRole.get() : null));
             return userRepository.save(user);
         } else {
             return null;
