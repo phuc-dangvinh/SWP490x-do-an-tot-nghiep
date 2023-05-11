@@ -11,6 +11,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import lombok.RequiredArgsConstructor;
+import phucdvfx12504.swp490x_backend.constant.ERoleName;
 
 @Configuration
 @EnableWebSecurity
@@ -25,12 +26,16 @@ public class SecurityConfig {
                         "/api/auth/register/**",
                         "/api/auth/authenticate/**",
         };
+        private final String[] ADMIN_ROLE_URL = {
+                        "/api/user/manager/**"
+        };
+        private final String[] USER_ROLE_URL = {
+        };
 
         // @Bean
         // public WebSecurityCustomizer webSecurityCustomizer() {
         // return (web) -> web.ignoring().requestMatchers("/**");
         // }
-
 
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -42,6 +47,11 @@ public class SecurityConfig {
                                                 requests -> requests
                                                                 .requestMatchers(H2_DATABASE_URL).permitAll()
                                                                 .requestMatchers(WHITE_LIST_URL).permitAll()
+                                                                .requestMatchers(ADMIN_ROLE_URL)
+                                                                .hasAuthority(ERoleName.ADMIN.toString())
+                                                                .requestMatchers(USER_ROLE_URL)
+                                                                .hasAnyAuthority(ERoleName.USER.toString(),
+                                                                                ERoleName.ADMIN.toString())
                                                                 .anyRequest().authenticated())
                                 // .anyRequest().permitAll())
                                 .sessionManagement(session -> session
@@ -49,7 +59,8 @@ public class SecurityConfig {
                                 .authenticationProvider(authenticationProvider)
                                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                                 .formLogin(form -> form.permitAll())
-                                .logout(logout -> logout.permitAll()).build();
+                                .logout(logout -> logout.permitAll())
+                                .build();
         }
 
 }
