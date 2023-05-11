@@ -17,49 +17,39 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private AntPathRequestMatcher h2ConsoleUrl = new AntPathRequestMatcher("/h2-console/**");
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final AuthenticationProvider authenticationProvider;
+        private final JwtAuthenticationFilter jwtAuthenticationFilter;
+        private final AuthenticationProvider authenticationProvider;
+        private final AntPathRequestMatcher H2_DATABASE_URL = new AntPathRequestMatcher("/h2-console/**");
+        private final String[] WHITE_LIST_URL = {
+                        "/api/user/register",
+                        "/api/auth/register/**",
+                        "/api/auth/authenticate/**",
+        };
 
-    // @Bean
-    // public WebSecurityCustomizer webSecurityCustomizer() {
-    // return (web) -> web.ignoring().requestMatchers("/**");
-    // }
+        // @Bean
+        // public WebSecurityCustomizer webSecurityCustomizer() {
+        // return (web) -> web.ignoring().requestMatchers("/**");
+        // }
 
-    // @Bean
-    // public PasswordEncoder passwordEncoder() {
-    // return new BCryptPasswordEncoder();
-    // }
 
-    // @Bean
-    // public UserDetailsService detailsService() {
-    // UserDetails user =
-    // User.withUsername("admin").password(passwordEncoder().encode("123"))
-    // .roles(ERoleName.ADMIN.toString()).build();
-    // return new InMemoryUserDetailsManager(user);
-    // }
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
-                .cors(cors -> cors.disable())
-                .csrf(csrf -> csrf.disable())
-                .headers(headers -> headers.frameOptions().disable())
-                .authorizeHttpRequests(
-                        requests -> requests
-                                .requestMatchers(h2ConsoleUrl).permitAll()
-                                // .requestMatchers("/api/user/register").permitAll()
-                                .requestMatchers("/api/user/register", "/api/auth/register/**",
-                                        "/api/auth/authenticate/**")
-                                .permitAll()
-                                // .requestMatchers("/api/auth/authenticate/**").permitAll()
-                                .anyRequest().authenticated())
-                // .anyRequest().permitAll())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .formLogin(form -> form.permitAll())
-                .logout(logout -> logout.permitAll()).build();
-    }
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+                return http
+                                .cors(cors -> cors.disable())
+                                .csrf(csrf -> csrf.disable())
+                                .headers(headers -> headers.frameOptions().disable())
+                                .authorizeHttpRequests(
+                                                requests -> requests
+                                                                .requestMatchers(H2_DATABASE_URL).permitAll()
+                                                                .requestMatchers(WHITE_LIST_URL).permitAll()
+                                                                .anyRequest().authenticated())
+                                // .anyRequest().permitAll())
+                                .sessionManagement(session -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                .authenticationProvider(authenticationProvider)
+                                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                                .formLogin(form -> form.permitAll())
+                                .logout(logout -> logout.permitAll()).build();
+        }
 
 }
