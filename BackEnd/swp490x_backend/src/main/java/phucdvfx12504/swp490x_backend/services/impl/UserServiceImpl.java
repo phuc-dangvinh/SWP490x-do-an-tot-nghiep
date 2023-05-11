@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(User user) {
-        if (!userRepository.existsByUsername(user.getUsername())) {
+        if (!userRepository.existsByEmail(user.getUsername())) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             Optional<Role> userRole = roleRepository.findByName(ERoleName.USER);
             user.setRoles(Set.of(userRole.isPresent() ? userRole.get() : null));

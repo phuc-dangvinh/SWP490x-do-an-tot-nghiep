@@ -24,7 +24,7 @@ public class AuthenticationService {
     private final AuthenticationManager athenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
-        User user = User.builder().username(request.getUsername())
+        User user = User.builder().email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .roles(Set.of(roleRepository.findByName(ERoleName.USER).get())).build();
         userRepository.save(user);
@@ -34,8 +34,8 @@ public class AuthenticationService {
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         athenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
+                .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
         String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder().token(jwtToken).build();
     }

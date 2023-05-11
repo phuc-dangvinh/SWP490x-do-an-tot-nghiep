@@ -20,7 +20,7 @@ public class JwtService {
     // https://allkeysgenerator.com/
     private static final String SECRET_KEY = "24432646294A404E635266556A576E5A7234753778214125442A472D4B615064";
 
-    public String extractUsername(String token) {
+    public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -36,8 +36,8 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpried(token);
+        final String email = extractEmail(token);
+        return (email.equals(userDetails.getUsername())) && !isTokenExpried(token);
     }
 
     private boolean isTokenExpried(String token) {
