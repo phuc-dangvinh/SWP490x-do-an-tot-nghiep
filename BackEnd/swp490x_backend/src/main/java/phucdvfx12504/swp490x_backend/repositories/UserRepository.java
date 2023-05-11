@@ -10,6 +10,9 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     Optional<User> findByEmail(String email);
 
-    // @Query(value = "SELECT user FROM User user WHERE user.fullname LIKE '%:fullname%'' AND user.email LIKE '%email'")
-    // List<User> getFilter(@Param("fullname") String fullname, @Param("email") String email);
+    // @Query(value = "SELECT user FROM User user WHERE user.fullname LIKE
+    // '%:fullname%'' AND user.email LIKE '%email'")
+    // List<User> getFilter(@Param("fullname") String fullname, @Param("email")
+    // String email);
+
 }
