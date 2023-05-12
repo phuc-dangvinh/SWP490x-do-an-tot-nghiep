@@ -22,12 +22,11 @@ public class SecurityConfig {
         private final AuthenticationProvider authenticationProvider;
         private final AntPathRequestMatcher H2_DATABASE_URL = new AntPathRequestMatcher("/h2-console/**");
         private final String[] WHITE_LIST_URL = {
-                        "/api/user/register",
-                        "/api/auth/register/**",
-                        "/api/auth/authenticate/**",
+                        "/api/auth/register",
+                        "/api/auth/authenticate",
         };
         private final String[] ADMIN_ROLE_URL = {
-                        "/api/user/manager/**"
+                        "/api/user/manage/**"
         };
         private final String[] USER_ROLE_URL = {
         };
