@@ -28,12 +28,12 @@ public class UserController {
     // return null;
     // }
 
-    @GetMapping("/manager")
+    @GetMapping("/manage")
     public List<User> getAll() {
         return userService.getAll();
     }
 
-    @GetMapping("/manager/search")
+    @GetMapping("/manage/search")
     public List<User> getFilter(
             @RequestParam(required = false) String fullname,
             @RequestParam(required = false) String email) {
