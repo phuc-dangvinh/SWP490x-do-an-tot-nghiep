@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.entities.User;
 import phucdvfx12504.swp490x_backend.repositories.UserRepository;
+import phucdvfx12504.swp490x_backend.repositories.UserRepositoryCustom;
 import phucdvfx12504.swp490x_backend.services.UserService;
 
 @Component
@@ -13,6 +14,7 @@ import phucdvfx12504.swp490x_backend.services.UserService;
 public class UserServiceImpl implements UserService {
     // @Autowired
     private final UserRepository userRepository;
+    private final UserRepositoryCustom userRepositoryCustom;
 
     // @Override
     // public User register(User user) {
@@ -33,7 +35,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getFilter(String fullname, String email) {
-        // return userRepository.getFilter(fullname, email);
-        return null;
+        return userRepositoryCustom.getFilter(fullname, email);
     }
 }

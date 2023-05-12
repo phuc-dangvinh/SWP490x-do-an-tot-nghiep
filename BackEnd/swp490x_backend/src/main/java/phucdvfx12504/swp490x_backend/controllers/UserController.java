@@ -33,7 +33,7 @@ public class UserController {
         return userService.getAll();
     }
 
-    @GetMapping("/manager/filter")
+    @GetMapping("/manager/search")
     public List<User> getFilter(
             @RequestParam(required = false) String fullname,
             @RequestParam(required = false) String email) {
