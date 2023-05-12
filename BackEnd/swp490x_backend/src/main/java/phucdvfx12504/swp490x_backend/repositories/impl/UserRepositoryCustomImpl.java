@@ -30,8 +30,8 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         Path<String> fullnamePath = user.get("fullname");
         Path<String> emailPath = user.get("email");
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(criteriaBuilder.like(fullnamePath, fullname));
-        predicates.add(criteriaBuilder.like(emailPath, email));
+        predicates.add(criteriaBuilder.like(fullnamePath, "%" + fullname + "%"));
+        predicates.add(criteriaBuilder.like(emailPath, "%" + email + "%"));
         query.select(user).where(criteriaBuilder.or(predicates.toArray(new Predicate[predicates.size()])));
         return entityManager.createQuery(query).getResultList();
     }
