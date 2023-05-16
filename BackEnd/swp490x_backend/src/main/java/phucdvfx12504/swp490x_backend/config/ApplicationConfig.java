@@ -1,5 +1,6 @@
 package phucdvfx12504.swp490x_backend.config;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,9 +11,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.repositories.UserRepository;
+import phucdvfx12504.swp490x_backend.utils.UpdateUtils;
 
 @Configuration
 @RequiredArgsConstructor
@@ -42,4 +43,15 @@ public class ApplicationConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
+
+    @Bean
+    public UpdateUtils updateUtils() {
+        return new UpdateUtils();
+    }
+
 }
