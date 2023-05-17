@@ -1,6 +1,5 @@
 package phucdvfx12504.swp490x_backend.services;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -17,6 +16,6 @@ public interface UserService {
 
     void delete(List<String> ids);
 
-    User update(UserUpdate userUpdate) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException;
+    User update(UserUpdate userUpdate);
 
 }

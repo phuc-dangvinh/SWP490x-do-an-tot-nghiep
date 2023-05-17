@@ -14,5 +14,4 @@ public class UserUpdate {
     private String fullname;
     private String email;
     private String phone;
-    private String password;
 }

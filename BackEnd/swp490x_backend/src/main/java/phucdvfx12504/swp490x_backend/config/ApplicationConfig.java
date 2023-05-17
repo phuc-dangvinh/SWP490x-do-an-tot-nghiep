@@ -1,6 +1,5 @@
 package phucdvfx12504.swp490x_backend.config;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,7 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.repositories.UserRepository;
-import phucdvfx12504.swp490x_backend.utils.UpdateUtils;
+import phucdvfx12504.swp490x_backend.utils.PropertyUtils;
 
 @Configuration
 @RequiredArgsConstructor
@@ -45,13 +44,8 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
-
-    @Bean
-    public UpdateUtils updateUtils() {
-        return new UpdateUtils();
+    public PropertyUtils updateUtils() {
+        return new PropertyUtils();
     }
 
 }
