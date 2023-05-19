@@ -1,8 +1,5 @@
 package phucdvfx12504.swp490x_backend.utils;
 
-import phucdvfx12504.swp490x_backend.dto.UserLoginRequest;
-import phucdvfx12504.swp490x_backend.dto.UserUpdateRequest;
-
 public class Testing {
 
     // public static void main(String[] args) {
