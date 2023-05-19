@@ -1,4 +1,4 @@
-package phucdvfx12504.swp490x_backend.auth;
+package phucdvfx12504.swp490x_backend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterRequest {
-    private String fullname;
+public class UserChangePasswordRequest {
     private String email;
-    private String phone;
-    private String password;
+    private String oldPassword;
+    private String newPassword;
 }

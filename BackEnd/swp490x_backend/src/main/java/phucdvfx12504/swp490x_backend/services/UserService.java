@@ -4,7 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import phucdvfx12504.swp490x_backend.dto.UserUpdate;
+import phucdvfx12504.swp490x_backend.dto.UserChangePasswordRequest;
+import phucdvfx12504.swp490x_backend.dto.UserUpdateRequest;
 import phucdvfx12504.swp490x_backend.entities.User;
 
 @Service
@@ -16,6 +17,8 @@ public interface UserService {
 
     void delete(List<String> ids);
 
-    User update(UserUpdate userUpdate);
+    User update(UserUpdateRequest userUpdate);
+
+    User changePassword(UserChangePasswordRequest userChangePasswordRequest);
 
 }

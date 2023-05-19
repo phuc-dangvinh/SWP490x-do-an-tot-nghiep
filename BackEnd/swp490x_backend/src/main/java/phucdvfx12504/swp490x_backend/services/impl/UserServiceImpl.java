@@ -2,11 +2,13 @@ package phucdvfx12504.swp490x_backend.services.impl;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import phucdvfx12504.swp490x_backend.dto.UserUpdate;
+import phucdvfx12504.swp490x_backend.dto.UserChangePasswordRequest;
+import phucdvfx12504.swp490x_backend.dto.UserUpdateRequest;
 import phucdvfx12504.swp490x_backend.entities.User;
 import phucdvfx12504.swp490x_backend.repositories.UserRepository;
 import phucdvfx12504.swp490x_backend.repositories.UserRepositoryCustom;
@@ -19,6 +21,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserRepositoryCustom userRepositoryCustom;
     private final PropertyUtils updateUtils;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<User> getAll() {
@@ -38,9 +41,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User update(UserUpdate userUpdate) {
+    public User update(UserUpdateRequest userUpdate) {
         User user = userRepository.findById(userUpdate.getId()).orElseThrow();
         updateUtils.copyNonNullProperties(userUpdate, user);
         return userRepository.save(user);
+    }
+
+    @Override
+    public User changePassword(UserChangePasswordRequest userChangePasswordRequest) {
+        User user = userRepository.findByEmail(userChangePasswordRequest.getEmail()).orElseThrow();
+        String oldRawPassword = userChangePasswordRequest.getOldPassword();
+        String newRawPassword = userChangePasswordRequest.getNewPassword();
+        if (!newRawPassword.isEmpty() && passwordEncoder.matches(oldRawPassword, user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(newRawPassword));
+            return userRepository.save(user);
+        }
+        return null;
     }
 }

@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserUpdate {
-    private String id;
+public class UserRegisterRequest {
     private String fullname;
     private String email;
     private String phone;
+    private String password;
 }

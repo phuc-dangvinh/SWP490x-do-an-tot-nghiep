@@ -11,6 +11,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import lombok.RequiredArgsConstructor;
+import phucdvfx12504.swp490x_backend.auth.AuthEntryPoint;
 import phucdvfx12504.swp490x_backend.constant.ERoleName;
 
 @Configuration
@@ -20,15 +21,19 @@ public class SecurityConfig {
 
         private final JwtAuthenticationFilter jwtAuthenticationFilter;
         private final AuthenticationProvider authenticationProvider;
+        // private final JwtService jwtService;
+        private final AuthEntryPoint authEntryPoint;
+
         private final AntPathRequestMatcher H2_DATABASE_URL = new AntPathRequestMatcher("/h2-console/**");
         private final String[] WHITE_LIST_URL = {
-                        "/api/auth/register",
-                        "/api/auth/authenticate",
+                        "/api/auth/register/**",
+                        "/api/auth/authenticate/**"
         };
         private final String[] ADMIN_ROLE_URL = {
                         "/api/user/manage/**"
         };
         private final String[] USER_ROLE_URL = {
+                        "/api/user/change-password/**"
         };
 
         // @Bean
@@ -41,7 +46,10 @@ public class SecurityConfig {
                 return http
                                 .cors(cors -> cors.disable())
                                 .csrf(csrf -> csrf.disable())
-                                .headers(headers -> headers.frameOptions().disable())
+                                .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
+                                .sessionManagement(session -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                // .headers(headers -> headers.frameOptions().disable())
                                 .authorizeHttpRequests(
                                                 requests -> requests
                                                                 .requestMatchers(H2_DATABASE_URL).permitAll()
@@ -53,12 +61,11 @@ public class SecurityConfig {
                                                                                 ERoleName.ADMIN.toString())
                                                                 .anyRequest().authenticated())
                                 // .anyRequest().permitAll())
-                                .sessionManagement(session -> session
-                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
                                 .authenticationProvider(authenticationProvider)
                                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                                .formLogin(form -> form.permitAll())
-                                .logout(logout -> logout.permitAll())
+                                // .formLogin(form -> form.permitAll())
+                                // .logout(logout -> logout.permitAll())
                                 .build();
         }
 

@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.config.JwtService;
 import phucdvfx12504.swp490x_backend.constant.ERoleName;
+import phucdvfx12504.swp490x_backend.dto.AuthenticationResponse;
+import phucdvfx12504.swp490x_backend.dto.UserLoginRequest;
+import phucdvfx12504.swp490x_backend.dto.UserRegisterRequest;
 import phucdvfx12504.swp490x_backend.entities.User;
 import phucdvfx12504.swp490x_backend.repositories.RoleRepository;
 import phucdvfx12504.swp490x_backend.repositories.UserRepository;
@@ -23,7 +26,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager athenticationManager;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponse register(UserRegisterRequest request) {
         User user = User.builder()
                 .fullname(request.getFullname())
                 .email(request.getEmail())
@@ -36,7 +39,7 @@ public class AuthenticationService {
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse authenticate(UserLoginRequest request) {
         athenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow();

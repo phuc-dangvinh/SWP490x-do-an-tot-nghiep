@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>phucdvfx12504</groupId>
@@ -20,11 +20,11 @@
 	</properties>
 	<dependencies>
 
-		<!-- <dependency>
+		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
 			<version>3.1.1</version>
-		</dependency> -->
+		</dependency>
 
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>

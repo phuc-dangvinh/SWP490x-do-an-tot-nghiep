@@ -7,15 +7,14 @@ import java.util.Map;
 import java.util.function.Function;
 
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-
+import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
-@Service
+@Component
 public class JwtService {
     // https://allkeysgenerator.com/
     private static final String SECRET_KEY = "24432646294A404E635266556A576E5A7234753778214125442A472D4B615064";

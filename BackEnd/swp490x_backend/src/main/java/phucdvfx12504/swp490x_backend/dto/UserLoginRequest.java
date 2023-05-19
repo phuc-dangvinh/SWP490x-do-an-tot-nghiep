@@ -1,4 +1,4 @@
-package phucdvfx12504.swp490x_backend.auth;
+package phucdvfx12504.swp490x_backend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthenticationResponse {
-    public String token;
-
+public class UserLoginRequest {
+    private String email;
+    private String password;
 }
