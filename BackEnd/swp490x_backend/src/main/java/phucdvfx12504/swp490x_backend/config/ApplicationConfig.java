@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
-import phucdvfx12504.swp490x_backend.auth.AuthEntryPoint;
 import phucdvfx12504.swp490x_backend.repositories.UserRepository;
 import phucdvfx12504.swp490x_backend.utils.PropertyUtils;
 
@@ -49,9 +48,5 @@ public class ApplicationConfig {
         return new PropertyUtils();
     }
 
-    @Bean
-    public AuthEntryPoint authEntryPoint() {
-        return new AuthEntryPoint();
-    }
 
 }
