@@ -35,7 +35,7 @@ public class Database {
                 }
                 if (!userRepository.findByEmail("admin").isPresent()) {
                     User user = User.builder().fullname("admin").email("admin")
-                            .password(passwordEncoder.encode("123"))
+                            .password(passwordEncoder.encode("admin"))
                             .roles(Set.of(roleRepository.findByName(ERoleName.ADMIN).get())).build();
                     userRepository.save(user);
                 }

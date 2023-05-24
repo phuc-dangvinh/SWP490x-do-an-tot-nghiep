@@ -59,6 +59,7 @@ public class SecurityConfig {
                                 .requestMatchers(USER_ROLE_URL)
                                 .hasAnyAuthority(ERoleName.USER.toString(), ERoleName.ADMIN.toString())
                                 .anyRequest().authenticated())
+                // .anyRequest().permitAll())
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 // .formLogin(form -> form.permitAll())
