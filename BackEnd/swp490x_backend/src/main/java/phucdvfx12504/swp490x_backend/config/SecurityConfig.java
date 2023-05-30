@@ -12,6 +12,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.auth.AuthEntryPoint;
+import phucdvfx12504.swp490x_backend.auth.JwtAuthenticationFilter;
 import phucdvfx12504.swp490x_backend.constant.ERoleName;
 
 @Configuration

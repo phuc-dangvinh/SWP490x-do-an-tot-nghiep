@@ -1,4 +1,4 @@
-package phucdvfx12504.swp490x_backend.config;
+package phucdvfx12504.swp490x_backend.auth;
 
 import java.io.IOException;
 

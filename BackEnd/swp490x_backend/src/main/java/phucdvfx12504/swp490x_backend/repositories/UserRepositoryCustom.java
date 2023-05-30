@@ -8,5 +8,5 @@ import phucdvfx12504.swp490x_backend.entities.User;
 
 @Repository
 public interface UserRepositoryCustom {
-    List<User> getFilter(String fullname, String email);
+    List<User> getFilter(String keyword);
 }

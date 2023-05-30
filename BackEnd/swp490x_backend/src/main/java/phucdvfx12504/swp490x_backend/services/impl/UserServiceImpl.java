@@ -1,7 +1,6 @@
 package phucdvfx12504.swp490x_backend.services.impl;
 
 import java.util.List;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,8 +32,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getFilter(String fullname, String email) {
-        return userRepositoryCustom.getFilter(fullname, email);
+    public List<User> getFilter(String keyword) {
+        return userRepositoryCustom.getFilter(keyword);
     }
 
     @Override
@@ -68,4 +67,5 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+
 }

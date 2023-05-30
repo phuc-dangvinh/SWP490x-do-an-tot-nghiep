@@ -23,15 +23,17 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     private final EntityManager entityManager;
 
     @Override
-    public List<User> getFilter(String fullname, String email) {
+    public List<User> getFilter(String keyword) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> query = criteriaBuilder.createQuery(User.class);
         Root<User> user = query.from(User.class);
         Path<String> fullnamePath = user.get("fullname");
         Path<String> emailPath = user.get("email");
+        Path<String> phonePath = user.get("phone");
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(criteriaBuilder.like(criteriaBuilder.lower(fullnamePath), "%" + fullname.toLowerCase().trim() + "%"));
-        predicates.add(criteriaBuilder.like(criteriaBuilder.lower(emailPath), "%" + email.toLowerCase().trim() + "%"));
+        predicates.add(criteriaBuilder.like(criteriaBuilder.lower(fullnamePath), "%" + keyword.toLowerCase().trim() + "%"));
+        predicates.add(criteriaBuilder.like(criteriaBuilder.lower(emailPath), "%" + keyword.toLowerCase().trim() + "%"));
+        predicates.add(criteriaBuilder.like(criteriaBuilder.lower(phonePath), "%" + keyword.trim() + "%"));
         query.select(user).where(criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()])));
         return entityManager.createQuery(query).getResultList();
     }

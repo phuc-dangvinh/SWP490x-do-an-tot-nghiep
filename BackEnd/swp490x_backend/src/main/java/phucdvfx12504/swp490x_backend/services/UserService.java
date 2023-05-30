@@ -13,7 +13,7 @@ public interface UserService {
 
     List<User> getAll();
 
-    List<User> getFilter(String fullname, String email);
+    List<User> getFilter(String keyword);
 
     void delete(List<String> ids);
 

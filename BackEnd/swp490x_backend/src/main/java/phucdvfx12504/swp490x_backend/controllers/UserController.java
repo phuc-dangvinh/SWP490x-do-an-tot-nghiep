@@ -29,10 +29,8 @@ public class UserController {
     }
 
     @GetMapping("/manage/search")
-    public List<User> getFilter(
-            @RequestParam(required = false) String fullname,
-            @RequestParam(required = false) String email) {
-        return userService.getFilter(fullname, email);
+    public List<User> getFilter(@RequestParam(required = false) String keyword) {
+        return userService.getFilter(keyword);
     }
 
     @DeleteMapping("/manage")
