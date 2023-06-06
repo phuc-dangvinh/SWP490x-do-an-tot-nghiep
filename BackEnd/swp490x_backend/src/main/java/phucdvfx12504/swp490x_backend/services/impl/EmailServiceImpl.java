@@ -1,9 +1,12 @@
 package phucdvfx12504.swp490x_backend.services.impl;
 
+import java.io.UnsupportedEncodingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import jakarta.mail.MessagingException;
@@ -25,16 +28,15 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendMimeEmail(String to, String subject, String text) throws MessagingException {
+    @Async
+    public void sendMimeEmail(String to, String subject, String text)
+            throws MessagingException, UnsupportedEncodingException {
         MimeMessage message = mailSender.createMimeMessage();
-        // format content with HTML
-        message.setContent("content", "text/html");
-        // FileSystemResource attachmentFile = new FileSystemResource(new File(filePath));
         MimeMessageHelper messageHelper = new MimeMessageHelper(message, true);
         messageHelper.setTo(to);
+        messageHelper.setFrom("noreply@funix.edu.vn", "System");
         messageHelper.setSubject(subject);
-        messageHelper.setText(text);
-        // messageHelper.addAttachment("file_attachment", attachmentFile);
+        messageHelper.setText(text, true);
         mailSender.send(message);
     }
 

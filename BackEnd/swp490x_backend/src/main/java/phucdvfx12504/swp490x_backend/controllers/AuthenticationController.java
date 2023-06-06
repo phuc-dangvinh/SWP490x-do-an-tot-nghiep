@@ -1,5 +1,7 @@
 package phucdvfx12504.swp490x_backend.controllers;
 
+import java.io.UnsupportedEncodingException;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,12 +23,12 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody UserRegisterRequest request) throws MessagingException {
+    public ResponseEntity<User> register(@RequestBody UserRegisterRequest request) throws MessagingException, UnsupportedEncodingException {
         return ResponseEntity.ok(authenticationService.register(request));
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody UserLoginRequest request) {
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+        return ResponseEntity.ok(authenticationService.login(request));
     }
 }

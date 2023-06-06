@@ -1,5 +1,6 @@
 package phucdvfx12504.swp490x_backend.auth;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -32,7 +33,7 @@ public class AuthenticationService {
     private final AuthenticationManager athenticationManager;
     private final EmailService emailService;
 
-    public User register(UserRegisterRequest request) throws MessagingException {
+    public User register(UserRegisterRequest request) throws MessagingException, UnsupportedEncodingException {
         String fullname = request.getFullname();
         String email = request.getEmail();
         String password = this.generateCommonLangPassword();
@@ -52,7 +53,7 @@ public class AuthenticationService {
         // return AuthenticationResponse.builder().token(jwtToken).build();
     }
 
-    public AuthenticationResponse authenticate(UserLoginRequest request) {
+    public AuthenticationResponse login(UserLoginRequest request) {
         athenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
@@ -61,7 +62,7 @@ public class AuthenticationService {
     }
 
     private String prepairContent(String fullname, String email, String password) {
-        String result = "Hi, {fullname}<br />Welcome to your new account<br /><br />We inform you that you have created an account successfully<br />Here is info about your account:<br />- Username: {username}<br />- Password: {password}<br />To keep your account safe, you should change your password at the firstsign-in.<br /><br />Thank you for your using our service.<br />Best regard!";
+        String result = "<html><body>Hi {fullname},<br />Welcome to your new account.<br /><br />We inform that you have created an account successfully.<br />Here is info about your account:<br />- Username: {username}<br />- Password: {password}<br />To keep your account safe, you should change your password at the first sign-in.<br /><br />Thank you for your using our service.<br />Best regard!</body></html>";
         // StringBuffer result = new StringBuffer();
         result = result.replace("{fullname}", fullname);
         result = result.replace("{username}", email);

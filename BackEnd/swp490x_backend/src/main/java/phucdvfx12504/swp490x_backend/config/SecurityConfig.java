@@ -26,7 +26,7 @@ public class SecurityConfig {
 
     private final AntPathRequestMatcher H2_DATABASE_URL = new AntPathRequestMatcher("/h2-console/**");
     private final String[] PUBLIC_LIST_URL = {
-            "/api/auth/authenticate/**",
+            "/api/auth/login/**",
             "/api/auth/register/**",
             "/home/**"
     };
