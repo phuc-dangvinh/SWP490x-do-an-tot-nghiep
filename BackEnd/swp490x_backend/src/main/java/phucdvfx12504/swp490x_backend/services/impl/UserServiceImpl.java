@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.constant.ERoleName;
-import phucdvfx12504.swp490x_backend.dto.UserChangePasswordRequest;
-import phucdvfx12504.swp490x_backend.dto.UserUpdateRequest;
+import phucdvfx12504.swp490x_backend.dto.user.UserChangePasswordRequest;
+import phucdvfx12504.swp490x_backend.dto.user.UserUpdateRequest;
 import phucdvfx12504.swp490x_backend.entities.Role;
 import phucdvfx12504.swp490x_backend.entities.User;
 import phucdvfx12504.swp490x_backend.repositories.RoleRepository;
@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserRepositoryCustom userRepositoryCustom;
     private final RoleRepository roleRepository;
-    private final PropertyUtils updateUtils;
+    private final PropertyUtils propertyUtils;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User update(UserUpdateRequest userUpdate) {
         User user = userRepository.findById(userUpdate.getId()).orElseThrow();
-        updateUtils.copyNonNullProperties(userUpdate, user);
+        propertyUtils.copyNonNullProperties(userUpdate, user);
         return userRepository.save(user);
     }
 

@@ -1,4 +1,4 @@
-package phucdvfx12504.swp490x_backend.dto;
+package phucdvfx12504.swp490x_backend.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import phucdvfx12504.swp490x_backend.dto.UserChangePasswordRequest;
-import phucdvfx12504.swp490x_backend.dto.UserUpdateRequest;
+import phucdvfx12504.swp490x_backend.dto.user.UserChangePasswordRequest;
+import phucdvfx12504.swp490x_backend.dto.user.UserUpdateRequest;
 import phucdvfx12504.swp490x_backend.entities.User;
 import phucdvfx12504.swp490x_backend.services.UserService;
 
@@ -39,8 +39,7 @@ public class UserController {
     }
 
     @PutMapping("/manage")
-    public User update(@RequestBody UserUpdateRequest userUpdate)
-            throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    public User update(@RequestBody UserUpdateRequest userUpdate) {
         return userService.update(userUpdate);
     }
 

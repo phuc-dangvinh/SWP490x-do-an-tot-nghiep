@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import phucdvfx12504.swp490x_backend.dto.UserChangePasswordRequest;
-import phucdvfx12504.swp490x_backend.dto.UserUpdateRequest;
+import phucdvfx12504.swp490x_backend.dto.user.UserChangePasswordRequest;
+import phucdvfx12504.swp490x_backend.dto.user.UserUpdateRequest;
 import phucdvfx12504.swp490x_backend.entities.User;
 
 @Service
