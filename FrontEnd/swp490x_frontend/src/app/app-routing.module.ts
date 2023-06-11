@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { CategoryManagementComponent } from './components/admin/category-management/category-management.component';
 import { ProductManagementComponent } from './components/admin/product-management/product-management.component';
 import { UserManagementComponent } from './components/admin/user-management/user-management.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { PageNotFoundComponent } from './components/share/page-not-found/page-not-found.component';
 
 const routes: Routes = [
   { path: 'admin/user-management', component: UserManagementComponent },
