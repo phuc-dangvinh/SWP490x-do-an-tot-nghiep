@@ -7,7 +7,8 @@ import { PagingComponent } from '../share/paging/paging.component';
 import { UserDetailComponent } from './pop-up/user-detail/user-detail.component';
 import { PopUpComponent } from '../share/pop-up/pop-up.component';
 import { ButtonsModule } from '../share/buttons/buttons.module';
-// import { ButtonsModule } from '../share/buttons/buttons.module';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,8 +18,14 @@ import { ButtonsModule } from '../share/buttons/buttons.module';
     PagingComponent,
     UserDetailComponent,
     PopUpComponent,
-    // SliderButtonComponent
   ],
-  imports: [CommonModule, ButtonsModule],
+  imports: [
+    CommonModule,
+    ButtonsModule,
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
+    // BrowserModule,
+  ],
 })
 export class AdminModule {}

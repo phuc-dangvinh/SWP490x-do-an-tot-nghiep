@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: 'admin/user-management', component: UserManagementComponent },
   { path: 'admin/category-management', component: CategoryManagementComponent },
   { path: 'admin/product-management', component: ProductManagementComponent },
-  // { path: 'home', component: HomeComponent },
+  // { path: 'home', component: FileUploadComponent },
   // { path: '',   redirectTo: '/home', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent },
 ];

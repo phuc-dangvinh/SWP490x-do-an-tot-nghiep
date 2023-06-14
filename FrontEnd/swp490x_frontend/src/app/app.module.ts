@@ -11,6 +11,7 @@ import { MenuBarComponent } from './components/share/menu-bar/menu-bar.component
 import { PageNotFoundComponent } from './components/share/page-not-found/page-not-found.component';
 import { AdminModule } from './components/admin/admin.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent, MenuBarComponent, PageNotFoundComponent],
@@ -23,6 +24,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AccountModule,
     HomeModule,
     NgbModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
