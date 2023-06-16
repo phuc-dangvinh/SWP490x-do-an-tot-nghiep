@@ -18,16 +18,20 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService {
     // https://allkeysgenerator.com/
     private static final String SECRET_KEY = "24432646294A404E635266556A576E5A7234753778214125442A472D4B615064";
+    private static final long EXPIRE_TIME = 1 * 60 * 60 * 1000;
 
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return Jwts.builder().setClaims(extraClaims).setSubject(userDetails.getUsername())
+        return Jwts.builder()
+                .setClaims(extraClaims)
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256).compact();
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_TIME))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
     public String generateToken(UserDetails userDetails) {
