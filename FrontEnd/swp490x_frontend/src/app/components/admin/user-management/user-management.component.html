@@ -17,65 +17,32 @@
           <th class="text-center">Action</th>
         </tr>
       </thead>
-      <tbody class="py">
+      <tbody class="py" *ngFor="let user of users">
         <tr>
-          <td class="text-center">
+          <td class="text-center info">
             <app-check-box-button></app-check-box-button>
           </td>
           <td>
             <img
               src="https://th.bing.com/th/id/OIP.qy9-YdYEPSC1IZ_STEWwLQHaHa?pid=ImgDet&rs=1"
-              class="rounded mx-auto"
-              style="height: 80px"
+              class="mx-auto"
             />
-            Lê Tú Uyên
+            <span
+              class="fw-bold name"
+              [ngClass]="{ 'text-danger': checkAdmin(user) }"
+              >{{ user.fullname }}</span
+            >
           </td>
-          <td class="center">uyen.letu@ncc.asia</td>
-          <td>098852365552</td>
-          <td class="text-center">
-            <app-slider-button></app-slider-button>
+          <td class="info">
+            {{ user.email }}
           </td>
-          <td class="text-center">
-            <app-edit-button></app-edit-button>
-            <app-delete-button></app-delete-button>
+          <td class="info">{{ user.phone }}</td>
+          <td class="text-center info">
+            <app-slider-button
+              [isChecked]="checkAdmin(user)"
+            ></app-slider-button>
           </td>
-        </tr>
-        <tr>
-          <td class="text-center">
-            <app-check-box-button></app-check-box-button>
-          </td>
-          <td>
-            <img
-              src="https://th.bing.com/th/id/OIP.qy9-YdYEPSC1IZ_STEWwLQHaHa?pid=ImgDet&rs=1"
-              class="rounded mx-auto"
-              style="height: 80px"
-            />
-            Lê Tú Uyên
-          </td>
-          <td>uyen.letu@ncc.asia</td>
-          <td>098852365552</td>
-          <td class="text-center"><app-slider-button></app-slider-button></td>
-          <td class="text-center">
-            <app-edit-button></app-edit-button>
-            <app-delete-button></app-delete-button>
-          </td>
-        </tr>
-        <tr>
-          <td class="text-center">
-            <app-check-box-button></app-check-box-button>
-          </td>
-          <td>
-            <img
-              src="https://th.bing.com/th/id/OIP.qy9-YdYEPSC1IZ_STEWwLQHaHa?pid=ImgDet&rs=1"
-              class="rounded mx-auto"
-              style="height: 80px"
-            />
-            Lê Tú Uyên
-          </td>
-          <td>uyen.letu@ncc.asia</td>
-          <td>098852365552</td>
-          <td class="text-center"><app-slider-button></app-slider-button></td>
-          <td class="text-center">
+          <td class="text-center info">
             <app-edit-button></app-edit-button>
             <app-delete-button></app-delete-button>
           </td>

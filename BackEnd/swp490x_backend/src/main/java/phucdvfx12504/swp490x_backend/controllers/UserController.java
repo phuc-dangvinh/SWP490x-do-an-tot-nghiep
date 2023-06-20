@@ -1,6 +1,5 @@
 package phucdvfx12504.swp490x_backend.controllers;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.DeleteMapping;

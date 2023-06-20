@@ -14,3 +14,18 @@ tr:hover {
 th {
   background-color: #A6A6A6;
 }
+
+img {
+  border-radius: 50%;
+  height: 60px;
+}
+
+tr {
+  .info {
+    padding-top: 25px;
+  }
+
+  .name{
+    margin-left: 15px;
+  }
+}

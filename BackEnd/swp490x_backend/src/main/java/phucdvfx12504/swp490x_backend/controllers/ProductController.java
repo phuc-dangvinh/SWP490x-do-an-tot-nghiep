@@ -1,6 +1,5 @@
 package phucdvfx12504.swp490x_backend.controllers;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,9 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.dto.product.ProductUpdateRequest;
-import phucdvfx12504.swp490x_backend.dto.user.UserUpdateRequest;
 import phucdvfx12504.swp490x_backend.entities.Product;
-import phucdvfx12504.swp490x_backend.entities.User;
 import phucdvfx12504.swp490x_backend.services.ProductService;
 
 @RestController

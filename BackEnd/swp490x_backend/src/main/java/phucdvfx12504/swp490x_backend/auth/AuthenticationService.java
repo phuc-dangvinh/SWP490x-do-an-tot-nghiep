@@ -47,7 +47,7 @@ public class AuthenticationService {
         String to = request.getEmail();
         String subject = "Sign Up Success";
         String text = this.prepairContent(fullname, email, password);
-        emailService.sendMimeEmail(to, subject, text);
+        // emailService.sendMimeEmail(to, subject, text);
         return userRepository.save(user);
         // String jwtToken = jwtService.generateToken(user);
         // return AuthenticationResponse.builder().token(jwtToken).build();
@@ -63,7 +63,6 @@ public class AuthenticationService {
 
     private String prepairContent(String fullname, String email, String password) {
         String result = "<html><body>Hi {fullname},<br />Welcome to your new account.<br /><br />We inform that you have created an account successfully.<br />Here is info about your account:<br />- Username: {username}<br />- Password: {password}<br />To keep your account safe, you should change your password at the first sign-in.<br /><br />Thank you for your using our service.<br />Best regard!</body></html>";
-        // StringBuffer result = new StringBuffer();
         result = result.replace("{fullname}", fullname);
         result = result.replace("{username}", email);
         result = result.replace("{password}", password);

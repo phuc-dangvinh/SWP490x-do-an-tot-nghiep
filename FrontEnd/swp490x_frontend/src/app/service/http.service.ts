@@ -1,0 +1,32 @@
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, catchError, of, tap } from 'rxjs';
+import { rootApi } from '../enviroments/environment';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class HttpService {
+  private httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+  };
+
+  // private httpOption = {
+  //   observe: 'response',
+  // };
+
+  constructor(private http: HttpClient) {}
+
+  get<T>(url: string): Observable<T> {
+    return this.http
+      .get<T>(rootApi + url)
+      .pipe(tap(), catchError(this.handleError<T>()));
+  }
+
+  private handleError<T>(result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(error);
+      return of(result as T);
+    };
+  }
+}
