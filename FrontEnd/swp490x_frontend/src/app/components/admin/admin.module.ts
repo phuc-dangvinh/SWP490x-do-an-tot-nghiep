@@ -3,18 +3,17 @@ import { CommonModule } from '@angular/common';
 import { UserManagementComponent } from './user-management/user-management.component';
 import { ProductManagementComponent } from './product-management/product-management.component';
 import { CategoryManagementComponent } from './category-management/category-management.component';
-import { PagingComponent } from '../share/paging/paging.component';
 import { UserDetailComponent } from './pop-up/user-detail/user-detail.component';
 import { PopUpComponent } from '../share/pop-up/pop-up.component';
 import { ButtonsModule } from '../share/buttons/buttons.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
     UserManagementComponent,
     ProductManagementComponent,
     CategoryManagementComponent,
-    PagingComponent,
     UserDetailComponent,
     PopUpComponent,
   ],
@@ -23,6 +22,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ButtonsModule,
     FormsModule,
     ReactiveFormsModule,
+    NgbModule
   ],
 })
 export class AdminModule {}

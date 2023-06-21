@@ -1,57 +1,90 @@
 <div>
-  <div class="container-fluid my-2">
+  <div class="container-fluid mt-4 mb-2">
     <app-new-large-button (clickButton)="openPopup()"></app-new-large-button>
     <app-delete-large-button></app-delete-large-button>
+    <div class="search">
+      <input type="text" placeholder="Search" class="form-control" />
+    </div>
+    
   </div>
   <div class="container-fluid">
-    <table class="table table-striped">
-      <thead class="header">
-        <tr>
-          <th class="text-center">
+    <table class="table">
+      <thead>
+        <tr class="text-center">
+          <th class="check-box">
             <app-check-box-button></app-check-box-button>
           </th>
-          <th>Fullname</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th class="text-center">Admin</th>
-          <th class="text-center">Action</th>
+          <th class="full-name">Fullname</th>
+          <th class="email">Email</th>
+          <th class="phone">Phone</th>
+          <th class="admin">Admin</th>
+          <th class="action">Action</th>
         </tr>
       </thead>
-      <tbody class="py" *ngFor="let user of users">
+      <tbody class="py" *ngFor="let user of itemsOfPage">
         <tr>
-          <td class="text-center info">
-            <app-check-box-button></app-check-box-button>
+          <td>
+            <div class="button-wraper">
+              <app-check-box-button></app-check-box-button>
+            </div>
           </td>
           <td>
-            <img
-              src="https://th.bing.com/th/id/OIP.qy9-YdYEPSC1IZ_STEWwLQHaHa?pid=ImgDet&rs=1"
-              class="mx-auto"
-            />
-            <span
-              class="fw-bold name"
-              [ngClass]="{ 'text-danger': checkAdmin(user) }"
-              >{{ user.fullname }}</span
-            >
+            <div class="name-wraper">
+              <span>
+                <img
+                  *ngIf="user.avatar; else noAvatar"
+                  [src]="user.avatar"
+                  class="mx-auto avatar"
+                />
+                <ng-template #noAvatar>
+                  <i class="bi bi-person-circle no-avatar"></i>
+                </ng-template>
+              </span>
+              <span
+                class="fw-bold name"
+                [ngClass]="{ 'text-danger': checkAdmin(user) }"
+                >{{ user.fullname }}</span
+              >
+            </div>
           </td>
-          <td class="info">
-            {{ user.email }}
+          <td>
+            <div class="info-wraper">
+              {{ user.email }}
+            </div>
           </td>
-          <td class="info">{{ user.phone }}</td>
-          <td class="text-center info">
-            <app-slider-button
-              [isChecked]="checkAdmin(user)"
-            ></app-slider-button>
+          <td>
+            <div class="info-wraper">
+              {{ user.phone }}
+            </div>
           </td>
-          <td class="text-center info">
-            <app-edit-button></app-edit-button>
-            <app-delete-button></app-delete-button>
+          <td>
+            <div class="button-wraper">
+              <app-slider-button
+                [isChecked]="checkAdmin(user)"
+              ></app-slider-button>
+            </div>
+          </td>
+          <td>
+            <div class="button-wraper">
+              <app-edit-button></app-edit-button>
+              <app-delete-button></app-delete-button>
+            </div>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-  <div class="container-fluid">
-    <app-paging></app-paging>
+  <div class="items-center">
+    <ngb-pagination
+      [collectionSize]="users.length"
+      [(page)]="currentPage"
+      [maxSize]="maxSizePage"
+      [rotate]="true"
+      [boundaryLinks]="true"
+      [pageSize]="pageSize"
+      (pageChange)="onChangePage($event)"
+    >
+    </ngb-pagination>
   </div>
 </div>
 <app-pop-up [show]="showPopup" (closePopup)="closePopup()">

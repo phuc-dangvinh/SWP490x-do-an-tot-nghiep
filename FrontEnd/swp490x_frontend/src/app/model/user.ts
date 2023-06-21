@@ -6,4 +6,5 @@ export interface User {
   email: string;
   phone: string;
   authorities: Authority[];
+  avatar: string;
 }
