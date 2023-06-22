@@ -1,11 +1,14 @@
 <div>
-  <div class="container-fluid mt-4 mb-2">
-    <app-new-large-button (clickButton)="openPopup()"></app-new-large-button>
-    <app-delete-large-button></app-delete-large-button>
-    <div class="search">
-      <input type="text" placeholder="Search" class="form-control" />
+  <div class="container-fluid mt-4 mb-3">
+    <div>
+      <app-new-large-button (clickButton)="openPopup()"></app-new-large-button>
+      <app-delete-large-button></app-delete-large-button>
+      <app-search-box
+        [width]="30"
+        class="search-box"
+        (clickSearch)="search($event)"
+      ></app-search-box>
     </div>
-    
   </div>
   <div class="container-fluid">
     <table class="table">
@@ -24,12 +27,12 @@
       <tbody class="py" *ngFor="let user of itemsOfPage">
         <tr>
           <td>
-            <div class="button-wraper">
+            <div class="center-center">
               <app-check-box-button></app-check-box-button>
             </div>
           </td>
           <td>
-            <div class="name-wraper">
+            <div class="left-center">
               <span>
                 <img
                   *ngIf="user.avatar; else noAvatar"
@@ -48,24 +51,24 @@
             </div>
           </td>
           <td>
-            <div class="info-wraper">
+            <div class="left-center">
               {{ user.email }}
             </div>
           </td>
           <td>
-            <div class="info-wraper">
+            <div class="left-center">
               {{ user.phone }}
             </div>
           </td>
           <td>
-            <div class="button-wraper">
+            <div class="center-center">
               <app-slider-button
                 [isChecked]="checkAdmin(user)"
               ></app-slider-button>
             </div>
           </td>
           <td>
-            <div class="button-wraper">
+            <div class="center-center">
               <app-edit-button></app-edit-button>
               <app-delete-button></app-delete-button>
             </div>
@@ -74,7 +77,7 @@
       </tbody>
     </table>
   </div>
-  <div class="items-center">
+  <div class="center-center">
     <ngb-pagination
       [collectionSize]="users.length"
       [(page)]="currentPage"
@@ -90,3 +93,5 @@
 <app-pop-up [show]="showPopup" (closePopup)="closePopup()">
   <app-user-detail></app-user-detail>
 </app-pop-up>
+
+<app-confirm-delete></app-confirm-delete>

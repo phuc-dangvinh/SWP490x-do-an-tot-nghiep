@@ -8,6 +8,7 @@ import { PopUpComponent } from '../share/pop-up/pop-up.component';
 import { ButtonsModule } from '../share/buttons/buttons.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmDeleteComponent } from '../share/confirm-delete/confirm-delete.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     CategoryManagementComponent,
     UserDetailComponent,
     PopUpComponent,
+    ConfirmDeleteComponent
   ],
   imports: [
     CommonModule,

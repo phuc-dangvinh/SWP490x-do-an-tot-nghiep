@@ -1,0 +1,15 @@
+<div [ngStyle]="{ 'width.vw': width }">
+  <form [formGroup]="searchForm" (ngSubmit)="onClick()">
+    <div class="wraper-button">
+      <input
+        type="text"
+        [placeholder]="placeHolder"
+        class="form-control"
+        formControlName="keyword"
+      />
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </form>
+</div>

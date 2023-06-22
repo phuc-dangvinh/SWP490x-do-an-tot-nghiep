@@ -13,26 +13,6 @@ th {
 }
 
 tr {
-  .info-wraper {
-    height: 100%;
-    display: flex;
-    align-items: center;
-  }
-
-  .button-wraper {
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .name-wraper {
-    height: 100%;
-    display: flex;
-    justify-content: start;
-    align-items: center;
-  }
-
   .name {
     margin-left: 15px;
   }
@@ -51,12 +31,6 @@ td {
 .no-avatar {
   font-size: 30px;
   color: #A6A6A6;
-}
-
-.items-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .check-box {
@@ -83,7 +57,6 @@ td {
   width: 10%;
 }
 
-.search{
-  width: 20%;
+.search-box {
   float: right;
 }

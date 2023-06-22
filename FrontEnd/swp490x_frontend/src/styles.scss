@@ -1,2 +1,16 @@
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
+
+.center-center {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.left-center {
+  height: 100%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}

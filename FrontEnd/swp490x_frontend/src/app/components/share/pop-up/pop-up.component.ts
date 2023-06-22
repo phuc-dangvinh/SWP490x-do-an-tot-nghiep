@@ -31,13 +31,10 @@ export class PopUpComponent implements OnInit {
     switch (this.position) {
       case PopupPosition.FULL_SCREEN:
         return 'modal-position-full-screen';
-        break;
       case PopupPosition.CENTER:
         return 'modal-position-center';
-        break;
       case PopupPosition.RIGHT:
         return 'modal-position-right';
-        break;
       default:
         return '';
     }
