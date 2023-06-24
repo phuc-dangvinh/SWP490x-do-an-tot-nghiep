@@ -69,8 +69,12 @@
           </td>
           <td>
             <div class="center-center">
-              <app-edit-button></app-edit-button>
-              <app-delete-button></app-delete-button>
+              <app-edit-button
+                (clickButton)="openPopup2('newOrEdit')"
+              ></app-edit-button>
+              <app-delete-button
+                (clickButton)="openPopup2('confirmDelete')"
+              ></app-delete-button>
             </div>
           </td>
         </tr>
@@ -93,5 +97,3 @@
 <app-pop-up [show]="showPopup" (closePopup)="closePopup()">
   <app-user-detail></app-user-detail>
 </app-pop-up>
-
-<app-confirm-delete></app-confirm-delete>
