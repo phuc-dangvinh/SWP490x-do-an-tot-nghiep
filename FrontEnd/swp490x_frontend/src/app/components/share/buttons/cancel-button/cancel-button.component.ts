@@ -6,4 +6,4 @@ import { ButtonBaseComponent } from '../button-base/button-base.component';
   templateUrl: './cancel-button.component.html',
   styleUrls: ['./cancel-button.component.scss'],
 })
-export class CancelButtonComponent {}
+export class CancelButtonComponent extends ButtonBaseComponent {}

@@ -1,8 +1,9 @@
-<div>
-  <h3 class="py-2 text-center sticky-top bg-white">New user</h3>
+<div class="container-fluid">
+  <h4 class="py-2 text-center sticky-top bg-white">New user</h4>
+  <hr />
   <div>
     <div class="mb-3">
-      <label for="avatar" class="form-label">Avatar:</label>
+      <label for="avatar" class="form-label text-primary">Avatar:</label>
       <input
         type="file"
         accept="image/*"
@@ -14,32 +15,35 @@
       </div>
     </div>
     <div class="mb-3">
-      <label for="fullname" class="form-label">Full name:</label>
+      <label for="fullname" class="form-label text-primary">Full name:</label>
       <input type="text" class="form-control" id="fullname" />
     </div>
     <div class="mb-3">
-      <label for="email" class="form-label">Email:</label>
+      <label for="email" class="form-label text-primary">Email:</label>
       <input type="email" class="form-control" id="email" />
     </div>
     <div class="mb-3">
-      <label for="phone" class="form-label">Phone:</label>
+      <label for="phone" class="form-label text-primary">Phone:</label>
       <input type="text" class="form-control" id="phone" />
     </div>
     <div class="mb-3">
-      <label for="password" class="form-label">Password:</label>
+      <label for="password" class="form-label text-primary">Password:</label>
       <input type="password" class="form-control" id="password" />
     </div>
     <div class="mb-3">
-      <label for="repeat-password" class="form-label">Repeat password:</label>
+      <label for="repeat-password" class="form-label text-primary"
+        >Repeat password:</label
+      >
       <input type="password" class="form-control" id="repeat-password" />
     </div>
     <div>
-      <label class="form-label" text-primary>Admin</label>
+      <label class="form-label text-primary">Admin</label>
       <app-slider-button class="ms-3"></app-slider-button>
     </div>
   </div>
-  <div class="text-center sticky-bottom bg-white">
+  <hr />
+  <div class="text-center sticky-bottom bg-white mb-3">
     <app-save-button></app-save-button>
-    <app-cancel-button></app-cancel-button>
+    <app-cancel-button (clickButton)="onClick(BUTTON.CANCEL)"></app-cancel-button>
   </div>
 </div>

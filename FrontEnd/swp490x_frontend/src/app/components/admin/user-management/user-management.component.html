@@ -1,8 +1,12 @@
 <div>
   <div class="container-fluid mt-4 mb-3">
     <div>
-      <app-new-large-button (clickButton)="openPopup()"></app-new-large-button>
-      <app-delete-large-button></app-delete-large-button>
+      <app-new-large-button
+        (clickButton)="openPopup(BUTTON.NEW, userDetailPopup)"
+      ></app-new-large-button>
+      <app-delete-large-button
+        (clickButton)="openPopup(BUTTON.DELETE, confirmDeletePopup)"
+      ></app-delete-large-button>
       <app-search-box
         [width]="30"
         class="search-box"
@@ -70,10 +74,12 @@
           <td>
             <div class="center-center">
               <app-edit-button
-                (clickButton)="openPopup2('newOrEdit')"
+                (clickButton)="openPopup(BUTTON.EDIT, userDetailPopup)"
               ></app-edit-button>
               <app-delete-button
-                (clickButton)="openPopup2('confirmDelete')"
+                (clickButton)="
+                  openPopup(BUTTON.DELETE, confirmDeletePopup, user.id)
+                "
               ></app-delete-button>
             </div>
           </td>
@@ -81,7 +87,7 @@
       </tbody>
     </table>
   </div>
-  <div class="center-center">
+  <div class="center-top">
     <ngb-pagination
       [collectionSize]="users.length"
       [(page)]="currentPage"
@@ -89,11 +95,32 @@
       [rotate]="true"
       [boundaryLinks]="true"
       [pageSize]="pageSize"
-      (pageChange)="onChangePage($event)"
+      (pageChange)="changeSelectPage($event)"
     >
     </ngb-pagination>
+    <select
+      class="form-select ms-4"
+      style="width: auto"
+      [(ngModel)]="pageSize"
+      (ngModelChange)="changePageSize()"
+    >
+      <option
+        *ngFor="let pageSizeOption of pageSizeOptionChange"
+        [ngValue]="pageSizeOption"
+      >
+        {{ pageSizeOption }} items per page
+      </option>
+    </select>
   </div>
 </div>
-<app-pop-up [show]="showPopup" (closePopup)="closePopup()">
-  <app-user-detail></app-user-detail>
-</app-pop-up>
+<ng-template #userDetailPopup>
+  <app-user-detail
+    (clickCancelButton)="closePopup(userDetailPopup)"
+  ></app-user-detail>
+</ng-template>
+<ng-template #confirmDeletePopup>
+  <app-confirm-delete
+    (clickCancelButton)="closePopup(confirmDeletePopup)"
+    (clickOkButton)="processsDelete(confirmDeletePopup)"
+  ></app-confirm-delete>
+</ng-template>

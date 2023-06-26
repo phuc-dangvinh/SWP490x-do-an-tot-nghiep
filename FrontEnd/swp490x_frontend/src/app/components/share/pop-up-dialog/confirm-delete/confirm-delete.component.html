@@ -1,0 +1,31 @@
+<div class="modal-header">
+  <h4 class="modal-title">Confirm delete</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-describedby="modal-title"
+    (click)="onClick(BUTTON.CANCEL)"
+  ></button>
+</div>
+<div class="modal-body">
+  <p>
+    <strong>Are you sure you want to delete?</strong>
+  </p>
+  <p>
+    All information will be permanently deleted.
+    <br />
+    <span class="text-danger">This operation can not be undone.</span>
+  </p>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-outline-secondary"
+    (click)="onClick(BUTTON.CANCEL)"
+  >
+    Cancel
+  </button>
+  <button type="button" class="btn btn-danger" (click)="onClick(BUTTON.OK)">
+    OK
+  </button>
+</div>

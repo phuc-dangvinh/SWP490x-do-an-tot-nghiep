@@ -1,10 +1,9 @@
-import { Component, OnInit, Type } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ROLE } from 'src/app/model/ERole';
-import { User } from 'src/app/model/user';
+import { ROLE } from 'src/app/const/ERole';
+import { User } from 'src/app/interface/user';
 import { HttpService } from 'src/app/service/http.service';
-import { ConfirmDeleteComponent } from '../../share/confirm-delete/confirm-delete.component';
-import { UserDetailComponent } from '../pop-up/user-detail/user-detail.component';
+import { BUTTON } from '../../../const/EButton';
 
 @Component({
   selector: 'app-user-management',
@@ -12,16 +11,19 @@ import { UserDetailComponent } from '../pop-up/user-detail/user-detail.component
   styleUrls: ['./user-management.component.scss'],
 })
 export class UserManagementComponent implements OnInit {
-  public showPopup: boolean = false;
+  private getUserUrl = '/user/manage';
   public users: User[] = [];
   public itemsOfPage: User[] = [];
-  public pageSize: number = 3;
+  public pageSize: number = 4;
   public currentPage: number = 1;
   public maxSizePage: number = 5;
-  public modelsPopup: { [name: string]: Type<any> } = {
-    newOrEdit: UserDetailComponent,
-    confirmDelete: ConfirmDeleteComponent,
-  };
+  public pageSizeOptionChange: number[] = [4, 6, 8, 10];
+  // public modelsPopup: { [name: string]: Type<any> } = {
+  //   newOrEdit: UserDetailComponent,
+  //   confirmDelete: ConfirmDeleteComponent,
+  // };
+  public readonly BUTTON = BUTTON;
+  private selectedUserIds: string[] = [];
 
   constructor(
     private httpService: HttpService,
@@ -29,41 +31,69 @@ export class UserManagementComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const url = '/user/manage';
-    this.getData(url);
+    this.getUser();
   }
 
-  private getData(url: string) {
+  private getUser() {
+    const url = '/user/manage';
     this.httpService.get<User[]>(url).subscribe((res) => {
       this.users = res;
-      this.onChangePage(1);
+      this.changeSelectPage(1);
     });
   }
 
-  public openPopup() {
-    this.showPopup = true;
+  public search(keyword: string) {
+    const url = `/user/manage/search?keyword=${keyword.trim()}`;
+    this.getUser();
   }
 
-  public closePopup() {
-    this.showPopup = false;
+  public processsDelete(popupContent: any) {
+    const url = '/user/manage';
+    this.httpService.deleteByPost(url, this.selectedUserIds).subscribe(() => {
+      this.getUser();
+      this.closePopup(popupContent);
+    });
   }
 
   public checkAdmin(user: User): boolean {
     return user.authorities.some((item) => item.authority == ROLE.ADMIN);
   }
 
-  public onChangePage(page: number) {
+  public changeSelectPage(page: number) {
     const start = this.pageSize * page - (this.pageSize - 1);
     const end = this.pageSize * page;
     this.itemsOfPage = this.users.slice(start - 1, end);
   }
 
-  public search(keyword: string) {
-    const url = `/user/manage/search?keyword=${keyword.trim()}`;
-    this.getData(url);
+  public changePageSize() {
+    this.currentPage = 1;
+    this.changeSelectPage(this.currentPage);
   }
 
-  public openPopup2(name: string){
-    this._modalService.open(this.modelsPopup[name]);
+  private getSelectedId(id: string) {
+    this.selectedUserIds = [];
+    this.selectedUserIds.push(id);
+  }
+
+  public openPopup(button: BUTTON, popupContent: any, id?: string) {
+    switch (button) {
+      case BUTTON.EDIT:
+        this._modalService.open(popupContent, { size: 'lg' });
+        break;
+      case BUTTON.NEW:
+        this._modalService.open(popupContent, { size: 'lg' });
+        break;
+      case BUTTON.DELETE:
+        this._modalService.open(popupContent);
+        if (id !== undefined) {
+          this.getSelectedId(id);
+        }
+        break;
+      default:
+    }
+  }
+
+  public closePopup(popupContent: any) {
+    this._modalService.dismissAll(popupContent);
   }
 }

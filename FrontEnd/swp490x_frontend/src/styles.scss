@@ -14,3 +14,10 @@
   justify-content: start;
   align-items: center;
 }
+
+.center-top {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}

@@ -17,16 +17,22 @@ export class HttpService {
 
   constructor(private http: HttpClient) {}
 
+  private handleError<T>(result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(error);
+      return of(result as T);
+    };
+  }
+
   get<T>(url: string): Observable<T> {
     return this.http
       .get<T>(rootApi + url)
       .pipe(tap(), catchError(this.handleError<T>()));
   }
 
-  private handleError<T>(result?: T) {
-    return (error: any): Observable<T> => {
-      console.error(error);
-      return of(result as T);
-    };
+  deleteByPost<T>(url: string, ids: string[]) {
+    return this.http
+      .post<T>(rootApi + url, ids, this.httpOptions)
+      .pipe(tap(), catchError(this.handleError<T>()));
   }
 }

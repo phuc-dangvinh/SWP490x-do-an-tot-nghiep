@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { PopupPosition } from 'src/app/model/position-popup';
+import { POSITION } from '../../../const/EPosition';
+// import { PopupPosition } from 'src/app/model/position-popup';
 
 @Component({
   selector: 'app-pop-up',
@@ -9,7 +10,7 @@ import { PopupPosition } from 'src/app/model/position-popup';
 export class PopUpComponent implements OnInit {
   private static lastZIndex = 1;
   public zIndex = 0;
-  @Input() position: PopupPosition = PopupPosition.CENTER;
+  @Input() position: POSITION = POSITION.CENTER;
   @Input() show: boolean = false;
   @Input() stopPropagation?: boolean = false;
   @Input() transparent?: boolean = false;
@@ -29,11 +30,11 @@ export class PopUpComponent implements OnInit {
 
   public selectClass() {
     switch (this.position) {
-      case PopupPosition.FULL_SCREEN:
+      case POSITION.FULL_SCREEN:
         return 'modal-position-full-screen';
-      case PopupPosition.CENTER:
+      case POSITION.CENTER:
         return 'modal-position-center';
-      case PopupPosition.RIGHT:
+      case POSITION.RIGHT:
         return 'modal-position-right';
       default:
         return '';
