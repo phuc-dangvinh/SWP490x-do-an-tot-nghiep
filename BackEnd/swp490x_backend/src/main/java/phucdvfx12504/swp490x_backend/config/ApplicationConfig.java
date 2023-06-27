@@ -12,7 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.repositories.UserRepository;
-import phucdvfx12504.swp490x_backend.utils.PropertyUtils;
+import phucdvfx12504.swp490x_backend.utils.UpdatePropertyUtils;
 
 @Configuration
 @RequiredArgsConstructor
@@ -44,8 +44,8 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public PropertyUtils updateUtils() {
-        return new PropertyUtils();
+    public UpdatePropertyUtils updateUtils() {
+        return new UpdatePropertyUtils();
     }
 
 

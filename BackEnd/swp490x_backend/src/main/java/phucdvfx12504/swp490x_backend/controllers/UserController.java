@@ -1,5 +1,6 @@
 package phucdvfx12504.swp490x_backend.controllers;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
 import phucdvfx12504.swp490x_backend.dto.user.UserChangePasswordRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserUpdateRequest;
 import phucdvfx12504.swp490x_backend.entities.User;
@@ -34,8 +37,8 @@ public class UserController {
     }
 
     @PostMapping("/manage")
-    public void delete(@RequestBody List<String> ids) {
-        userService.delete(ids);
+    public TextMessageResponse delete(@RequestBody List<String> ids) {
+        return userService.delete(ids);
     }
 
     @PutMapping("/manage")
@@ -46,6 +49,12 @@ public class UserController {
     @PutMapping("/change-password")
     public User changePassword(@RequestBody UserChangePasswordRequest userChangePasswordRequest) {
         return userService.changePassword(userChangePasswordRequest);
+    }
+
+    @PostMapping("/manage/reset-password")
+    public TextMessageResponse resetPassword(@RequestBody List<String> ids)
+            throws UnsupportedEncodingException, MessagingException {
+        return userService.resetPassword(ids);
     }
 
 }

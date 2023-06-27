@@ -11,6 +11,7 @@ import { CancelButtonComponent } from './cancel-button/cancel-button.component';
 import { SearchBoxComponent } from './search-box/search-box.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonBaseComponent } from './button-base/button-base.component';
+import { ResetButtonComponent } from './reset-button/reset-button.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { ButtonBaseComponent } from './button-base/button-base.component';
     CancelButtonComponent,
     SearchBoxComponent,
     ButtonBaseComponent,
+    ResetButtonComponent,
   ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   exports: [
@@ -37,6 +39,7 @@ import { ButtonBaseComponent } from './button-base/button-base.component';
     SaveButtonComponent,
     CancelButtonComponent,
     SearchBoxComponent,
+    ResetButtonComponent,
   ],
 })
 export class ButtonsModule {}

@@ -4,5 +4,6 @@ export enum BUTTON {
   SAVE = 'SAVE',
   NEW = 'NEW',
   EDIT = 'EDIT',
-  DELETE = 'DELETE'
+  DELETE = 'DELETE',
+  RESET = 'RESET',
 }

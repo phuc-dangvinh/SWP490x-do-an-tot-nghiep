@@ -1,12 +1,15 @@
 package phucdvfx12504.swp490x_backend.services.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.constant.ERoleName;
+import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
 import phucdvfx12504.swp490x_backend.dto.user.UserChangePasswordRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserUpdateRequest;
 import phucdvfx12504.swp490x_backend.entities.Role;
@@ -14,8 +17,10 @@ import phucdvfx12504.swp490x_backend.entities.User;
 import phucdvfx12504.swp490x_backend.repositories.RoleRepository;
 import phucdvfx12504.swp490x_backend.repositories.UserRepository;
 import phucdvfx12504.swp490x_backend.repositories.UserRepositoryCustom;
+import phucdvfx12504.swp490x_backend.services.EmailService;
 import phucdvfx12504.swp490x_backend.services.UserService;
-import phucdvfx12504.swp490x_backend.utils.PropertyUtils;
+import phucdvfx12504.swp490x_backend.utils.CommonLangPasswordUtils;
+import phucdvfx12504.swp490x_backend.utils.UpdatePropertyUtils;
 
 @Component
 @RequiredArgsConstructor
@@ -23,8 +28,10 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserRepositoryCustom userRepositoryCustom;
     private final RoleRepository roleRepository;
-    private final PropertyUtils propertyUtils;
+    private final UpdatePropertyUtils propertyUtils;
     private final PasswordEncoder passwordEncoder;
+    private final CommonLangPasswordUtils commonLangPasswordUtils;
+    private final EmailService emailService;
 
     @Override
     public List<User> getAll() {
@@ -38,13 +45,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void delete(List<String> ids) {
+    public TextMessageResponse delete(List<String> ids) {
+        int countAdmin = 0;
         Role adminRole = roleRepository.findByName(ERoleName.ADMIN).get();
         for (String id : ids) {
             User user = userRepository.findById(id).get();
             if (!user.getRoles().contains(adminRole)) {
                 userRepository.deleteById(id);
+            } else {
+                countAdmin++;
             }
+        }
+        if (countAdmin == 0) {
+            return TextMessageResponse.builder().message("Delete successfully!").build();
+        } else {
+            return TextMessageResponse.builder().message("Delete failed").build();
         }
     }
 
@@ -66,6 +81,35 @@ public class UserServiceImpl implements UserService {
             return userRepository.save(user);
         }
         return null;
+    }
+
+    @Override
+    public TextMessageResponse resetPassword(List<String> ids) throws UnsupportedEncodingException, MessagingException {
+        for (String id : ids) {
+            User user = userRepository.findById(id).orElseThrow();
+            String newPassword = commonLangPasswordUtils.generateCommonLangPassword();
+            user.setPassword(passwordEncoder.encode(passwordEncoder.encode(newPassword)));
+            // send email
+            String to = user.getEmail();
+            String subject = "Reset password successfully";
+            String text = this.replaceEmailContent(newPassword);
+            emailService.sendMimeEmail(to, subject, text);
+            //
+            userRepository.save(user);
+        }
+        return TextMessageResponse.builder().message("Reset password successfully!").build();
+    }
+
+    private String replaceEmailContent(String password) {
+        String result = "<html>\r\n" + //
+                "  <body>\r\n" + //
+                "    You have successfully reset your password.<br />\r\n" + //
+                "    Your new password is: <b>{password}</b><br /><br />\r\n" + //
+                "    Thank you for your using our service.\r\n" + //
+                "  </body>\r\n" + //
+                "</html>";
+        result = result.replace("{password}", password);
+        return result;
     }
 
 }

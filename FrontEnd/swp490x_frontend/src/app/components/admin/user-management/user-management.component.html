@@ -2,10 +2,10 @@
   <div class="container-fluid mt-4 mb-3">
     <div>
       <app-new-large-button
-        (clickButton)="openPopup(BUTTON.NEW, userDetailPopup)"
+        (clickButton)="openPopup(BUTTON.NEW)"
       ></app-new-large-button>
       <app-delete-large-button
-        (clickButton)="openPopup(BUTTON.DELETE, confirmDeletePopup)"
+        (clickButton)="openPopup(BUTTON.DELETE)"
       ></app-delete-large-button>
       <app-search-box
         [width]="30"
@@ -74,12 +74,18 @@
           <td>
             <div class="center-center">
               <app-edit-button
-                (clickButton)="openPopup(BUTTON.EDIT, userDetailPopup)"
+                ngbTooltip="edit"
+                (clickButton)="openPopup(BUTTON.EDIT)"
               ></app-edit-button>
+              <app-reset-button
+                class="ms-1"
+                ngbTooltip="reset password"
+                (clickButton)="resetPassword(user.id)"
+              ></app-reset-button>
               <app-delete-button
-                (clickButton)="
-                  openPopup(BUTTON.DELETE, confirmDeletePopup, user.id)
-                "
+                class="ms-1"
+                (clickButton)="openPopup(BUTTON.DELETE, user)"
+                ngbTooltip="delete"
               ></app-delete-button>
             </div>
           </td>
@@ -114,13 +120,17 @@
   </div>
 </div>
 <ng-template #userDetailPopup>
-  <app-user-detail
-    (clickCancelButton)="closePopup(userDetailPopup)"
-  ></app-user-detail>
+  <app-user-detail (clickCancelButton)="closePopup()"></app-user-detail>
 </ng-template>
 <ng-template #confirmDeletePopup>
   <app-confirm-delete
-    (clickCancelButton)="closePopup(confirmDeletePopup)"
-    (clickOkButton)="processsDelete(confirmDeletePopup)"
+    (clickCancelButton)="closePopup()"
+    (clickOkButton)="processsDelete()"
   ></app-confirm-delete>
 </ng-template>
+<app-toast #toast></app-toast>
+<ng-template #notDeleteAdminPopup
+  ><app-not-delete-admin (clickButton)="closeTest()"></app-not-delete-admin
+></ng-template>
+
+<app-slider-button></app-slider-button>

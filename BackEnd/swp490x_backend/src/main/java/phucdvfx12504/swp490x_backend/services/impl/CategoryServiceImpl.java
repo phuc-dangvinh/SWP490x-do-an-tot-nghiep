@@ -10,13 +10,13 @@ import phucdvfx12504.swp490x_backend.dto.category.CategoryUpdateRequest;
 import phucdvfx12504.swp490x_backend.entities.Category;
 import phucdvfx12504.swp490x_backend.repositories.CategoryRepository;
 import phucdvfx12504.swp490x_backend.services.CategoryService;
-import phucdvfx12504.swp490x_backend.utils.PropertyUtils;
+import phucdvfx12504.swp490x_backend.utils.UpdatePropertyUtils;
 
 @Component
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
   private final CategoryRepository categoryRepository;
-  private final PropertyUtils propertyUtils;
+  private final UpdatePropertyUtils propertyUtils;
 
   @Override
   public List<Category> getAll() {

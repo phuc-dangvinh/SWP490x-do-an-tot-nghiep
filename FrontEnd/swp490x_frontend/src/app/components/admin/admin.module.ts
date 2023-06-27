@@ -9,6 +9,8 @@ import { ButtonsModule } from '../share/buttons/buttons.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmDeleteComponent } from '../share/pop-up-dialog/confirm-delete/confirm-delete.component';
+import { ToastComponent } from '../share/toast/toast.component';
+import { NotDeleteAdminComponent } from '../share/pop-up-dialog/not-delete-admin/not-delete-admin.component';
 
 @NgModule({
   declarations: [
@@ -17,14 +19,18 @@ import { ConfirmDeleteComponent } from '../share/pop-up-dialog/confirm-delete/co
     CategoryManagementComponent,
     UserDetailComponent,
     PopUpComponent,
-    ConfirmDeleteComponent
+    ConfirmDeleteComponent,
+    ToastComponent,
+    NotDeleteAdminComponent,
   ],
   imports: [
     CommonModule,
     ButtonsModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbModule
+    NgbModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
 })
 export class AdminModule {}

@@ -1,9 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ROLE } from 'src/app/const/ERole';
 import { User } from 'src/app/interface/user';
 import { HttpService } from 'src/app/service/http.service';
 import { BUTTON } from '../../../const/EButton';
+import { ToastComponent } from '../../share/toast/toast.component';
+import { TextMessage } from 'src/app/interface/text-message';
+import { NotDeleteAdminComponent } from '../../share/pop-up-dialog/not-delete-admin/not-delete-admin.component';
+import { UserDetailComponent } from '../pop-up/user-detail/user-detail.component';
+import { ConfirmDeleteComponent } from '../../share/pop-up-dialog/confirm-delete/confirm-delete.component';
 
 @Component({
   selector: 'app-user-management',
@@ -11,7 +16,6 @@ import { BUTTON } from '../../../const/EButton';
   styleUrls: ['./user-management.component.scss'],
 })
 export class UserManagementComponent implements OnInit {
-  private getUserUrl = '/user/manage';
   public users: User[] = [];
   public itemsOfPage: User[] = [];
   public pageSize: number = 4;
@@ -24,6 +28,16 @@ export class UserManagementComponent implements OnInit {
   // };
   public readonly BUTTON = BUTTON;
   private selectedUserIds: string[] = [];
+  @ViewChild('toast') toast: ToastComponent | undefined;
+  @ViewChild('userDetailPopup') userDetailPopup:
+    | UserDetailComponent
+    | undefined;
+  @ViewChild('confirmDeletePopup') confirmDeletePopup:
+    | ConfirmDeleteComponent
+    | undefined;
+  @ViewChild('notDeleteAdminPopup') notDeleteAdminPopup:
+    | NotDeleteAdminComponent
+    | undefined;
 
   constructor(
     private httpService: HttpService,
@@ -38,7 +52,7 @@ export class UserManagementComponent implements OnInit {
     const url = '/user/manage';
     this.httpService.get<User[]>(url).subscribe((res) => {
       this.users = res;
-      this.changeSelectPage(1);
+      this.changeSelectPage(this.currentPage);
     });
   }
 
@@ -47,12 +61,29 @@ export class UserManagementComponent implements OnInit {
     this.getUser();
   }
 
-  public processsDelete(popupContent: any) {
+  public processsDelete() {
     const url = '/user/manage';
-    this.httpService.deleteByPost(url, this.selectedUserIds).subscribe(() => {
-      this.getUser();
-      this.closePopup(popupContent);
-    });
+    this.httpService
+      .deleteByPost<TextMessage>(url, this.selectedUserIds)
+      .subscribe((res) => {
+        if (res.message.includes('failed')) {
+          this.toast?.showDanger(res.message, 3000);
+        } else {
+          this.getUser();
+          this.toast?.showSuccess(res.message, 3000);
+        }
+        this.closePopup();
+      });
+  }
+
+  public resetPassword(id: string) {
+    this.getSelectedId(id);
+    const url = '/user/manage/reset-password';
+    this.httpService
+      .post<TextMessage>(url, this.selectedUserIds)
+      .subscribe((res) => {
+        this.toast?.showSuccess(res.message, 3000);
+      });
   }
 
   public checkAdmin(user: User): boolean {
@@ -60,6 +91,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   public changeSelectPage(page: number) {
+    this.currentPage = page;
     const start = this.pageSize * page - (this.pageSize - 1);
     const end = this.pageSize * page;
     this.itemsOfPage = this.users.slice(start - 1, end);
@@ -75,25 +107,38 @@ export class UserManagementComponent implements OnInit {
     this.selectedUserIds.push(id);
   }
 
-  public openPopup(button: BUTTON, popupContent: any, id?: string) {
+  public openPopup(button: BUTTON, user?: User) {
     switch (button) {
       case BUTTON.EDIT:
-        this._modalService.open(popupContent, { size: 'lg' });
+        this._modalService.open(this.userDetailPopup, { size: 'lg' });
         break;
       case BUTTON.NEW:
-        this._modalService.open(popupContent, { size: 'lg' });
+        this._modalService.open(this.userDetailPopup, { size: 'lg' });
         break;
       case BUTTON.DELETE:
-        this._modalService.open(popupContent);
-        if (id !== undefined) {
-          this.getSelectedId(id);
+        if (user) {
+          this.checkAdmin(user)
+            ? this._modalService.open(this.notDeleteAdminPopup)
+            : this._modalService.open(this.confirmDeletePopup);
+          this.getSelectedId(user.id);
+          break;
+        } else {
+          break;
         }
-        break;
       default:
     }
   }
 
-  public closePopup(popupContent: any) {
-    this._modalService.dismissAll(popupContent);
+  public closePopup() {
+    this._modalService.dismissAll();
+  }
+
+  public openTest() {
+    this._modalService.open(this.notDeleteAdminPopup);
+    console.log('type', typeof this.notDeleteAdminPopup);
+  }
+
+  public closeTest() {
+    this._modalService.dismissAll(this.notDeleteAdminPopup);
   }
 }

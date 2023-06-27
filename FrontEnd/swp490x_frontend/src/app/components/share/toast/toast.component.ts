@@ -1,4 +1,4 @@
-import { Component, OnDestroy, TemplateRef } from '@angular/core';
+import { Component, Input, OnDestroy, TemplateRef } from '@angular/core';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastService } from 'src/app/service/toast.service';
 
@@ -6,31 +6,31 @@ import { ToastService } from 'src/app/service/toast.service';
   selector: 'app-toast',
   templateUrl: './toast.component.html',
   styleUrls: ['./toast.component.scss'],
-  // imports: [NgbTooltipModule],
-  // standalone: true,
 })
 export class ToastComponent implements OnDestroy {
   constructor(public toastService: ToastService) {}
 
-  isTemplate(toast: string | TemplateRef<any>) {
-    return toast instanceof TemplateRef;
+  isTemplate(content: string | TemplateRef<any>) {
+    return content instanceof TemplateRef;
   }
 
-  showStandard() {
-    this.toastService.show('I am a standard toast');
-  }
-
-  showSuccess() {
-    this.toastService.show('I am a success toast', {
-      classname: 'bg-success text-light',
-      delay: 5000,
+  showStandard(content: string | TemplateRef<any>, delayTime: number) {
+    this.toastService.show(content, {
+      delay: delayTime,
     });
   }
 
-  showDanger(dangerTpl: string | TemplateRef<any>) {
-    this.toastService.show(dangerTpl, {
+  showSuccess(content: string | TemplateRef<any>, delayTime: number) {
+    this.toastService.show(content, {
+      classname: 'bg-success text-light',
+      delay: delayTime,
+    });
+  }
+
+  showDanger(content: string | TemplateRef<any>, delayTime: number) {
+    this.toastService.show(content, {
       classname: 'bg-danger text-light',
-      delay: 5000,
+      delay: delayTime,
     });
   }
 

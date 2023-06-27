@@ -11,14 +11,14 @@ import phucdvfx12504.swp490x_backend.entities.Product;
 import phucdvfx12504.swp490x_backend.repositories.ProductRepository;
 import phucdvfx12504.swp490x_backend.repositories.ProductRepositoryCustom;
 import phucdvfx12504.swp490x_backend.services.ProductService;
-import phucdvfx12504.swp490x_backend.utils.PropertyUtils;
+import phucdvfx12504.swp490x_backend.utils.UpdatePropertyUtils;
 
 @Component
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
   private final ProductRepository productRepository;
   private final ProductRepositoryCustom productRepositoryCustom;
-  private final PropertyUtils propertyUtils;
+  private final UpdatePropertyUtils propertyUtils;
 
   @Override
   public List<Product> getAll() {

@@ -30,6 +30,12 @@ export class HttpService {
       .pipe(tap(), catchError(this.handleError<T>()));
   }
 
+  post<T>(url: string, ids: string[]) {
+    return this.http
+      .post<T>(rootApi + url, ids, this.httpOptions)
+      .pipe(tap(), catchError(this.handleError<T>()));
+  }
+
   deleteByPost<T>(url: string, ids: string[]) {
     return this.http
       .post<T>(rootApi + url, ids, this.httpOptions)

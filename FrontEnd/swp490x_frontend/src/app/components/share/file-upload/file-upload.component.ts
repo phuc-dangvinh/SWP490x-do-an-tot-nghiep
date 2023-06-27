@@ -1,5 +1,6 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { FileUploadService } from 'src/app/service/file-upload.service';
 
@@ -16,7 +17,7 @@ export class FileUploadComponent implements OnInit {
   preview = '';
   imageInfos?: Observable<any>;
 
-  constructor(private uploadService: FileUploadService) {}
+  constructor(public uploadService: FileUploadService) {}
 
   ngOnInit(): void {
     this.imageInfos = this.uploadService.getFiles();
