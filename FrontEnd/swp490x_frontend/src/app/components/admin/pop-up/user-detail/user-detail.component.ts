@@ -1,9 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { BUTTON } from 'src/app/const/EButton';
 import { FileUploadComponent } from 'src/app/components/share/file-upload/file-upload.component';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Observable } from 'rxjs';
 import { FileUploadService } from 'src/app/service/file-upload.service';
+import { HttpService } from 'src/app/service/http.service';
 
 @Component({
   selector: 'app-user-detail',
@@ -15,31 +21,24 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
   @Output() clickCancelButton = new EventEmitter<boolean>();
   @Output() clickSaveButton = new EventEmitter<boolean>();
   public readonly BUTTON = BUTTON;
-  // public formGroup: FormGroup | undefined;
-
+  public userForm!: FormGroup;
   private nameRegex: RegExp = /^((?=.*\d)(?=.*[A-Z]).{8,20})$/;
   private emailRegex: RegExp =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  //email: ^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$
   private passwordRegex: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
-  public formGroup = this.formBuilder.group({
-    fullname: [null],
-    email: [null],
-    phone: [null],
-    password: [null],
-    repeatPassword: [null],
-    isAdmin: [null],
-  });
 
   constructor(
     public override uploadService: FileUploadService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private httpService: HttpService
   ) {
     super(uploadService);
   }
 
-  // override ngOnInit(): void {
-  //   this.createForm();
-  // }
+  override ngOnInit(): void {
+    this.createForm();
+  }
 
   public onClick(button: BUTTON) {
     switch (button) {
@@ -53,43 +52,37 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
     }
   }
 
-  // private createForm() {
-  //   const nameRegex: RegExp = /^((?=.*\d)(?=.*[A-Z]).{8,20})$/;
-  //   const emailRegex: RegExp =
-  //     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  //   this.formGroup = this.formBuilder.group({
-  //     fullname: [null, [Validators.required, Validators.pattern(nameRegex)]],
-  //     email: [
-  //       null,
-  //       [Validators.required, Validators.pattern(emailRegex)],
-  //       this.checkInUseEmail,
-  //     ],
-  //     phone: [null],
-  //     password: [null, [Validators.required, this.checkPassword]],
-  //     repeatPassword: [null, [Validators.required, this.checkPassword]],
-  //     isAdmin: [null, [Validators.required]],
-  //   });
-  // }
-
-  private checkPassword(control: FormControl) {
-    let enteredPassword = control.value;
-    // const passwordRegex: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
-    return !this.passwordRegex.test(enteredPassword) && enteredPassword
-      ? { requirements: true }
-      : null;
+  private createForm() {
+    this.userForm = this.formBuilder.group({
+      fullname: ['', [Validators.required, Validators.pattern(this.nameRegex)]],
+      email: [
+        '',
+        [Validators.required, Validators.pattern(this.emailRegex)],
+        this.checkExistEmail,
+      ],
+      phone: [''],
+      password: [
+        '',
+        [Validators.required, Validators.pattern(this.passwordRegex)],
+      ],
+      repeatPassword: ['', [Validators.required, this.checkPassword]],
+      isAdmin: [false, [Validators.required]],
+    });
   }
 
-  private checkInUseEmail(control: FormControl) {
-    // mimic http database access
-    let db = ['tony@gmail.com'];
-    return new Observable((observer) => {
-      setTimeout(() => {
-        let result =
-          db.indexOf(control.value) !== -1 ? { alreadyInUse: true } : null;
-        observer.next(result);
-        observer.complete();
-      }, 4000);
-    });
+  private checkPassword(control: FormControl) {
+    let repeatPassword = control.value;
+    let password = this.userForm.controls['password'].value;
+    return repeatPassword !== password ? { requirements: true } : null;
+  }
+
+  private checkExistEmail(control: FormControl) {
+    const url = 'user/manage/check-exist';
+    return this.httpService
+      .post(url, { email: control.value })
+      .subscribe((res) => {
+        !res ? { requirements: true } : null;
+      });
   }
 
   public submitForm() {}

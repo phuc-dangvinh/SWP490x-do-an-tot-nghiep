@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
+import phucdvfx12504.swp490x_backend.dto.user.CheckExistUserRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserChangePasswordRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserUpdateRequest;
 import phucdvfx12504.swp490x_backend.entities.User;
@@ -57,4 +58,8 @@ public class UserController {
         return userService.resetPassword(ids);
     }
 
+    @PostMapping("/manage/check-exist")
+    public boolean checkExist(@RequestBody CheckExistUserRequest user) {
+        return userService.checkExist(user);
+    }
 }

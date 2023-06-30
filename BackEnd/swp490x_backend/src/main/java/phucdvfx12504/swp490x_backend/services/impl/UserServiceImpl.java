@@ -10,6 +10,7 @@ import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.constant.ERoleName;
 import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
+import phucdvfx12504.swp490x_backend.dto.user.CheckExistUserRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserChangePasswordRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserUpdateRequest;
 import phucdvfx12504.swp490x_backend.entities.Role;
@@ -110,6 +111,11 @@ public class UserServiceImpl implements UserService {
                 "</html>";
         result = result.replace("{password}", password);
         return result;
+    }
+
+    @Override
+    public boolean checkExist(CheckExistUserRequest user) {
+        return userRepository.existsByEmail(user.getEmail());
     }
 
 }

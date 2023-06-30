@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.mail.MessagingException;
 import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
+import phucdvfx12504.swp490x_backend.dto.user.CheckExistUserRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserChangePasswordRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserUpdateRequest;
 import phucdvfx12504.swp490x_backend.entities.User;
@@ -25,5 +26,7 @@ public interface UserService {
     User changePassword(UserChangePasswordRequest userChangePasswordRequest);
 
     TextMessageResponse resetPassword(List<String> id) throws UnsupportedEncodingException, MessagingException;
+
+    boolean checkExist(CheckExistUserRequest email);
 
 }
