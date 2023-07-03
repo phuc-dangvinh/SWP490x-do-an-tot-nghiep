@@ -120,7 +120,10 @@
   </div>
 </div>
 <ng-template #userDetailPopup>
-  <app-user-detail (clickCancelButton)="closePopup()"></app-user-detail>
+  <app-user-detail
+    (clickCancelButton)="closePopup()"
+    (clickSaveButton)="newOrUpdateUser($event)"
+  ></app-user-detail>
 </ng-template>
 <ng-template #confirmDeletePopup>
   <app-confirm-delete
@@ -130,7 +133,5 @@
 </ng-template>
 <app-toast #toast></app-toast>
 <ng-template #notDeleteAdminPopup
-  ><app-not-delete-admin (clickButton)="closeTest()"></app-not-delete-admin
+  ><app-not-delete-admin (clickButton)="closePopup()"></app-not-delete-admin
 ></ng-template>
-
-<app-slider-button></app-slider-button>

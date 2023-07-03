@@ -64,12 +64,15 @@
       </div>
       <div>
         <label class="form-label text-primary">Admin</label>
-        <app-slider-button class="ms-3"></app-slider-button>
+        <app-slider-button
+          class="ms-3"
+          formControlName="isAdmin"
+        ></app-slider-button>
       </div>
     </div>
     <hr />
-    <div class="text-center sticky-bottom bg-white mb-3">
-      <app-save-button></app-save-button>
+    <div class="text-center bg-white mb-3">
+      <app-save-button (clickButton)="onClick(BUTTON.OK)"></app-save-button>
       <app-cancel-button
         (clickButton)="onClick(BUTTON.CANCEL)"
       ></app-cancel-button>

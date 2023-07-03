@@ -17,6 +17,7 @@ export class SearchBoxComponent {
   constructor(private formBuilder: FormBuilder) {}
 
   public onClick() {
+    console.log('click serch');
     this.clickSearch.emit(this.searchForm.value.keyword);
   }
 }

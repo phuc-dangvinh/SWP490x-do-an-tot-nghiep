@@ -2,14 +2,17 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { BUTTON } from 'src/app/const/EButton';
 import { FileUploadComponent } from 'src/app/components/share/file-upload/file-upload.component';
 import {
+  AbstractControl,
   FormBuilder,
   FormControl,
   FormGroup,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { FileUploadService } from 'src/app/service/file-upload.service';
 import { HttpService } from 'src/app/service/http.service';
+import { TextMessage } from 'src/app/interface/text-message';
 
 @Component({
   selector: 'app-user-detail',
@@ -19,7 +22,7 @@ import { HttpService } from 'src/app/service/http.service';
 export class UserDetailComponent extends FileUploadComponent implements OnInit {
   @Input() isEdit: boolean = false;
   @Output() clickCancelButton = new EventEmitter<boolean>();
-  @Output() clickSaveButton = new EventEmitter<boolean>();
+  @Output() clickSaveButton = new EventEmitter<string>();
   public readonly BUTTON = BUTTON;
   public userForm!: FormGroup;
   private nameRegex: RegExp = /^((?=.*\d)(?=.*[A-Z]).{8,20})$/;
@@ -38,6 +41,9 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
 
   override ngOnInit(): void {
     this.createForm();
+    this.userForm.get('isAdmin')?.valueChanges.subscribe((res) => {
+      res;
+    });
   }
 
   public onClick(button: BUTTON) {
@@ -46,44 +52,62 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
         this.clickCancelButton.emit(true);
         break;
       case BUTTON.OK:
-        this.clickSaveButton.emit(true);
+        this.submitForm();
         break;
       default:
     }
   }
 
+  // private createForm() {
+  //   this.userForm = this.formBuilder.group({
+  //     fullname: ['', [Validators.required, Validators.pattern(this.nameRegex)]],
+  //     email: [
+  //       '',
+  //       [Validators.required, Validators.pattern(this.emailRegex)],
+  //       this.checkExistEmail,
+  //     ],
+  //     phone: [''],
+  //     password: [
+  //       '',
+  //       [Validators.required, Validators.pattern(this.passwordRegex)],
+  //     ],
+  //     repeatPassword: ['', [Validators.required, this.checkPassword]],
+  //     isAdmin: [false, [Validators.required]],
+  //   });
+  // }
+
   private createForm() {
     this.userForm = this.formBuilder.group({
-      fullname: ['', [Validators.required, Validators.pattern(this.nameRegex)]],
-      email: [
-        '',
-        [Validators.required, Validators.pattern(this.emailRegex)],
-        this.checkExistEmail,
-      ],
+      fullname: [''],
+      email: [''],
       phone: [''],
-      password: [
-        '',
-        [Validators.required, Validators.pattern(this.passwordRegex)],
-      ],
-      repeatPassword: ['', [Validators.required, this.checkPassword]],
-      isAdmin: [false, [Validators.required]],
+      password: [''],
+      repeatPassword: [''],
+      isAdmin: [true],
     });
   }
 
-  private checkPassword(control: FormControl) {
-    let repeatPassword = control.value;
-    let password = this.userForm.controls['password'].value;
-    return repeatPassword !== password ? { requirements: true } : null;
+  private checkPassword(control: AbstractControl) {
+    const repeatPassword = control.value;
+    const password = this.userForm.controls['password'].value;
+    return repeatPassword === password ? { requirements: true } : null;
   }
 
-  private checkExistEmail(control: FormControl) {
+  private checkExistEmail(control: AbstractControl): ValidationErrors {
     const url = 'user/manage/check-exist';
     return this.httpService
       .post(url, { email: control.value })
       .subscribe((res) => {
-        !res ? { requirements: true } : null;
+        res ? { requirements: true } : null;
       });
   }
 
-  public submitForm() {}
+  private submitForm() {
+    const url = '/auth/register';
+    let form = this.userForm.value;
+    const { repeatPassword, ...payload } = form;
+    this.httpService.post<TextMessage>(url, payload).subscribe((res) => {
+      this.clickSaveButton.emit(res.message);
+    });
+  }
 }

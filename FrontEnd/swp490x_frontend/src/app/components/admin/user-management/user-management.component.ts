@@ -30,13 +30,13 @@ export class UserManagementComponent implements OnInit {
   private selectedUserIds: string[] = [];
   @ViewChild('toast') toast: ToastComponent | undefined;
   @ViewChild('userDetailPopup') userDetailPopup:
-    | UserDetailComponent
+    | TemplateRef<UserDetailComponent>
     | undefined;
   @ViewChild('confirmDeletePopup') confirmDeletePopup:
-    | ConfirmDeleteComponent
+    | TemplateRef<ConfirmDeleteComponent>
     | undefined;
   @ViewChild('notDeleteAdminPopup') notDeleteAdminPopup:
-    | NotDeleteAdminComponent
+    | TemplateRef<NotDeleteAdminComponent>
     | undefined;
 
   constructor(
@@ -51,12 +51,16 @@ export class UserManagementComponent implements OnInit {
   private getUser() {
     const url = '/user/manage';
     this.httpService.get<User[]>(url).subscribe((res) => {
-      this.users = res;
+      this.users = [];
+      res.forEach((user) => {
+        this.users.unshift(user);
+      });
       this.changeSelectPage(this.currentPage);
     });
   }
 
   public search(keyword: string) {
+    console.log('keyword', keyword);
     const url = `/user/manage/search?keyword=${keyword.trim()}`;
     this.getUser();
   }
@@ -133,12 +137,10 @@ export class UserManagementComponent implements OnInit {
     this._modalService.dismissAll();
   }
 
-  public openTest() {
-    this._modalService.open(this.notDeleteAdminPopup);
-    console.log('type', typeof this.notDeleteAdminPopup);
-  }
-
-  public closeTest() {
-    this._modalService.dismissAll(this.notDeleteAdminPopup);
+  public newOrUpdateUser(message: string) {
+    this.currentPage = 1;
+    this.closePopup();
+    this.toast?.showSuccess(message, 3000);
+    this.getUser();
   }
 }
