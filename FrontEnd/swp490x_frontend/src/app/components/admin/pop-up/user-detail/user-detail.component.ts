@@ -31,6 +31,12 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
   //email: ^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$
   private passwordRegex: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
 
+  private controlError = {
+    required: 'Required field',
+    passwordNotMatch: 'Re-entered password is incorrect',
+    emailExist: 'This email is taken',
+  };
+
   constructor(
     public override uploadService: FileUploadService,
     private formBuilder: FormBuilder,
@@ -41,9 +47,6 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
 
   override ngOnInit(): void {
     this.createForm();
-    this.userForm.get('isAdmin')?.valueChanges.subscribe((res) => {
-      res;
-    });
   }
 
   public onClick(button: BUTTON) {
@@ -58,56 +61,66 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
     }
   }
 
-  // private createForm() {
-  //   this.userForm = this.formBuilder.group({
-  //     fullname: ['', [Validators.required, Validators.pattern(this.nameRegex)]],
-  //     email: [
-  //       '',
-  //       [Validators.required, Validators.pattern(this.emailRegex)],
-  //       this.checkExistEmail,
-  //     ],
-  //     phone: [''],
-  //     password: [
-  //       '',
-  //       [Validators.required, Validators.pattern(this.passwordRegex)],
-  //     ],
-  //     repeatPassword: ['', [Validators.required, this.checkPassword]],
-  //     isAdmin: [false, [Validators.required]],
-  //   });
-  // }
-
   private createForm() {
     this.userForm = this.formBuilder.group({
-      fullname: [''],
-      email: [''],
+      fullname: ['', [Validators.required]],
+      email: [
+        '',
+        [Validators.required, Validators.email],
+        this.checkExistEmail,
+      ],
       phone: [''],
-      password: [''],
-      repeatPassword: [''],
-      isAdmin: [true],
+      password: this.formBuilder.group(
+        {
+          typePassword: ['', [Validators.required]],
+          repeatPassword: ['', [Validators.required]],
+        },
+        {
+          validators: this.checkRepeatPassword,
+        }
+      ),
+      isAdmin: [false, [Validators.required]],
     });
   }
 
-  private checkPassword(control: AbstractControl) {
-    const repeatPassword = control.value;
-    const password = this.userForm.controls['password'].value;
-    return repeatPassword === password ? { requirements: true } : null;
+  public checkRepeatPassword(
+    passwordControl: AbstractControl
+  ): ValidationErrors | null {
+    const passwordValue = passwordControl.value;
+    return passwordValue.typePassword === passwordValue.repeatPassword
+      ? null
+      : { passwordNotMatch: true };
   }
 
-  private checkExistEmail(control: AbstractControl): ValidationErrors {
-    const url = 'user/manage/check-exist';
+  private checkExistEmail(
+    emailControl: AbstractControl
+  ): ValidationErrors | null {
+    console.log('vao check exist email');
+    console.log({ email: emailControl.value });
+    const url = '/user/manage/check-exist';
     return this.httpService
-      .post(url, { email: control.value })
+      .post(url, { email: emailControl.value })
       .subscribe((res) => {
-        res ? { requirements: true } : null;
+        console.log('res', res);
+        res ? { emailExist: true } : null;
       });
   }
 
   private submitForm() {
-    const url = '/auth/register';
-    let form = this.userForm.value;
-    const { repeatPassword, ...payload } = form;
-    this.httpService.post<TextMessage>(url, payload).subscribe((res) => {
-      this.clickSaveButton.emit(res.message);
-    });
+    if (this.userForm.valid) {
+      const url = '/auth/register';
+      const formValue = this.userForm.value;
+      let payload = formValue;
+      payload.password = formValue.password.typePassword;
+      this.httpService.post<TextMessage>(url, payload).subscribe((res) => {
+        this.clickSaveButton.emit(res.message);
+      });
+    }
+  }
+
+  public getErrorMessage(controlName: string) {
+    const errors = this.userForm.controls[controlName]?.errors;
+
+    return this.controlError['required'];
   }
 }

@@ -23,6 +23,10 @@
           class="form-control"
           id="fullname"
         />
+        <div class="error-control left-center mt-1">
+          <div class="center-center"><i class="bi bi-exclamation"></i></div>
+          <span class="ms-1">Required field</span>
+        </div>
       </div>
       <div class="mb-3">
         <label for="email" class="form-label text-primary">Email:</label>
@@ -32,6 +36,10 @@
           class="form-control"
           id="email"
         />
+        <div class="error-control left-center mt-1">
+          <div class="center-center"><i class="bi bi-exclamation"></i></div>
+          <span class="ms-1">Required field</span>
+        </div>
       </div>
       <div class="mb-3">
         <label for="phone" class="form-label text-primary">Phone:</label>
@@ -42,26 +50,39 @@
           id="phone"
         />
       </div>
-      <div class="mb-3">
-        <label for="password" class="form-label text-primary">Password:</label>
-        <input
-          formControlName="password"
-          type="password"
-          class="form-control"
-          id="password"
-        />
+      <div formGroupName="password">
+        <div class="mb-3">
+          <label for="password" class="form-label text-primary"
+            >Password:</label
+          >
+          <input
+            formControlName="typePassword"
+            type="password"
+            class="form-control"
+            id="password"
+          />
+          <div class="error-control left-center mt-1">
+            <div class="center-center"><i class="bi bi-exclamation"></i></div>
+            <span class="ms-1">Required field</span>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="repeat-password" class="form-label text-primary"
+            >Repeat password:</label
+          >
+          <input
+            formControlName="repeatPassword"
+            type="password"
+            class="form-control"
+            id="repeat-password"
+          />
+          <div class="error-control left-center mt-1">
+            <div class="center-center"><i class="bi bi-exclamation"></i></div>
+            <span class="ms-1">Required field</span>
+          </div>
+        </div>
       </div>
-      <div class="mb-3">
-        <label for="repeat-password" class="form-label text-primary"
-          >Repeat password:</label
-        >
-        <input
-          formControlName="repeatPassword"
-          type="password"
-          class="form-control"
-          id="repeat-password"
-        />
-      </div>
+
       <div>
         <label class="form-label text-primary">Admin</label>
         <app-slider-button

@@ -48,21 +48,23 @@ export class UserManagementComponent implements OnInit {
     this.getUser();
   }
 
-  private getUser() {
+  private getUser(toLastPage?: boolean) {
     const url = '/user/manage';
     this.httpService.get<User[]>(url).subscribe((res) => {
-      this.users = [];
-      res.forEach((user) => {
-        this.users.unshift(user);
-      });
-      this.changeSelectPage(this.currentPage);
+      this.users = res;
+      this.changeSelectPage(
+        toLastPage ? this.calcTotalPages() : this.currentPage
+      );
     });
   }
 
   public search(keyword: string) {
-    console.log('keyword', keyword);
     const url = `/user/manage/search?keyword=${keyword.trim()}`;
-    this.getUser();
+    this.httpService.get<User[]>(url).subscribe((res) => {
+      this.users = res;
+      this.currentPage = 1;
+      this.changeSelectPage(this.currentPage);
+    });
   }
 
   public processsDelete() {
@@ -138,9 +140,12 @@ export class UserManagementComponent implements OnInit {
   }
 
   public newOrUpdateUser(message: string) {
-    this.currentPage = 1;
     this.closePopup();
     this.toast?.showSuccess(message, 3000);
-    this.getUser();
+    this.getUser(true);
+  }
+
+  private calcTotalPages() {
+    return (this.users.length + this.pageSize - 1) / this.pageSize;
   }
 }

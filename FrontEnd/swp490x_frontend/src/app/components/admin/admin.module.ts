@@ -29,8 +29,6 @@ import { NotDeleteAdminComponent } from '../share/pop-up-dialog/not-delete-admin
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
-    FormsModule,
-    ReactiveFormsModule,
   ],
 })
 export class AdminModule {}
