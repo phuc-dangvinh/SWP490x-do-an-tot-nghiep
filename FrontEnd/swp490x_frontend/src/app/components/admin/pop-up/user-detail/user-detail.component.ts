@@ -12,6 +12,7 @@ import { FileUploadService } from 'src/app/service/file-upload.service';
 import { HttpService } from 'src/app/service/http.service';
 import { TextMessage } from 'src/app/interface/text-message';
 import { FormControlError } from 'src/app/interface/form-control-error';
+import { Observable, map, tap } from 'rxjs';
 
 @Component({
   selector: 'app-user-detail',
@@ -92,18 +93,17 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
       : { passwordNotMatch: true };
   }
 
-  public checkExistEmail(
-    emailControl: AbstractControl
-  ): ValidationErrors | null {
+  public checkExistEmail(emailControl: AbstractControl) {
     console.log('vao check exist email');
     console.log({ email: emailControl.value });
     const url = '/user/manage/check-exist';
     return this.httpService
-      .post(url, { email: emailControl.value })
-      .subscribe((res) => {
-        console.log('res', res);
-        res ? { emailExist: true } : null;
-      });
+      .post<boolean>(url, { email: emailControl.value })
+      .pipe(
+        map((result) => {
+          result ? { usernameAlreadyExists: true } : null;
+        })
+      );
   }
 
   private submitForm() {
