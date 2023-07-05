@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <form [formGroup]="userForm">
-    <h4 class="py-2 text-center sticky-top bg-white">New user</h4>
+    <h4 class="pt-3 text-center sticky-top bg-white">New user</h4>
     <hr />
     <div>
       <div class="mb-3">
@@ -23,10 +23,21 @@
           class="form-control"
           id="fullname"
         />
-        <div class="error-control left-center mt-1">
-          <div class="center-center"><i class="bi bi-exclamation"></i></div>
-          <span class="ms-1">Required field</span>
-        </div>
+        <ng-container
+          *ngIf="
+            getErrorMessage('fullname') &&
+            (getFormControl('fullname').dirty ||
+              getFormControl('fullname').touched)
+          "
+        >
+          <div
+            class="error-control left-center mt-1"
+            *ngFor="let message of getErrorMessage('fullname')"
+          >
+            <div class="center-center"><i class="bi bi-exclamation"></i></div>
+            <span class="ms-1">{{ message }}</span>
+          </div>
+        </ng-container>
       </div>
       <div class="mb-3">
         <label for="email" class="form-label text-primary">Email:</label>
@@ -36,10 +47,20 @@
           class="form-control"
           id="email"
         />
-        <div class="error-control left-center mt-1">
-          <div class="center-center"><i class="bi bi-exclamation"></i></div>
-          <span class="ms-1">Required field</span>
-        </div>
+        <ng-container
+          *ngIf="
+            getErrorMessage('email') &&
+            (getFormControl('email').dirty || getFormControl('email').touched)
+          "
+        >
+          <div
+            class="error-control left-center mt-1"
+            *ngFor="let message of getErrorMessage('email')"
+          >
+            <div class="center-center"><i class="bi bi-exclamation"></i></div>
+            <span class="ms-1">{{ message }}</span>
+          </div>
+        </ng-container>
       </div>
       <div class="mb-3">
         <label for="phone" class="form-label text-primary">Phone:</label>
@@ -49,6 +70,20 @@
           class="form-control"
           id="phone"
         />
+        <ng-container
+          *ngIf="
+            getErrorMessage('phone') &&
+            (getFormControl('phone').dirty || getFormControl('phone').touched)
+          "
+        >
+          <div
+            class="error-control left-center mt-1"
+            *ngFor="let message of getErrorMessage('phone')"
+          >
+            <div class="center-center"><i class="bi bi-exclamation"></i></div>
+            <span class="ms-1">{{ message }}</span>
+          </div>
+        </ng-container>
       </div>
       <div formGroupName="password">
         <div class="mb-3">
@@ -61,10 +96,23 @@
             class="form-control"
             id="password"
           />
-          <div class="error-control left-center mt-1">
-            <div class="center-center"><i class="bi bi-exclamation"></i></div>
-            <span class="ms-1">Required field</span>
-          </div>
+          <ng-container
+            *ngIf="
+              getErrorMessage('password', 'typePassword') &&
+              (getFormControl('password', 'typePassword').dirty ||
+                getFormControl('password', 'typePassword').touched)
+            "
+          >
+            <div
+              class="error-control left-center mt-1"
+              *ngFor="
+                let message of getErrorMessage('password', 'typePassword')
+              "
+            >
+              <div class="center-center"><i class="bi bi-exclamation"></i></div>
+              <span class="ms-1">{{ message }}</span>
+            </div>
+          </ng-container>
         </div>
         <div class="mb-3">
           <label for="repeat-password" class="form-label text-primary"
@@ -76,10 +124,23 @@
             class="form-control"
             id="repeat-password"
           />
-          <div class="error-control left-center mt-1">
-            <div class="center-center"><i class="bi bi-exclamation"></i></div>
-            <span class="ms-1">Required field</span>
-          </div>
+          <ng-container
+            *ngIf="
+              getErrorMessage('password', 'repeatPassword') &&
+              (getFormControl('password', 'repeatPassword').dirty ||
+                getFormControl('password', 'repeatPassword').touched)
+            "
+          >
+            <div
+              class="error-control left-center mt-1"
+              *ngFor="
+                let message of getErrorMessage('password', 'repeatPassword')
+              "
+            >
+              <div class="center-center"><i class="bi bi-exclamation"></i></div>
+              <span class="ms-1">{{ message }}</span>
+            </div>
+          </ng-container>
         </div>
       </div>
 

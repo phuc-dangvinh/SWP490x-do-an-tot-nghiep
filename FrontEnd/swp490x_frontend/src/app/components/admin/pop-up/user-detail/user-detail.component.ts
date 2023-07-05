@@ -4,15 +4,14 @@ import { FileUploadComponent } from 'src/app/components/share/file-upload/file-u
 import {
   AbstractControl,
   FormBuilder,
-  FormControl,
   FormGroup,
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { FileUploadService } from 'src/app/service/file-upload.service';
 import { HttpService } from 'src/app/service/http.service';
 import { TextMessage } from 'src/app/interface/text-message';
+import { FormControlError } from 'src/app/interface/form-control-error';
 
 @Component({
   selector: 'app-user-detail',
@@ -25,17 +24,18 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
   @Output() clickSaveButton = new EventEmitter<string>();
   public readonly BUTTON = BUTTON;
   public userForm!: FormGroup;
-  private nameRegex: RegExp = /^((?=.*\d)(?=.*[A-Z]).{8,20})$/;
-  private emailRegex: RegExp =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  // private nameRegex: RegExp = /^((?=.*\d)(?=.*[A-Z]).{8,20})$/;
+  // private emailRegex: RegExp =
+  //   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   //email: ^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$
-  private passwordRegex: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
+  // private passwordRegex: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
 
-  private controlError = {
-    required: 'Required field',
-    passwordNotMatch: 'Re-entered password is incorrect',
-    emailExist: 'This email is taken',
-  };
+  private controlErrors: FormControlError[] = [
+    { error: 'required', message: 'Required field' },
+    { error: 'email', message: 'Email is not valid' },
+    { error: 'passwordNotMatch', message: 'Repeat password is incorrect' },
+    { error: 'emailExist', message: 'This email is taken' },
+  ];
 
   constructor(
     public override uploadService: FileUploadService,
@@ -69,7 +69,7 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
         [Validators.required, Validators.email],
         this.checkExistEmail,
       ],
-      phone: [''],
+      phone: ['', [Validators.required]],
       password: this.formBuilder.group(
         {
           typePassword: ['', [Validators.required]],
@@ -92,7 +92,7 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
       : { passwordNotMatch: true };
   }
 
-  private checkExistEmail(
+  public checkExistEmail(
     emailControl: AbstractControl
   ): ValidationErrors | null {
     console.log('vao check exist email');
@@ -118,9 +118,43 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
     }
   }
 
-  public getErrorMessage(controlName: string) {
-    const errors = this.userForm.controls[controlName]?.errors;
+  public getErrorMessage(parentControlName: string, subControlName?: string) {
+    const parentErrors: ValidationErrors | null =
+      this.userForm.controls[parentControlName].errors;
+    let subErrors: ValidationErrors | null = null;
+    if (subControlName) {
+      subErrors = (this.userForm.controls[parentControlName] as FormGroup)
+        .controls[subControlName].errors;
+    }
+    let errors: ValidationErrors | null = null;
+    if (subControlName == 'repeatPassword') {
+      errors = { ...parentErrors, ...subErrors };
+    } else {
+      subControlName ? (errors = subErrors) : (errors = parentErrors);
+    }
+    if (errors) {
+      return Object.keys(errors)
+        .map((errorKey) =>
+          this.controlErrors.find(
+            (controlError) => controlError.error == errorKey
+          )
+        )
+        .map((errorObj) => errorObj?.message);
+    } else {
+      return null;
+    }
+  }
 
-    return this.controlError['required'];
+  public getFormControl(
+    parentControlName: string,
+    subControlName?: string
+  ): AbstractControl {
+    if (subControlName) {
+      return (this.userForm.controls[parentControlName] as FormGroup).controls[
+        subControlName
+      ];
+    } else {
+      return this.userForm.controls[parentControlName];
+    }
   }
 }
