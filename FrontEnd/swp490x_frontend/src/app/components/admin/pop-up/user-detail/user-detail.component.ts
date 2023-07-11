@@ -12,7 +12,7 @@ import { FileUploadService } from 'src/app/service/file-upload.service';
 import { HttpService } from 'src/app/service/http.service';
 import { TextMessage } from 'src/app/interface/text-message';
 import { FormControlError } from 'src/app/interface/form-control-error';
-import { Observable, map, tap } from 'rxjs';
+import { checkExistEmail } from 'src/app/service/async-validator-fn';
 
 @Component({
   selector: 'app-user-detail',
@@ -25,12 +25,6 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
   @Output() clickSaveButton = new EventEmitter<string>();
   public readonly BUTTON = BUTTON;
   public userForm!: FormGroup;
-  // private nameRegex: RegExp = /^((?=.*\d)(?=.*[A-Z]).{8,20})$/;
-  // private emailRegex: RegExp =
-  //   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  //email: ^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$
-  // private passwordRegex: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
-
   private controlErrors: FormControlError[] = [
     { error: 'required', message: 'Required field' },
     { error: 'email', message: 'Email is not valid' },
@@ -68,7 +62,7 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
       email: [
         '',
         [Validators.required, Validators.email],
-        this.checkExistEmail,
+        checkExistEmail(this.httpService),
       ],
       phone: ['', [Validators.required]],
       password: this.formBuilder.group(
@@ -91,19 +85,6 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
     return passwordValue.typePassword === passwordValue.repeatPassword
       ? null
       : { passwordNotMatch: true };
-  }
-
-  public checkExistEmail(emailControl: AbstractControl) {
-    console.log('vao check exist email');
-    console.log({ email: emailControl.value });
-    const url = '/user/manage/check-exist';
-    return this.httpService
-      .post<boolean>(url, { email: emailControl.value })
-      .pipe(
-        map((result) => {
-          result ? { usernameAlreadyExists: true } : null;
-        })
-      );
   }
 
   private submitForm() {
