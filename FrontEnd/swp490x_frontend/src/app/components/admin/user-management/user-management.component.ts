@@ -17,15 +17,12 @@ import { ConfirmDeleteComponent } from '../../share/pop-up-dialog/confirm-delete
 })
 export class UserManagementComponent implements OnInit {
   public users: User[] = [];
+  public editUser: User | undefined;
   public itemsOfPage: User[] = [];
   public pageSize: number = 4;
   public currentPage: number = 1;
   public maxSizePage: number = 5;
   public pageSizeOptionChange: number[] = [4, 6, 8, 10];
-  // public modelsPopup: { [name: string]: Type<any> } = {
-  //   newOrEdit: UserDetailComponent,
-  //   confirmDelete: ConfirmDeleteComponent,
-  // };
   public readonly BUTTON = BUTTON;
   private selectedUserIds: string[] = [];
   @ViewChild('toast') toast: ToastComponent | undefined;
@@ -117,6 +114,7 @@ export class UserManagementComponent implements OnInit {
     switch (button) {
       case BUTTON.EDIT:
         this._modalService.open(this.userDetailPopup, { size: 'lg' });
+        this.editUser = user;
         break;
       case BUTTON.NEW:
         this._modalService.open(this.userDetailPopup, { size: 'lg' });

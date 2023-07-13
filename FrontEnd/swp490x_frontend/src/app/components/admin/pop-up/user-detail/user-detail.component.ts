@@ -13,6 +13,8 @@ import { HttpService } from 'src/app/service/http.service';
 import { TextMessage } from 'src/app/interface/text-message';
 import { FormControlError } from 'src/app/interface/form-control-error';
 import { checkExistEmail } from 'src/app/service/async-validator-fn';
+import { User } from 'src/app/interface/user';
+import { ROLE } from 'src/app/const/ERole';
 
 @Component({
   selector: 'app-user-detail',
@@ -23,6 +25,7 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
   @Input() isEdit: boolean = false;
   @Output() clickCancelButton = new EventEmitter<boolean>();
   @Output() clickSaveButton = new EventEmitter<string>();
+  @Input() editUser: User | undefined;
   public readonly BUTTON = BUTTON;
   public userForm!: FormGroup;
   private controlErrors: FormControlError[] = [
@@ -65,34 +68,32 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
         checkExistEmail(this.httpService),
       ],
       phone: ['', [Validators.required]],
-      password: this.formBuilder.group(
-        {
-          typePassword: ['', [Validators.required]],
-          repeatPassword: ['', [Validators.required]],
-        },
-        {
-          validators: this.checkRepeatPassword,
-        }
-      ),
+      // password: this.formBuilder.group(
+      //   {
+      //     typePassword: ['', [Validators.required]],
+      //     repeatPassword: ['', [Validators.required]],
+      //   },
+      //   {
+      //     validators: this.checkRepeatPassword,
+      //   }
+      // ),
       isAdmin: [false, [Validators.required]],
     });
   }
 
-  public checkRepeatPassword(
-    passwordControl: AbstractControl
-  ): ValidationErrors | null {
-    const passwordValue = passwordControl.value;
-    return passwordValue.typePassword === passwordValue.repeatPassword
-      ? null
-      : { passwordNotMatch: true };
-  }
+  // public checkRepeatPassword(
+  //   passwordControl: AbstractControl
+  // ): ValidationErrors | null {
+  //   const passwordValue = passwordControl.value;
+  //   return passwordValue.typePassword === passwordValue.repeatPassword
+  //     ? null
+  //     : { passwordNotMatch: true };
+  // }
 
   private submitForm() {
     if (this.userForm.valid) {
       const url = '/auth/register';
-      const formValue = this.userForm.value;
-      let payload = formValue;
-      payload.password = formValue.password.typePassword;
+      const payload = this.userForm.value;
       this.httpService.post<TextMessage>(url, payload).subscribe((res) => {
         this.clickSaveButton.emit(res.message);
       });
@@ -137,5 +138,14 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
     } else {
       return this.userForm.controls[parentControlName];
     }
+  }
+
+  private fillEditForm(user: User) {
+    this.userForm.controls['fullname'].setValue(user.fullname);
+    this.userForm.controls['email'].setValue(user.email);
+    this.userForm.controls['phone'].setValue(user.phone);
+    this.userForm.controls['isAdmin'].setValue(
+      user.authorities.includes({ authority: ROLE.ADMIN })
+    );
   }
 }

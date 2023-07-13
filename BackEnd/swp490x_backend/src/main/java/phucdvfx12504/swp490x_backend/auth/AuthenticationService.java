@@ -18,6 +18,7 @@ import phucdvfx12504.swp490x_backend.dto.user.UserRegisterRequest;
 import phucdvfx12504.swp490x_backend.entities.User;
 import phucdvfx12504.swp490x_backend.repositories.RoleRepository;
 import phucdvfx12504.swp490x_backend.repositories.UserRepository;
+import phucdvfx12504.swp490x_backend.utils.CommonLangPasswordUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +28,7 @@ public class AuthenticationService {
     private final RoleRepository roleRepository;
     private final JwtService jwtService;
     private final AuthenticationManager athenticationManager;
+    private final CommonLangPasswordUtils commonLangPasswordUtils;
 
     @Transactional
     public TextMessageResponse register(UserRegisterRequest request)
@@ -35,7 +37,7 @@ public class AuthenticationService {
                 .fullname(request.getFullname())
                 .email(request.getEmail())
                 .phone(request.getPhone())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .password(passwordEncoder.encode(commonLangPasswordUtils.generateCommonLangPassword()))
                 .roles(Set.of(roleRepository.findByName(request.getIsAdmin() ? ERoleName.ADMIN : ERoleName.USER).get()))
                 .build();
         userRepository.save(user);

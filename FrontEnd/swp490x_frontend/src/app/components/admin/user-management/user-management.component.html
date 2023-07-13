@@ -75,7 +75,7 @@
             <div class="center-center">
               <app-edit-button
                 ngbTooltip="edit"
-                (clickButton)="openPopup(BUTTON.EDIT)"
+                (clickButton)="openPopup(BUTTON.EDIT, user)"
               ></app-edit-button>
               <app-reset-button
                 class="ms-1"
@@ -123,6 +123,7 @@
   <app-user-detail
     (clickCancelButton)="closePopup()"
     (clickSaveButton)="newOrUpdateUser($event)"
+    [editUser]="editUser"
   ></app-user-detail>
 </ng-template>
 <ng-template #confirmDeletePopup>
