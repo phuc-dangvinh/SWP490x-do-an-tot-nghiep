@@ -114,9 +114,9 @@ export class UserManagementComponent implements OnInit {
   public openPopup(button: BUTTON, user?: User) {
     switch (button) {
       case BUTTON.EDIT:
-        this._modalService.open(this.userDetailPopup, { size: 'md' });
-        this.userEdit = user;
         this.isEdit = true;
+        this.userEdit = user;
+        this._modalService.open(this.userDetailPopup, { size: 'md' });
         break;
       case BUTTON.NEW:
         this.isEdit = false;
