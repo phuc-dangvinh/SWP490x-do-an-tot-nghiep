@@ -36,6 +36,12 @@ export class HttpService {
       .pipe(tap(), catchError(this.handleError<T>()));
   }
 
+  put<T>(url: string, payload: any) {
+    return this.http
+      .put<T>(rootApi + url, payload, this.httpOptions)
+      .pipe(tap(), catchError(this.handleError<T>()));
+  }
+
   deleteByPost<T>(url: string, ids: string[]) {
     return this.http
       .post<T>(rootApi + url, ids, this.httpOptions)

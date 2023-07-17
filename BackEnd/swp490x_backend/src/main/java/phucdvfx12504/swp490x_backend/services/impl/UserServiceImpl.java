@@ -2,6 +2,9 @@ package phucdvfx12504.swp490x_backend.services.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Set;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,10 +69,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User update(UserUpdateRequest userUpdate) {
+    public TextMessageResponse update(UserUpdateRequest userUpdate) {
         User user = userRepository.findById(userUpdate.getId()).orElseThrow();
         propertyUtils.copyNonNullProperties(userUpdate, user);
-        return userRepository.save(user);
+        user.setRoles(
+                Set.of(roleRepository.findByName(userUpdate.getIsAdmin() ? ERoleName.ADMIN : ERoleName.USER).get()));
+        userRepository.save(user);
+        return TextMessageResponse.builder().message("Update successfully!").build();
     }
 
     @Override

@@ -3,6 +3,7 @@ package phucdvfx12504.swp490x_backend.services;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import jakarta.mail.MessagingException;
@@ -21,7 +22,7 @@ public interface UserService {
 
     TextMessageResponse delete(List<String> ids);
 
-    User update(UserUpdateRequest userUpdate);
+    TextMessageResponse update(UserUpdateRequest userUpdate);
 
     User changePassword(UserChangePasswordRequest userChangePasswordRequest);
 

@@ -17,7 +17,8 @@ import { ConfirmDeleteComponent } from '../../share/pop-up-dialog/confirm-delete
 })
 export class UserManagementComponent implements OnInit {
   public users: User[] = [];
-  public editUser: User | undefined;
+  public userEdit: User | undefined;
+  public isEdit: boolean = false;
   public itemsOfPage: User[] = [];
   public pageSize: number = 4;
   public currentPage: number = 1;
@@ -113,17 +114,19 @@ export class UserManagementComponent implements OnInit {
   public openPopup(button: BUTTON, user?: User) {
     switch (button) {
       case BUTTON.EDIT:
-        this._modalService.open(this.userDetailPopup, { size: 'lg' });
-        this.editUser = user;
+        this._modalService.open(this.userDetailPopup, { size: 'md' });
+        this.userEdit = user;
+        this.isEdit = true;
         break;
       case BUTTON.NEW:
-        this._modalService.open(this.userDetailPopup, { size: 'lg' });
+        this.isEdit = false;
+        this._modalService.open(this.userDetailPopup, { size: 'md' });
         break;
       case BUTTON.DELETE:
         if (user) {
           this.checkAdmin(user)
-            ? this._modalService.open(this.notDeleteAdminPopup)
-            : this._modalService.open(this.confirmDeletePopup);
+            ? this._modalService.open(this.notDeleteAdminPopup, { size: 'sm' })
+            : this._modalService.open(this.confirmDeletePopup, { size: 'md' });
           this.getSelectedId(user.id);
           break;
         } else {
@@ -135,12 +138,14 @@ export class UserManagementComponent implements OnInit {
 
   public closePopup() {
     this._modalService.dismissAll();
+    this.isEdit = false;
   }
 
   public newOrUpdateUser(message: string) {
     this.closePopup();
     this.toast?.showSuccess(message, 3000);
     this.getUser(true);
+    this.isEdit = false;
   }
 
   private calcTotalPages() {

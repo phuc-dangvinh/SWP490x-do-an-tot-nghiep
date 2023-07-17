@@ -20,7 +20,7 @@ export class SliderButtonComponent implements ControlValueAccessor {
   private onChange = (checked: boolean) => {};
   private onTouched = () => {};
   private touched = false;
-  private disabled = false;
+  public disabled = false;
 
   //implements
   writeValue(checked: boolean): void {

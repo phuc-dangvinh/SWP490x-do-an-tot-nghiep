@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <form [formGroup]="userForm">
+  <form [formGroup]="formUser">
     <h4 class="pt-3 text-center sticky-top bg-white">New user</h4>
     <hr />
     <div>
@@ -154,7 +154,7 @@
     </div>
     <hr />
     <div class="text-center bg-white mb-3">
-      <app-save-button (clickButton)="onClick(BUTTON.OK)"></app-save-button>
+      <app-save-button (clickButton)="onClick(BUTTON.SAVE)"></app-save-button>
       <app-cancel-button
         (clickButton)="onClick(BUTTON.CANCEL)"
       ></app-cancel-button>

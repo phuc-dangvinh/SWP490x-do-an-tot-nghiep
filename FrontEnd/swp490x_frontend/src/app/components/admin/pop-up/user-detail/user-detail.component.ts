@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { BUTTON } from 'src/app/const/EButton';
 import { FileUploadComponent } from 'src/app/components/share/file-upload/file-upload.component';
 import {
@@ -21,13 +28,16 @@ import { ROLE } from 'src/app/const/ERole';
   templateUrl: './user-detail.component.html',
   styleUrls: ['./user-detail.component.scss'],
 })
-export class UserDetailComponent extends FileUploadComponent implements OnInit {
+export class UserDetailComponent
+  extends FileUploadComponent
+  implements OnInit, OnDestroy
+{
   @Input() isEdit: boolean = false;
   @Output() clickCancelButton = new EventEmitter<boolean>();
   @Output() clickSaveButton = new EventEmitter<string>();
-  @Input() editUser: User | undefined;
+  @Input() userEdit: User | undefined;
   public readonly BUTTON = BUTTON;
-  public userForm!: FormGroup;
+  public formUser!: FormGroup;
   private controlErrors: FormControlError[] = [
     { error: 'required', message: 'Required field' },
     { error: 'email', message: 'Email is not valid' },
@@ -42,25 +52,34 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
   ) {
     super(uploadService);
   }
+  ngOnDestroy(): void {
+    console.log('ngOnDestroy run');
+  }
 
   override ngOnInit(): void {
     this.createForm();
+    if (this.isEdit && this.userEdit) {
+      this.fillEditForm(this.userEdit);
+    }
   }
 
   public onClick(button: BUTTON) {
+    console.log('button click', button);
     switch (button) {
       case BUTTON.CANCEL:
         this.clickCancelButton.emit(true);
         break;
-      case BUTTON.OK:
+      case BUTTON.SAVE:
+        console.log('vào case SAVE');
         this.submitForm();
         break;
       default:
     }
+    this.formUser.reset();
   }
 
   private createForm() {
-    this.userForm = this.formBuilder.group({
+    this.formUser = this.formBuilder.group({
       fullname: ['', [Validators.required]],
       email: [
         '',
@@ -91,21 +110,39 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
   // }
 
   private submitForm() {
-    if (this.userForm.valid) {
-      const url = '/auth/register';
-      const payload = this.userForm.value;
-      this.httpService.post<TextMessage>(url, payload).subscribe((res) => {
-        this.clickSaveButton.emit(res.message);
-      });
+    console.log('vào submitForm');
+    if (this.formUser.valid) {
+      console.log('isEdit', this.isEdit);
+      if (!this.isEdit) {
+        //new
+        const url = '/auth/register';
+        const payload = this.formUser.value;
+        this.httpService.post<TextMessage>(url, payload).subscribe((res) => {
+          this.clickSaveButton.emit(res.message);
+        });
+      } else {
+        //update
+        const test = this.formUser.getRawValue();
+        console.log('getRawValueForm', test);
+        const url = '/user/manage';
+        const payload = {
+          ...this.formUser.getRawValue(),
+          id: this.userEdit?.id,
+        };
+        console.log('payload update', payload);
+        this.httpService.put<TextMessage>(url, payload).subscribe((res) => {
+          this.clickSaveButton.emit(res.message);
+        });
+      }
     }
   }
 
   public getErrorMessage(parentControlName: string, subControlName?: string) {
     const parentErrors: ValidationErrors | null =
-      this.userForm.controls[parentControlName].errors;
+      this.formUser.controls[parentControlName].errors;
     let subErrors: ValidationErrors | null = null;
     if (subControlName) {
-      subErrors = (this.userForm.controls[parentControlName] as FormGroup)
+      subErrors = (this.formUser.controls[parentControlName] as FormGroup)
         .controls[subControlName].errors;
     }
     let errors: ValidationErrors | null = null;
@@ -132,20 +169,25 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
     subControlName?: string
   ): AbstractControl {
     if (subControlName) {
-      return (this.userForm.controls[parentControlName] as FormGroup).controls[
+      return (this.formUser.controls[parentControlName] as FormGroup).controls[
         subControlName
       ];
     } else {
-      return this.userForm.controls[parentControlName];
+      return this.formUser.controls[parentControlName];
     }
   }
 
   private fillEditForm(user: User) {
-    this.userForm.controls['fullname'].setValue(user.fullname);
-    this.userForm.controls['email'].setValue(user.email);
-    this.userForm.controls['phone'].setValue(user.phone);
-    this.userForm.controls['isAdmin'].setValue(
-      user.authorities.includes({ authority: ROLE.ADMIN })
+    this.formUser.controls['fullname'].setValue(user.fullname);
+    this.formUser.controls['email'].setValue(user.email);
+    this.formUser.controls['email'].disable();
+    this.formUser.controls['phone'].setValue(user.phone);
+    this.formUser.controls['isAdmin'].setValue(
+      user.authorities.some((item) => item.authority == ROLE.ADMIN)
     );
+    const test = this.formUser.controls['isAdmin'].value;
+    if (this.formUser.controls['isAdmin'].value == true) {
+      this.formUser.controls['isAdmin'].disable();
+    }
   }
 }
