@@ -2,10 +2,12 @@ package phucdvfx12504.swp490x_backend.entities;
 
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,7 +28,7 @@ public class Role {
     @Column(nullable = false, unique = true)
     @Enumerated(EnumType.STRING)
     private ERoleName name;
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private Set<User> users;
 
     public Role(ERoleName name) {

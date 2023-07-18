@@ -119,7 +119,6 @@ export class UserManagementComponent implements OnInit {
         this._modalService.open(this.userDetailPopup, { size: 'md' });
         break;
       case BUTTON.NEW:
-        this.isEdit = false;
         this._modalService.open(this.userDetailPopup, { size: 'md' });
         break;
       case BUTTON.DELETE:
@@ -142,10 +141,9 @@ export class UserManagementComponent implements OnInit {
   }
 
   public newOrUpdateUser(message: string) {
-    this.closePopup();
     this.toast?.showSuccess(message, 3000);
-    this.getUser(true);
-    this.isEdit = false;
+    this.getUser(!this.isEdit);
+    this.closePopup();
   }
 
   private calcTotalPages() {

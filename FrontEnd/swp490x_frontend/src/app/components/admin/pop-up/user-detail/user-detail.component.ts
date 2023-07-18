@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { BUTTON } from 'src/app/const/EButton';
 import { FileUploadComponent } from 'src/app/components/share/file-upload/file-upload.component';
 import {
@@ -28,10 +21,7 @@ import { ROLE } from 'src/app/const/ERole';
   templateUrl: './user-detail.component.html',
   styleUrls: ['./user-detail.component.scss'],
 })
-export class UserDetailComponent
-  extends FileUploadComponent
-  implements OnInit, OnDestroy
-{
+export class UserDetailComponent extends FileUploadComponent implements OnInit {
   @Input() isEdit: boolean = false;
   @Output() clickCancelButton = new EventEmitter<boolean>();
   @Output() clickSaveButton = new EventEmitter<string>();
@@ -52,9 +42,6 @@ export class UserDetailComponent
   ) {
     super(uploadService);
   }
-  ngOnDestroy(): void {
-    console.log('ngOnDestroy run');
-  }
 
   override ngOnInit(): void {
     this.createForm();
@@ -64,13 +51,11 @@ export class UserDetailComponent
   }
 
   public onClick(button: BUTTON) {
-    console.log('button click', button);
     switch (button) {
       case BUTTON.CANCEL:
         this.clickCancelButton.emit(true);
         break;
       case BUTTON.SAVE:
-        console.log('vào case SAVE');
         this.submitForm();
         break;
       default:
@@ -110,27 +95,22 @@ export class UserDetailComponent
   // }
 
   private submitForm() {
-    console.log('vào submitForm');
     if (this.formUser.valid) {
-      console.log('isEdit', this.isEdit);
-      if (!this.isEdit) {
-        //new
-        const url = '/auth/register';
-        const payload = this.formUser.value;
-        this.httpService.post<TextMessage>(url, payload).subscribe((res) => {
-          this.clickSaveButton.emit(res.message);
-        });
-      } else {
+      if (this.isEdit) {
         //update
-        const test = this.formUser.getRawValue();
-        console.log('getRawValueForm', test);
         const url = '/user/manage';
         const payload = {
           ...this.formUser.getRawValue(),
           id: this.userEdit?.id,
         };
-        console.log('payload update', payload);
         this.httpService.put<TextMessage>(url, payload).subscribe((res) => {
+          this.clickSaveButton.emit(res.message);
+        });
+      } else {
+        //new
+        const url = '/auth/register';
+        const payload = this.formUser.value;
+        this.httpService.post<TextMessage>(url, payload).subscribe((res) => {
           this.clickSaveButton.emit(res.message);
         });
       }

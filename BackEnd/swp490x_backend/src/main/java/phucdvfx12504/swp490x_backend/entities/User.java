@@ -33,7 +33,7 @@ public class User implements UserDetails {
     private String phone;
     @Column(nullable = false)
     private String password;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     @JsonIgnore
     private Set<Role> roles;

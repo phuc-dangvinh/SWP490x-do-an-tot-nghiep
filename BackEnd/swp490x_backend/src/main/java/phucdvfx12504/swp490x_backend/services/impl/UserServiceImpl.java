@@ -4,7 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +21,7 @@ import phucdvfx12504.swp490x_backend.repositories.RoleRepository;
 import phucdvfx12504.swp490x_backend.repositories.UserRepository;
 import phucdvfx12504.swp490x_backend.repositories.UserRepositoryCustom;
 import phucdvfx12504.swp490x_backend.services.EmailService;
+import phucdvfx12504.swp490x_backend.services.RoleService;
 import phucdvfx12504.swp490x_backend.services.UserService;
 import phucdvfx12504.swp490x_backend.utils.CommonLangPasswordUtils;
 import phucdvfx12504.swp490x_backend.utils.UpdatePropertyUtils;
@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final CommonLangPasswordUtils commonLangPasswordUtils;
     private final EmailService emailService;
+    private final RoleService roleService;;
 
     @Override
     public List<User> getAll() {
@@ -70,10 +71,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public TextMessageResponse update(UserUpdateRequest userUpdate) {
+        ERoleName roleNameUpdate = userUpdate.getIsAdmin() ? ERoleName.ADMIN : ERoleName.USER;
         User user = userRepository.findById(userUpdate.getId()).orElseThrow();
         propertyUtils.copyNonNullProperties(userUpdate, user);
-        user.setRoles(
-                Set.of(roleRepository.findByName(userUpdate.getIsAdmin() ? ERoleName.ADMIN : ERoleName.USER).get()));
+        if (!hasRoleName(user, ERoleName.ADMIN) && !hasRoleName(user, roleNameUpdate)) {
+            user.setRoles(roleService.getSetRoles(roleNameUpdate));
+        }
         userRepository.save(user);
         return TextMessageResponse.builder().message("Update successfully!").build();
     }
@@ -122,6 +125,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean checkExist(CheckExistUserRequest user) {
         return userRepository.existsByEmail(user.getEmail());
+    }
+
+    @Override
+    public boolean hasRoleName(User user, ERoleName roleName) {
+        boolean result = false;
+        Set<Role> roles = user.getRoles();
+        for (Role role : roles) {
+            if (role.getName() == roleName) {
+                result = true;
+            }
+        }
+        return result;
     }
 
 }
