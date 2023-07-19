@@ -14,6 +14,7 @@ import phucdvfx12504.swp490x_backend.constant.ERoleName;
 import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
 import phucdvfx12504.swp490x_backend.dto.user.CheckExistUserRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserChangePasswordRequest;
+import phucdvfx12504.swp490x_backend.dto.user.UserChangeRoleRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserUpdateRequest;
 import phucdvfx12504.swp490x_backend.entities.Role;
 import phucdvfx12504.swp490x_backend.entities.User;
@@ -137,6 +138,18 @@ public class UserServiceImpl implements UserService {
             }
         }
         return result;
+    }
+
+    @Override
+    @Transactional
+    public TextMessageResponse changeRole(UserChangeRoleRequest changeRoleRequest) {
+        ERoleName roleNameUpdate = changeRoleRequest.getIsAdmin() ? ERoleName.ADMIN : ERoleName.USER;
+        User user = userRepository.findById(changeRoleRequest.getId()).orElseThrow();
+        if (!hasRoleName(user, ERoleName.ADMIN) && !hasRoleName(user, roleNameUpdate)) {
+            user.setRoles(roleService.getSetRoles(roleNameUpdate));
+        }
+        userRepository.save(user);
+        return TextMessageResponse.builder().message("Change successfully!").build();
     }
 
 }

@@ -149,4 +149,13 @@ export class UserManagementComponent implements OnInit {
   private calcTotalPages() {
     return (this.users.length + this.pageSize - 1) / this.pageSize;
   }
+
+  public changeRole(id: string, isAdmin: boolean) {
+    const payload = { id, isAdmin };
+    const url = '/user/manage/change-role';
+    this.httpService.put<TextMessage>(url, payload).subscribe((res) => {
+      this.getUser();
+      this.toast?.showSuccess(res.message, 3000);
+    });
+  }
 }

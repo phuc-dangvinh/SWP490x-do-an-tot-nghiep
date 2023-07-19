@@ -1,7 +1,5 @@
-import { Component, Input } from '@angular/core';
-import {
-  ControlValueAccessor, NG_VALUE_ACCESSOR
-} from '@angular/forms';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-slider-button',
@@ -17,10 +15,12 @@ import {
 })
 export class SliderButtonComponent implements ControlValueAccessor {
   @Input() isChecked: boolean = false;
+  @Output() changeState: EventEmitter<boolean> = new EventEmitter<boolean>();
   private onChange = (checked: boolean) => {};
   private onTouched = () => {};
   private touched = false;
-  public disabled = false;
+  // public disabled = false;
+  @Input() disabled = false;
 
   //implements
   writeValue(checked: boolean): void {
@@ -41,6 +41,7 @@ export class SliderButtonComponent implements ControlValueAccessor {
     this.markAsTouched();
     if (!this.disabled) {
       this.onChange(this.isChecked);
+      this.changeState.emit(this.isChecked);
     }
   }
 

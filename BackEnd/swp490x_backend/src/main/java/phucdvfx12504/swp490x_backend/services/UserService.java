@@ -10,6 +10,7 @@ import phucdvfx12504.swp490x_backend.constant.ERoleName;
 import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
 import phucdvfx12504.swp490x_backend.dto.user.CheckExistUserRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserChangePasswordRequest;
+import phucdvfx12504.swp490x_backend.dto.user.UserChangeRoleRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserUpdateRequest;
 import phucdvfx12504.swp490x_backend.entities.User;
 
@@ -31,5 +32,7 @@ public interface UserService {
     boolean checkExist(CheckExistUserRequest email);
 
     boolean hasRoleName(User user, ERoleName roleName);
+
+    TextMessageResponse changeRole(UserChangeRoleRequest changeRoleRequest);
 
 }

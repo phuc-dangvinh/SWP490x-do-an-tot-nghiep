@@ -68,6 +68,8 @@
             <div class="center-center">
               <app-slider-button
                 [isChecked]="checkAdmin(user)"
+                [disabled]="checkAdmin(user)"
+                (changeState)="changeRole(user.id, $event)"
               ></app-slider-button>
             </div>
           </td>
