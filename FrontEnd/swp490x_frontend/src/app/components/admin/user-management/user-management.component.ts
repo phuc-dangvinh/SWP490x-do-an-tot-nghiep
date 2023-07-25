@@ -49,7 +49,7 @@ export class UserManagementComponent implements OnInit {
   private getUser(toLastPage?: boolean) {
     const url = '/user/manage';
     this.httpService.get<User[]>(url).subscribe((res) => {
-      this.users = res;
+      this.users = res.map((user) => ({ ...user, checked: false }));
       this.changeSelectPage(
         toLastPage ? this.calcTotalPages() : this.currentPage
       );
@@ -59,7 +59,7 @@ export class UserManagementComponent implements OnInit {
   public search(keyword: string) {
     const url = `/user/manage/search?keyword=${keyword.trim()}`;
     this.httpService.get<User[]>(url).subscribe((res) => {
-      this.users = res;
+      this.users = res.map((user) => ({ ...user, checked: false }));
       this.currentPage = 1;
       this.changeSelectPage(this.currentPage);
     });
