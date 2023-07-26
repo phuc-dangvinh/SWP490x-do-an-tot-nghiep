@@ -7,4 +7,5 @@ export interface User {
   phone: string;
   authorities: Authority[];
   avatar: string;
+  checked: boolean;
 }

@@ -19,7 +19,11 @@
       <thead>
         <tr class="text-center">
           <th class="check-box">
-            <app-check-box-button></app-check-box-button>
+            <app-check-box-button
+              [isChecked]="alreadyCheckAll"
+              [disabled]="disableCheckAll"
+              (changeState)="checkAllItems($event)"
+            ></app-check-box-button>
           </th>
           <th class="full-name">Fullname</th>
           <th class="email">Email</th>
@@ -32,7 +36,11 @@
         <tr>
           <td>
             <div class="center-center">
-              <app-check-box-button></app-check-box-button>
+              <app-check-box-button
+                [isChecked]="user.checked"
+                [disabled]="checkAdmin(user)"
+                (changeState)="checkItem(user, $event)"
+              ></app-check-box-button>
             </div>
           </td>
           <td>
@@ -132,7 +140,7 @@
 <ng-template #confirmDeletePopup>
   <app-confirm-delete
     (clickCancelButton)="closePopup()"
-    (clickOkButton)="processsDelete()"
+    (clickOkButton)="processsDelete(directActionButton)"
   ></app-confirm-delete>
 </ng-template>
 <app-toast #toast></app-toast>
