@@ -8,4 +8,5 @@ export interface User {
   authorities: Authority[];
   avatar: string;
   checked: boolean;
+  isAdmin: boolean;
 }

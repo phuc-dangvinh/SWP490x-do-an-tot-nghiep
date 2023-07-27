@@ -38,7 +38,7 @@
             <div class="center-center">
               <app-check-box-button
                 [isChecked]="user.checked"
-                [disabled]="checkAdmin(user)"
+                [disabled]="user.isAdmin"
                 (changeState)="checkItem(user, $event)"
               ></app-check-box-button>
             </div>
@@ -57,7 +57,7 @@
               </span>
               <span
                 class="fw-bold name"
-                [ngClass]="{ 'text-danger': checkAdmin(user) }"
+                [ngClass]="{ 'text-danger': user.isAdmin }"
                 >{{ user.fullname }}</span
               >
             </div>
@@ -75,8 +75,8 @@
           <td>
             <div class="center-center">
               <app-slider-button
-                [isChecked]="checkAdmin(user)"
-                [disabled]="checkAdmin(user)"
+                [isChecked]="user.isAdmin"
+                [disabled]="user.isAdmin"
                 (changeState)="changeRole(user.id, $event)"
               ></app-slider-button>
             </div>

@@ -54,7 +54,7 @@ export class UserManagementComponent implements OnInit {
   private getUser(toLastPage?: boolean) {
     const url = '/user/manage';
     this.httpService.get<User[]>(url).subscribe((res) => {
-      this.users = res.map((user) => ({ ...user, checked: false }));
+      this.users = this.mapUsers(res);
       this.changeSelectPage(
         toLastPage ? this.calcTotalPages() : this.currentPage
       );
@@ -64,7 +64,7 @@ export class UserManagementComponent implements OnInit {
   public search(keyword: string) {
     const url = `/user/manage/search?keyword=${keyword.trim()}`;
     this.httpService.get<User[]>(url).subscribe((res) => {
-      this.users = res.map((user) => ({ ...user, checked: false }));
+      this.users = this.mapUsers(res);
       this.currentPage = 1;
       this.changeSelectPage(this.currentPage);
     });
@@ -95,10 +95,6 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
-  public checkAdmin(user: User): boolean {
-    return user.authorities.some((item) => item.authority == ROLE.ADMIN);
-  }
-
   public changeSelectPage(page: number) {
     this.currentPage = page;
     const start = this.pageSize * page - (this.pageSize - 1);
@@ -125,7 +121,7 @@ export class UserManagementComponent implements OnInit {
         break;
       case BUTTON.DELETE:
         if (user) {
-          this.checkAdmin(user)
+          user.isAdmin
             ? this._modalService.open(this.notDeleteAdminPopup, { size: 'sm' })
             : this._modalService.open(this.confirmDeletePopup, { size: 'md' });
           this.directActionButton = true;
@@ -179,7 +175,7 @@ export class UserManagementComponent implements OnInit {
 
   public checkAllItems(checked: boolean) {
     this.itemsOfPage.forEach((item) => {
-      if (!this.checkAdmin(item) && item.checked !== checked) {
+      if (!item.isAdmin && item.checked !== checked) {
         item.checked = checked;
         this.checkItem(item, checked);
       }
@@ -189,7 +185,7 @@ export class UserManagementComponent implements OnInit {
   private isDisableCheckAll() {
     let count: number = 0;
     this.itemsOfPage.forEach((user) => {
-      if (this.checkAdmin(user)) {
+      if (user.isAdmin) {
         count++;
       }
     });
@@ -212,5 +208,13 @@ export class UserManagementComponent implements OnInit {
     } else {
       this.alreadyCheckAll = false;
     }
+  }
+
+  private mapUsers(users: User[]) {
+    return users.map((user) => ({
+      ...user,
+      checked: false,
+      isAdmin: user.authorities.some((item) => item.authority == ROLE.ADMIN),
+    }));
   }
 }
