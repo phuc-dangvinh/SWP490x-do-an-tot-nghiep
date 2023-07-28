@@ -10,6 +10,7 @@
           accept="image/*"
           (change)="uploadFile($event)"
           class="ms-3"
+          #fileUpload
         />
         <div class="text-center">
           <img *ngIf="currentFile" [src]="preview" class="avatar" />
