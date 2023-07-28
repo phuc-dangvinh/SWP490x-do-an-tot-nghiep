@@ -14,5 +14,7 @@ public interface FileUploadService {
 
   byte[] readFileContent(String fileName);
 
-  void deleteAllFiles();
+  boolean delete(String filename);
+
+  void deleteAll();
 }

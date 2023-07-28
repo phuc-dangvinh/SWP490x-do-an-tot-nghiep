@@ -170,4 +170,18 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
       this.formUser.controls['isAdmin'].disable();
     }
   }
+
+  public uploadFile(event: any) {
+    const selectedFiles = event.target.files;
+    if (selectedFiles) {
+      const file: File = selectedFiles.item(0);
+      if (file) {
+        console.log('if file đúng');
+        const url = '/file/upload';
+        this.httpService.uploadFile(url, file).subscribe((res) => {
+          console.log('uploadFile', res);
+        });
+      }
+    }
+  }
 }

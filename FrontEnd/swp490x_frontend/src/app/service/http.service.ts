@@ -11,10 +11,6 @@ export class HttpService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
 
-  // private httpOption = {
-  //   observe: 'response',
-  // };
-
   constructor(private http: HttpClient) {}
 
   private handleError<T>(result?: T) {
@@ -46,5 +42,19 @@ export class HttpService {
     return this.http
       .post<T>(rootApi + url, ids, this.httpOptions)
       .pipe(tap(), catchError(this.handleError<T>()));
+  }
+
+  uploadFile(url: string, file: File) {
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+    // const req = new HttpRequest('POST', `${this.baseUrl}/upload`, formData, {
+    //   reportProgress: true,
+    //   responseType: 'json',
+    // });
+    // return this.http.request(req);
+
+    return this.http
+      .post<String>(rootApi + url, formData, {})
+      .pipe(tap(), catchError(this.handleError<String>()));
   }
 }

@@ -1,8 +1,8 @@
 package phucdvfx12504.swp490x_backend.services.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,8 +11,6 @@ import java.util.Arrays;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import javax.management.RuntimeErrorException;
-
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -20,12 +18,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.services.FileUploadService;
 
 @Component
 public class FileUploadServiceImpl implements FileUploadService {
-  private final Path storageFolder = Paths.get("upload");
+  private final Path storageFolder = Paths.get("file-upload");
 
   public FileUploadServiceImpl() {
     try {
@@ -64,7 +61,7 @@ public class FileUploadServiceImpl implements FileUploadService {
       try (InputStream inputStream = file.getInputStream()) {
         Files.copy(inputStream, destinationFilePath, StandardCopyOption.REPLACE_EXISTING);
       }
-      return generatedFileName;
+      return storageFolder.resolve(Paths.get(generatedFileName)).toString();
     } catch (IOException exception) {
       throw new RuntimeException("Failed to store file", exception);
     }
@@ -72,8 +69,13 @@ public class FileUploadServiceImpl implements FileUploadService {
 
   @Override
   public Stream<Path> loadAll() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'loadAll'");
+    try {
+      return Files.walk(this.storageFolder, 1)
+          .filter(path -> !path.equals(this.storageFolder) && !path.toString().contains("._"))
+          .map(this.storageFolder::relativize);
+    } catch (Exception exception) {
+      throw new RuntimeException("Failed to load stored files", exception);
+    }
   }
 
   @Override
@@ -93,9 +95,21 @@ public class FileUploadServiceImpl implements FileUploadService {
   }
 
   @Override
-  public void deleteAllFiles() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'deleteAllFiles'");
+  public boolean delete(String filename) {
+    try {
+      Path file = storageFolder.resolve(filename);
+      return Files.deleteIfExists(file);
+    } catch (IOException e) {
+      throw new RuntimeException("Error: " + e.getMessage());
+    }
+  }
+
+  @Override
+  public void deleteAll() {
+    File[] listOfFiles = storageFolder.toFile().listFiles();
+    for (File file : listOfFiles) {
+      delete(file.getName());
+    }
   }
 
 }

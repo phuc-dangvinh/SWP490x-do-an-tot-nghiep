@@ -1,6 +1,5 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { FileUploadService } from 'src/app/service/file-upload.service';
 
@@ -35,7 +34,6 @@ export class FileUploadComponent implements OnInit {
         this.currentFile = file;
         const reader = new FileReader();
         reader.onload = (e: any) => {
-          // console.log(e.target.result);
           this.preview = e.target.result;
         };
         reader.readAsDataURL(this.currentFile);
@@ -59,7 +57,6 @@ export class FileUploadComponent implements OnInit {
             }
           },
           error: (err: any) => {
-            // console.log(err);
             this.progress = 0;
             if (err.error && err.error.message) {
               this.message = err.error.message;
