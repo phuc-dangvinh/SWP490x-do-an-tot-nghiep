@@ -44,17 +44,16 @@ export class HttpService {
       .pipe(tap(), catchError(this.handleError<T>()));
   }
 
-  uploadFile(url: string, file: File) {
+  uploadFile<T>(url: string, file: File) {
     const formData: FormData = new FormData();
     formData.append('file', file);
-    // const req = new HttpRequest('POST', `${this.baseUrl}/upload`, formData, {
-    //   reportProgress: true,
-    //   responseType: 'json',
-    // });
-    // return this.http.request(req);
-
     return this.http
-      .post<String>(rootApi + url, formData, {})
-      .pipe(tap(), catchError(this.handleError<String>()));
+      .post<T>(rootApi + url, formData)
+      .pipe(tap(), catchError(this.handleError<T>()));
+  }
+  getFile<T>(url: string, fileName: string) {
+    return this.http
+      .get<T>(rootApi + url + fileName)
+      .pipe(tap(), catchError(this.handleError<T>()));
   }
 }

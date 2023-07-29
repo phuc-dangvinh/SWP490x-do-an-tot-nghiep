@@ -1,10 +1,3 @@
-.avatar {
-  vertical-align: middle;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-}
-
 .error-control {
   font-size: 14px;
 
@@ -18,5 +11,21 @@
 
   span {
     color: #dc3545;
+  }
+}
+
+.avatar {
+  .file-input {
+    display: none;
+  }
+
+  .avatar-label {
+    position: absolute;
+  }
+
+  .display-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
   }
 }

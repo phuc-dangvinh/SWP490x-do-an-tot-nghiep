@@ -63,9 +63,9 @@ public class UserServiceImpl implements UserService {
             }
         }
         if (countAdmin == 0) {
-            return TextMessageResponse.builder().message("Delete successfully!").build();
+            return TextMessageResponse.builder().info("Delete successfully!").build();
         } else {
-            return TextMessageResponse.builder().message("Delete failed").build();
+            return TextMessageResponse.builder().info("Delete failed").build();
         }
     }
 
@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
             user.setRoles(roleService.getSetRoles(roleNameUpdate));
         }
         userRepository.save(user);
-        return TextMessageResponse.builder().message("Update successfully!").build();
+        return TextMessageResponse.builder().info("Update successfully!").build();
     }
 
     @Override
@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
             //
             userRepository.save(user);
         }
-        return TextMessageResponse.builder().message("Reset password successfully!").build();
+        return TextMessageResponse.builder().info("Reset password successfully!").build();
     }
 
     private String replaceEmailContent(String password) {
@@ -149,7 +149,7 @@ public class UserServiceImpl implements UserService {
             user.setRoles(roleService.getSetRoles(roleNameUpdate));
         }
         userRepository.save(user);
-        return TextMessageResponse.builder().message("Change successfully!").build();
+        return TextMessageResponse.builder().info("Change successfully!").build();
     }
 
 }

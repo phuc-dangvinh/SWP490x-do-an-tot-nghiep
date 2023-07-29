@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import lombok.RequiredArgsConstructor;
+import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
 import phucdvfx12504.swp490x_backend.services.FileUploadService;
 
 @RestController
@@ -25,7 +26,7 @@ public class FileUploadController {
   private final FileUploadService fileUploadService;
 
   @PostMapping("/upload")
-  public String uploadFile(@RequestParam("file") MultipartFile file) {
+  public TextMessageResponse uploadFile(@RequestParam("file") MultipartFile file) {
     try {
       return fileUploadService.storeFile(file);
     } catch (Exception e) {

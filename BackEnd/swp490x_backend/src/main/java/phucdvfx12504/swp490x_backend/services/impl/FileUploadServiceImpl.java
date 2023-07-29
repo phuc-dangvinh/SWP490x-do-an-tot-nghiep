@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
 import phucdvfx12504.swp490x_backend.services.FileUploadService;
 
 @Component
@@ -39,7 +40,7 @@ public class FileUploadServiceImpl implements FileUploadService {
   }
 
   @Override
-  public String storeFile(MultipartFile file) {
+  public TextMessageResponse storeFile(MultipartFile file) {
     try {
       if (file.isEmpty()) {
         throw new RuntimeException("Failed to store empty file");
@@ -47,10 +48,10 @@ public class FileUploadServiceImpl implements FileUploadService {
       if (!isImageFile(file)) {
         throw new RuntimeException("You can only upload image file");
       }
-      float fileSizeInMegabytes = (float) (file.getSize() / Math.pow(1024, 2));
-      if (fileSizeInMegabytes > 5.0f) {
-        throw new RuntimeException("File must be <= 5Mb");
-      }
+      // float fileSizeInMegabytes = (float) (file.getSize() / Math.pow(1024, 2));
+      // if (fileSizeInMegabytes > 5.0f) {
+      // throw new RuntimeException("File must be <= 5Mb");
+      // }
       String fileExtension = FilenameUtils.getExtension(file.getOriginalFilename());
       String generatedFileName = UUID.randomUUID().toString().replace("-", "");
       generatedFileName = generatedFileName + "." + fileExtension;
@@ -61,7 +62,7 @@ public class FileUploadServiceImpl implements FileUploadService {
       try (InputStream inputStream = file.getInputStream()) {
         Files.copy(inputStream, destinationFilePath, StandardCopyOption.REPLACE_EXISTING);
       }
-      return storageFolder.resolve(Paths.get(generatedFileName)).toString();
+      return TextMessageResponse.builder().info(generatedFileName).build();
     } catch (IOException exception) {
       throw new RuntimeException("Failed to store file", exception);
     }

@@ -15,6 +15,7 @@ import { FormControlError } from 'src/app/interface/form-control-error';
 import { checkExistEmail } from 'src/app/service/async-validator-fn';
 import { User } from 'src/app/interface/user';
 import { ROLE } from 'src/app/const/ERole';
+import { rootApi } from 'src/app/enviroments/environment';
 
 @Component({
   selector: 'app-user-detail',
@@ -25,7 +26,7 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
   @Input() isEdit: boolean = false;
   @Output() clickCancelButton = new EventEmitter<boolean>();
   @Output() clickSaveButton = new EventEmitter<string>();
-  @Input() userEdit: User | undefined;
+  @Input() userEdit!: User;
   public readonly BUTTON = BUTTON;
   public formUser!: FormGroup;
   private controlErrors: FormControlError[] = [
@@ -34,6 +35,8 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
     { error: 'passwordNotMatch', message: 'Repeat password is incorrect' },
     { error: 'emailExist', message: 'This email is taken' },
   ];
+  public fileName: string = '';
+  public srcFile: string = '';
 
   constructor(
     public override uploadService: FileUploadService,
@@ -46,6 +49,7 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
   override ngOnInit(): void {
     this.createForm();
     if (this.isEdit && this.userEdit) {
+      this.srcFile = this.userEdit.avatar;
       this.fillEditForm(this.userEdit);
     }
   }
@@ -65,6 +69,7 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
 
   private createForm() {
     this.formUser = this.formBuilder.group({
+      avatar: [''],
       fullname: ['', [Validators.required]],
       email: [
         '',
@@ -104,14 +109,14 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
           id: this.userEdit?.id,
         };
         this.httpService.put<TextMessage>(url, payload).subscribe((res) => {
-          this.clickSaveButton.emit(res.message);
+          this.clickSaveButton.emit(res.info);
         });
       } else {
         //new
         const url = '/auth/register';
         const payload = this.formUser.value;
         this.httpService.post<TextMessage>(url, payload).subscribe((res) => {
-          this.clickSaveButton.emit(res.message);
+          this.clickSaveButton.emit(res.info);
         });
       }
     }
@@ -171,17 +176,17 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
     }
   }
 
-  public uploadFile(event: any) {
-    const selectedFiles = event.target.files;
-    if (selectedFiles) {
-      const file: File = selectedFiles.item(0);
-      if (file) {
-        console.log('if file đúng');
-        const url = '/file/upload';
-        this.httpService.uploadFile(url, file).subscribe((res) => {
-          console.log('uploadFile', res);
-        });
-      }
+  public onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.fileName = file.name;
+      const url = '/file/upload';
+      this.httpService.uploadFile<TextMessage>(url, file).subscribe((res) => {
+        if (res) {
+          this.srcFile = `${rootApi}/file/${res.info}`;
+          this.formUser.controls['avatar'].setValue(res.info);
+        }
+      });
     }
   }
 }

@@ -1,19 +1,32 @@
 <div class="container-fluid">
   <form [formGroup]="formUser">
-    <h4 class="pt-3 text-center sticky-top bg-white">New user</h4>
+    <h4 class="pt-3 text-center sticky-top bg-white">
+      {{ isEdit ? "Update user" : "New user" }}
+    </h4>
     <hr />
     <div>
-      <div class="mb-3">
-        <label for="avatar" class="form-label text-primary">Avatar:</label>
-        <input
-          type="file"
-          accept="image/*"
-          (change)="uploadFile($event)"
-          class="ms-3"
-          #fileUpload
-        />
-        <div class="text-center">
-          <img *ngIf="currentFile" [src]="preview" class="avatar" />
+      <div class="mb-3 avatar">
+        <div class="file-input">
+          <input
+            type="file"
+            accept="image/*"
+            (change)="onFileSelected($event)"
+            #fileUpload
+          />
+        </div>
+        <div>
+          <label class="form-label text-primary avatar-label">Avatar:</label>
+          <div>
+            <div class="text-center" *ngIf="srcFile">
+              <img [src]="srcFile" class="display-avatar" />
+            </div>
+            <div class="text-center" *ngIf="fileName && srcFile">
+              {{ fileName }}
+            </div>
+            <div class="text-center mt-3">
+              <app-select-file (onClick)="fileUpload.click()"></app-select-file>
+            </div>
+          </div>
         </div>
       </div>
       <div class="mb-3">

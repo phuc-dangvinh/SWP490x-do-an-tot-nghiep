@@ -5,6 +5,7 @@
         (clickButton)="openPopup(BUTTON.NEW)"
       ></app-new-large-button>
       <app-delete-large-button
+        [isDisable]="!selectedUserIds.length"
         (clickButton)="openPopup(BUTTON.DELETE)"
       ></app-delete-large-button>
       <app-search-box

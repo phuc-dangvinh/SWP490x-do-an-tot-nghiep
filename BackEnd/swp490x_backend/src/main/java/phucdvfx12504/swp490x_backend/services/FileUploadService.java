@@ -5,10 +5,12 @@ import java.util.stream.Stream;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
+
 public interface FileUploadService {
   boolean isImageFile(MultipartFile file);
 
-  String storeFile(MultipartFile file);
+  TextMessageResponse storeFile(MultipartFile file);
 
   Stream<Path> loadAll();
 

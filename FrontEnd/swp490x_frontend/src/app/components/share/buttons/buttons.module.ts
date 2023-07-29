@@ -12,6 +12,7 @@ import { SearchBoxComponent } from './search-box/search-box.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonBaseComponent } from './button-base/button-base.component';
 import { ResetButtonComponent } from './reset-button/reset-button.component';
+import { SelectFileComponent } from './select-file/select-file.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { ResetButtonComponent } from './reset-button/reset-button.component';
     SearchBoxComponent,
     ButtonBaseComponent,
     ResetButtonComponent,
+    SelectFileComponent,
   ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   exports: [
@@ -40,6 +42,7 @@ import { ResetButtonComponent } from './reset-button/reset-button.component';
     CancelButtonComponent,
     SearchBoxComponent,
     ResetButtonComponent,
+    SelectFileComponent
   ],
 })
 export class ButtonsModule {}

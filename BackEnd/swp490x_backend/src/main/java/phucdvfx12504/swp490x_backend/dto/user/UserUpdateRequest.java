@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserUpdateRequest {
     private String id;
+    private String avatar;
     private String fullname;
     private String email;
     private String phone;

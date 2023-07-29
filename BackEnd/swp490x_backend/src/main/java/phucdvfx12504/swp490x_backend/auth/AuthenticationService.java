@@ -34,6 +34,7 @@ public class AuthenticationService {
     public TextMessageResponse register(UserRegisterRequest request)
             throws MessagingException, UnsupportedEncodingException {
         User user = User.builder()
+                .avatar(request.getAvatar())
                 .fullname(request.getFullname())
                 .email(request.getEmail())
                 .phone(request.getPhone())
@@ -41,7 +42,7 @@ public class AuthenticationService {
                 .roles(Set.of(roleRepository.findByName(request.getIsAdmin() ? ERoleName.ADMIN : ERoleName.USER).get()))
                 .build();
         userRepository.save(user);
-        return TextMessageResponse.builder().message("Register successfully!").build();
+        return TextMessageResponse.builder().info("Register successfully!").build();
         // String jwtToken = jwtService.generateToken(user);
         // return AuthenticationResponse.builder().token(jwtToken).build();
     }

@@ -9,6 +9,7 @@ import { TextMessage } from 'src/app/interface/text-message';
 import { NotDeleteAdminComponent } from '../../share/pop-up-dialog/not-delete-admin/not-delete-admin.component';
 import { UserDetailComponent } from '../pop-up/user-detail/user-detail.component';
 import { ConfirmDeleteComponent } from '../../share/pop-up-dialog/confirm-delete/confirm-delete.component';
+import { rootApi } from 'src/app/enviroments/environment';
 
 @Component({
   selector: 'app-user-management',
@@ -18,14 +19,14 @@ import { ConfirmDeleteComponent } from '../../share/pop-up-dialog/confirm-delete
 export class UserManagementComponent implements OnInit {
   public readonly BUTTON = BUTTON;
   public users: User[] = [];
-  public userEdit: User | undefined;
+  public userEdit!: User;
   public isEdit: boolean = false;
   public itemsOfPage: User[] = [];
   public pageSize: number = 4;
   public currentPage: number = 1;
   public maxSizePage: number = 5;
   public pageSizeOptionChange: number[] = [4, 6, 8, 10];
-  private selectedUserIds: string[] = [];
+  public selectedUserIds: string[] = [];
   private selectedTmpUserId: string = '';
   public directActionButton: boolean = false;
   public disableCheckAll: boolean = false;
@@ -78,11 +79,11 @@ export class UserManagementComponent implements OnInit {
         directButtonAction ? [this.selectedTmpUserId] : this.selectedUserIds
       )
       .subscribe((res) => {
-        if (res.message.includes('failed')) {
-          this.toast?.showDanger(res.message, 3000);
+        if (res.info.includes('failed')) {
+          this.toast?.showDanger(res.info, 3000);
         } else {
           this.getUser();
-          this.toast?.showSuccess(res.message, 3000);
+          this.toast?.showSuccess(res.info, 3000);
         }
         this.closePopup();
       });
@@ -91,7 +92,7 @@ export class UserManagementComponent implements OnInit {
   public resetPassword(id: string) {
     const url = '/user/manage/reset-password';
     this.httpService.post<TextMessage>(url, [id]).subscribe((res) => {
-      this.toast?.showSuccess(res.message, 3000);
+      this.toast?.showSuccess(res.info, 3000);
     });
   }
 
@@ -113,7 +114,9 @@ export class UserManagementComponent implements OnInit {
     switch (button) {
       case BUTTON.EDIT:
         this.isEdit = true;
-        this.userEdit = user;
+        if (user) {
+          this.userEdit = user;
+        }
         this._modalService.open(this.userDetailPopup, { size: 'md' });
         break;
       case BUTTON.NEW:
@@ -156,7 +159,7 @@ export class UserManagementComponent implements OnInit {
     const url = '/user/manage/change-role';
     this.httpService.put<TextMessage>(url, payload).subscribe((res) => {
       this.getUser();
-      this.toast?.showSuccess(res.message, 3000);
+      this.toast?.showSuccess(res.info, 3000);
     });
   }
 
@@ -215,6 +218,7 @@ export class UserManagementComponent implements OnInit {
       ...user,
       checked: false,
       isAdmin: user.authorities.some((item) => item.authority == ROLE.ADMIN),
+      avatar: user.avatar ? `${rootApi}/file/${user.avatar}` : '',
     }));
   }
 }
