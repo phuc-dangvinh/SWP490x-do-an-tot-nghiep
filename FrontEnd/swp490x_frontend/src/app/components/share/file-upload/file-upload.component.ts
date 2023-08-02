@@ -1,73 +1,29 @@
-import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { FileUploadService } from 'src/app/service/file-upload.service';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { rootApi } from 'src/app/enviroments/environment';
+import { TextMessage } from 'src/app/interface/text-message';
+import { HttpService } from 'src/app/service/http.service';
 
 @Component({
   selector: 'app-file-upload',
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.scss'],
 })
-export class FileUploadComponent implements OnInit {
-  selectedFiles?: FileList;
-  currentFile?: File;
-  progress = 0;
-  message = '';
-  preview = '';
-  imageInfos?: Observable<any>;
+export class FileUploadComponent {
+  @Output() hasSrcFile: EventEmitter<string> = new EventEmitter<string>();
+  @Output() hasFileName: EventEmitter<string> = new EventEmitter<string>();
 
-  constructor(public uploadService: FileUploadService) {}
+  constructor(private _httpService: HttpService) {}
 
-  ngOnInit(): void {
-    this.imageInfos = this.uploadService.getFiles();
-  }
-
-  selectFile(event: any): void {
-    // this.message = '';
-    // this.preview = '';
-    // this.progress = 0;
-    this.selectedFiles = event.target.files;
-    if (this.selectedFiles) {
-      const file: File | null = this.selectedFiles.item(0);
-      if (file) {
-        this.preview = '';
-        this.currentFile = file;
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-          this.preview = e.target.result;
-        };
-        reader.readAsDataURL(this.currentFile);
-      }
-    }
-  }
-
-  upload(): void {
-    this.progress = 0;
-    if (this.selectedFiles) {
-      const file: File | null = this.selectedFiles.item(0);
-      if (file) {
-        this.currentFile = file;
-        this.uploadService.upload(this.currentFile).subscribe({
-          next: (event: any) => {
-            if (event.type === HttpEventType.UploadProgress) {
-              this.progress = Math.round((100 * event.loaded) / event.total);
-            } else if (event instanceof HttpResponse) {
-              this.message = event.body.message;
-              this.imageInfos = this.uploadService.getFiles();
-            }
-          },
-          error: (err: any) => {
-            this.progress = 0;
-            if (err.error && err.error.message) {
-              this.message = err.error.message;
-            } else {
-              this.message = 'Could not upload the image!';
-            }
-            this.currentFile = undefined;
-          },
-        });
-      }
-      this.selectedFiles = undefined;
+  public onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.hasFileName.emit(file.name);
+      const url = '/file/upload';
+      this._httpService.uploadFile<TextMessage>(url, file).subscribe((res) => {
+        if (res) {
+          this.hasSrcFile.emit(`${rootApi}/file/${res.info}`);
+        }
+      });
     }
   }
 }

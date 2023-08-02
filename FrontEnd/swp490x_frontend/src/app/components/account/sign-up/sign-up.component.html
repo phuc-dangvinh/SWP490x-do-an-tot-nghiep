@@ -1,0 +1,45 @@
+<div class="wrapper">
+  <form [formGroup]="signUpForm">
+    <h3>Register</h3>
+    <app-form-control
+      [label]="'Avatar'"
+      [touchedOrDirty]="avatarFormControl.touched || avatarFormControl.dirty"
+    >
+      <ng-container>
+        <div><app-file-upload></app-file-upload></div>
+      </ng-container>
+    </app-form-control>
+    <app-form-control
+      [label]="'Full name'"
+      [touchedOrDirty]="
+        fullnameFormControl.touched || fullnameFormControl.dirty
+      "
+      [errorMessages]="fullnameErrorMessages"
+    >
+      <ng-container>
+        <input formControlName="fullname" type="text" class="form-control" />
+      </ng-container>
+    </app-form-control>
+    <app-form-control
+      [label]="'Email'"
+      [touchedOrDirty]="emailFormControl.touched || emailFormControl.dirty"
+      [errorMessages]="emailErrorMessages"
+    >
+      <ng-container>
+        <input formControlName="email" type="email" class="form-control" />
+      </ng-container>
+    </app-form-control>
+    <app-form-control
+      [label]="'Phone'"
+      [touchedOrDirty]="phoneFormControl.touched || phoneFormControl.dirty"
+      [errorMessages]="phoneErrorMessages"
+    >
+      <ng-container>
+        <input formControlName="phone" type="text" class="form-control" />
+      </ng-container>
+    </app-form-control>
+    <div class="button-register">
+      <app-register-large-button></app-register-large-button>
+    </div>
+  </form>
+</div>

@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { BUTTON } from 'src/app/const/EButton';
-import { FileUploadComponent } from 'src/app/components/share/file-upload/file-upload.component';
 import {
   AbstractControl,
   FormBuilder,
@@ -8,7 +7,6 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { FileUploadService } from 'src/app/service/file-upload.service';
 import { HttpService } from 'src/app/service/http.service';
 import { TextMessage } from 'src/app/interface/text-message';
 import { FormControlError } from 'src/app/interface/form-control-error';
@@ -22,7 +20,7 @@ import { rootApi } from 'src/app/enviroments/environment';
   templateUrl: './user-detail.component.html',
   styleUrls: ['./user-detail.component.scss'],
 })
-export class UserDetailComponent extends FileUploadComponent implements OnInit {
+export class UserDetailComponent implements OnInit {
   @Input() isEdit: boolean = false;
   @Output() clickCancelButton = new EventEmitter<boolean>();
   @Output() clickSaveButton = new EventEmitter<string>();
@@ -39,14 +37,11 @@ export class UserDetailComponent extends FileUploadComponent implements OnInit {
   public srcFile: string = '';
 
   constructor(
-    public override uploadService: FileUploadService,
     private formBuilder: FormBuilder,
     private httpService: HttpService
-  ) {
-    super(uploadService);
-  }
+  ) {}
 
-  override ngOnInit(): void {
+  ngOnInit(): void {
     this.createForm();
     if (this.isEdit && this.userEdit) {
       this.srcFile = this.userEdit.avatar;

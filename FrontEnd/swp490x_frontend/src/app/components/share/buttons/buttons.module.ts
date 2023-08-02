@@ -13,6 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonBaseComponent } from './button-base/button-base.component';
 import { ResetButtonComponent } from './reset-button/reset-button.component';
 import { SelectFileComponent } from './select-file/select-file.component';
+import { RegisterLargeButtonComponent } from './register-large-button/register-large-button.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { SelectFileComponent } from './select-file/select-file.component';
     ButtonBaseComponent,
     ResetButtonComponent,
     SelectFileComponent,
+    RegisterLargeButtonComponent,
   ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   exports: [
@@ -42,7 +44,8 @@ import { SelectFileComponent } from './select-file/select-file.component';
     CancelButtonComponent,
     SearchBoxComponent,
     ResetButtonComponent,
-    SelectFileComponent
+    SelectFileComponent,
+    RegisterLargeButtonComponent
   ],
 })
 export class ButtonsModule {}

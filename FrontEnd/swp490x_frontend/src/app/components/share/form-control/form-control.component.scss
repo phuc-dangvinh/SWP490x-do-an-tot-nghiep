@@ -1,0 +1,19 @@
+label {
+  font-size: 14px;
+}
+
+.error-control {
+  font-size: 14px;
+
+  div {
+    background-color: #dc3545;
+    color: white;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+  }
+
+  span {
+    color: #dc3545;
+  }
+}

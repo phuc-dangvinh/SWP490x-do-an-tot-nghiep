@@ -21,7 +21,7 @@ import { NotDeleteAdminComponent } from '../share/pop-up-dialog/not-delete-admin
     PopUpComponent,
     ConfirmDeleteComponent,
     ToastComponent,
-    NotDeleteAdminComponent,
+    NotDeleteAdminComponent
   ],
   imports: [
     CommonModule,

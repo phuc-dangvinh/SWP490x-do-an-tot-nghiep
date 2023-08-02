@@ -1,0 +1,13 @@
+<div class="mb-2">
+  <label *ngIf="label" class="text-primary mb-1">{{ label }}</label>
+  <ng-container *ngIf="errorMessages.length && touchedOrDirty">
+    <div
+      class="error-control left-center mb-1"
+      *ngFor="let errorMessage of errorMessages"
+    >
+      <div class="center-center"><i class="bi bi-exclamation"></i></div>
+      <span class="ms-1">{{ errorMessage }}</span>
+    </div>
+  </ng-container>
+  <ng-content></ng-content>
+</div>
