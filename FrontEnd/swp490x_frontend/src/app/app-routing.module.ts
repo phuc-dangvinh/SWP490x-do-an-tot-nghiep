@@ -6,13 +6,15 @@ import { UserManagementComponent } from './components/admin/user-management/user
 import { PageNotFoundComponent } from './components/share/page-not-found/page-not-found.component';
 import { HomeComponent } from './components/home/home/home.component';
 import { SignUpComponent } from './components/account/sign-up/sign-up.component';
+import { SignInComponent } from './components/account/sign-in/sign-in.component';
 
 const routes: Routes = [
+  { path: 'home', component: HomeComponent },
   { path: 'admin/user-management', component: UserManagementComponent },
   { path: 'admin/category-management', component: CategoryManagementComponent },
   { path: 'admin/product-management', component: ProductManagementComponent },
-  { path: 'home', component: HomeComponent },
   { path: 'account/sign-up', component: SignUpComponent },
+  { path: 'account/sign-in', component: SignInComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent },
 ];

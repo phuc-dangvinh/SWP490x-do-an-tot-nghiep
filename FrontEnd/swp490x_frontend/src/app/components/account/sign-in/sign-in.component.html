@@ -1,1 +1,38 @@
-<p>sign-in works!</p>
+<div class="wrapper">
+  <form [formGroup]="signInForm">
+    <h3>Login</h3>
+    <app-form-control
+      [label]="'Email'"
+      [touchedOrDirty]="emailFormControl.touched || emailFormControl.dirty"
+      [errorMessages]="emailErrorMessages"
+    >
+      <ng-container>
+        <input formControlName="email" type="email" class="form-control" />
+      </ng-container>
+    </app-form-control>
+    <app-form-control
+      [label]="'Password'"
+      [touchedOrDirty]="
+        passwordFormControl.touched || passwordFormControl.dirty
+      "
+      [errorMessages]="passwordErrorMessages"
+    >
+      <ng-container>
+        <input
+          formControlName="password"
+          type="password"
+          class="form-control"
+        />
+      </ng-container>
+    </app-form-control>
+
+    <div class="button-sign-in">
+      <app-sign-in-button (clickButton)="submitForm()"></app-sign-in-button>
+    </div>
+    <div class="mt-3 text-center">
+      If you don't have an account,
+      <a routerLink="/account/sign-in">please sign up here</a>
+    </div>
+  </form>
+</div>
+<!-- <app-toast #toast></app-toast> -->

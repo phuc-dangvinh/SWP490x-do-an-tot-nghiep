@@ -14,6 +14,7 @@ import { checkExistEmail } from 'src/app/service/async-validator-fn';
 import { User } from 'src/app/interface/user';
 import { ROLE } from 'src/app/const/ERole';
 import { rootApi } from 'src/app/enviroments/environment';
+import { EToastMessage } from 'src/app/const/EToastMessage';
 
 @Component({
   selector: 'app-user-detail',
@@ -111,7 +112,9 @@ export class UserDetailComponent implements OnInit {
         const url = '/auth/register';
         const payload = this.formUser.value;
         this.httpService.post<TextMessage>(url, payload).subscribe((res) => {
-          this.clickSaveButton.emit(res.info);
+          if (res) {
+            this.clickSaveButton.emit(EToastMessage.ADD_USER_SUCCESS);
+          }
         });
       }
     }

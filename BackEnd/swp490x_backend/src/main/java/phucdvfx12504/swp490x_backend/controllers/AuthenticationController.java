@@ -15,6 +15,7 @@ import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
 import phucdvfx12504.swp490x_backend.dto.user.AuthenticationResponse;
 import phucdvfx12504.swp490x_backend.dto.user.UserLoginRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserRegisterRequest;
+import phucdvfx12504.swp490x_backend.entities.User;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -23,13 +24,13 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<TextMessageResponse> register(@RequestBody UserRegisterRequest request)
+    public ResponseEntity<User> register(@RequestBody UserRegisterRequest request)
             throws MessagingException, UnsupportedEncodingException {
         return ResponseEntity.ok(authenticationService.register(request));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody UserLoginRequest request) {
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody UserLoginRequest request) {
         return ResponseEntity.ok(authenticationService.login(request));
     }
 }

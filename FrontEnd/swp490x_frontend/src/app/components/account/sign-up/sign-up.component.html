@@ -6,7 +6,21 @@
       [touchedOrDirty]="avatarFormControl.touched || avatarFormControl.dirty"
     >
       <ng-container>
-        <div><app-file-upload></app-file-upload></div>
+        <div class="avatar">
+          <div *ngIf="avatarSrc" class="text-center">
+            <img [src]="avatarSrc" class="avatar-prevỉew" />
+          </div>
+          <div *ngIf="avatarFileName" class="text-center mt-2 file-name">
+            {{ avatarFileName }}
+          </div>
+          <div class="text-center mt-3">
+            <app-file-upload
+              (hasSrcFile)="onHasSrcFile($event)"
+              (hasFileName)="onHasFileName($event)"
+            ></app-file-upload>
+          </div>
+          <div class="select-file-warning">(File must be <= 1Mb)</div>
+        </div>
       </ng-container>
     </app-form-control>
     <app-form-control
@@ -39,7 +53,18 @@
       </ng-container>
     </app-form-control>
     <div class="button-register">
-      <app-register-large-button></app-register-large-button>
+      <app-register-large-button
+        (clickButton)="submitForm()"
+      ></app-register-large-button>
+    </div>
+    <div class="mt-3 text-center">
+      If you have an account,
+      <a routerLink="/account/sign-in">please sign in here</a>
     </div>
   </form>
 </div>
+<ng-template #signUpSuccesPopup>
+  <app-sign-up-success
+    (onClickButton)="handleClickContinueButton()"
+  ></app-sign-up-success>
+</ng-template>

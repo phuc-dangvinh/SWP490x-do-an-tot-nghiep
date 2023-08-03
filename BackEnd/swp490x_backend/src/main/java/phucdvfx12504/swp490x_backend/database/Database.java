@@ -33,8 +33,11 @@ public class Database {
                 if (!roleRepository.findByName(ERoleName.ADMIN).isPresent()) {
                     roleRepository.save(new Role(ERoleName.ADMIN));
                 }
-                if (!userRepository.findByEmail("admin").isPresent()) {
-                    User user = User.builder().fullname("admin").email("admin")
+                if (!userRepository.findByEmail("admin@admin.com").isPresent()) {
+                    User user = User.builder()
+                            .fullname("admin")
+                            .email("admin@admin.com")
+                            .phone("0000")
                             .password(passwordEncoder.encode("admin"))
                             .roles(Set.of(roleRepository.findByName(ERoleName.ADMIN).get())).build();
                     userRepository.save(user);

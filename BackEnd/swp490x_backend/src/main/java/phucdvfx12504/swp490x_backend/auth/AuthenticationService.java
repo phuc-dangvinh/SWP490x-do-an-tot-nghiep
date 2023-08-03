@@ -31,7 +31,7 @@ public class AuthenticationService {
     private final CommonLangPasswordUtils commonLangPasswordUtils;
 
     @Transactional
-    public TextMessageResponse register(UserRegisterRequest request)
+    public User register(UserRegisterRequest request)
             throws MessagingException, UnsupportedEncodingException {
         User user = User.builder()
                 .avatar(request.getAvatar())
@@ -41,8 +41,8 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(commonLangPasswordUtils.generateCommonLangPassword()))
                 .roles(Set.of(roleRepository.findByName(request.getIsAdmin() ? ERoleName.ADMIN : ERoleName.USER).get()))
                 .build();
-        userRepository.save(user);
-        return TextMessageResponse.builder().info("Register successfully!").build();
+        return userRepository.save(user);
+        // return TextMessageResponse.builder().info("Register successfully!").build();
         // String jwtToken = jwtService.generateToken(user);
         // return AuthenticationResponse.builder().token(jwtToken).build();
     }
@@ -52,7 +52,7 @@ public class AuthenticationService {
                 .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
         String jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return AuthenticationResponse.builder().user(user).token(jwtToken).build();
     }
 
 }

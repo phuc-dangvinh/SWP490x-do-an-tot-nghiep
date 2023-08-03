@@ -6,6 +6,7 @@ import { FormControlComponent } from '../share/form-control/form-control.compone
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonsModule } from '../share/buttons/buttons.module';
 import { FileUploadComponent } from '../share/file-upload/file-upload.component';
+import { SignUpSuccessComponent } from './sign-up-success/sign-up-success.component';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { FileUploadComponent } from '../share/file-upload/file-upload.component'
     SignInComponent,
     FormControlComponent,
     FileUploadComponent,
+    SignUpSuccessComponent,
   ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonsModule],
 })

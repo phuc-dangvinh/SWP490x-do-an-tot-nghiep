@@ -14,6 +14,8 @@ import { ButtonBaseComponent } from './button-base/button-base.component';
 import { ResetButtonComponent } from './reset-button/reset-button.component';
 import { SelectFileComponent } from './select-file/select-file.component';
 import { RegisterLargeButtonComponent } from './register-large-button/register-large-button.component';
+import { ContinueButtonComponent } from './continue-button/continue-button.component';
+import { SignInButtonComponent } from './sign-in-button/sign-in-button.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import { RegisterLargeButtonComponent } from './register-large-button/register-l
     ResetButtonComponent,
     SelectFileComponent,
     RegisterLargeButtonComponent,
+    ContinueButtonComponent,
+    SignInButtonComponent,
   ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   exports: [
@@ -45,7 +49,9 @@ import { RegisterLargeButtonComponent } from './register-large-button/register-l
     SearchBoxComponent,
     ResetButtonComponent,
     SelectFileComponent,
-    RegisterLargeButtonComponent
+    RegisterLargeButtonComponent,
+    ContinueButtonComponent,
+    SignInButtonComponent
   ],
 })
 export class ButtonsModule {}

@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
-  FormGroup, Validators
+  FormGroup,
+  Validators,
 } from '@angular/forms';
 import { checkExistEmail } from './async-validator-fn';
 import { HttpService } from './http.service';
@@ -34,6 +35,13 @@ export class FormService {
         checkExistEmail(this._httpService),
       ],
       phone: ['', [Validators.required]],
+    });
+  }
+
+  public buildSignInForm(): FormGroup {
+    return this._formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
     });
   }
 

@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { rootApi } from 'src/app/enviroments/environment';
 import { TextMessage } from 'src/app/interface/text-message';
 import { HttpService } from 'src/app/service/http.service';
 
@@ -21,7 +20,7 @@ export class FileUploadComponent {
       const url = '/file/upload';
       this._httpService.uploadFile<TextMessage>(url, file).subscribe((res) => {
         if (res) {
-          this.hasSrcFile.emit(`${rootApi}/file/${res.info}`);
+          this.hasSrcFile.emit(res.info);
         }
       });
     }

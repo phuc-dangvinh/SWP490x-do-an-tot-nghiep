@@ -14,5 +14,23 @@
     .button-register {
       margin-top: 30px;
     }
+
+    .avatar {
+      .avatar-prevỉew {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+      }
+
+      .file-name {
+        font-style: italic;
+      }
+
+      .select-file-warning {
+        text-align: center;
+        font-size: 14px;
+        font-style: italic;
+      }
+    }
   }
 }
