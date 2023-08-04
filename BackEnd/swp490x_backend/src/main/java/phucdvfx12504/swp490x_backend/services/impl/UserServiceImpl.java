@@ -1,6 +1,8 @@
 package phucdvfx12504.swp490x_backend.services.impl;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.constant.ERoleName;
+import phucdvfx12504.swp490x_backend.dto.share.DeleteResponse;
 import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
 import phucdvfx12504.swp490x_backend.dto.user.CheckExistUserRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserChangePasswordRequest;
@@ -51,22 +54,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public TextMessageResponse delete(List<String> ids) {
-        int countAdmin = 0;
+    public DeleteResponse delete(List<String> ids) {
+        List<String> deletedIds = new LinkedList<>();
         Role adminRole = roleRepository.findByName(ERoleName.ADMIN).get();
         for (String id : ids) {
             User user = userRepository.findById(id).get();
             if (!user.getRoles().contains(adminRole)) {
                 userRepository.deleteById(id);
-            } else {
-                countAdmin++;
+                deletedIds.add(id);
             }
         }
-        if (countAdmin == 0) {
-            return TextMessageResponse.builder().info("Delete successfully!").build();
-        } else {
-            return TextMessageResponse.builder().info("Delete failed").build();
-        }
+        return DeleteResponse.builder().deleted(deletedIds.size()).build();
     }
 
     @Override

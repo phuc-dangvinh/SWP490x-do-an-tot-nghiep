@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonsModule } from '../share/buttons/buttons.module';
 import { FileUploadComponent } from '../share/file-upload/file-upload.component';
 import { SignUpSuccessComponent } from './sign-up-success/sign-up-success.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,12 @@ import { SignUpSuccessComponent } from './sign-up-success/sign-up-success.compon
     FileUploadComponent,
     SignUpSuccessComponent,
   ],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ButtonsModule,
+    NgbModule,
+  ],
 })
 export class AccountModule {}
