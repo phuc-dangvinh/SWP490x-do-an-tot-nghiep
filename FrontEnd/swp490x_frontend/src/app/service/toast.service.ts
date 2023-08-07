@@ -13,7 +13,7 @@ export class ToastService {
   //   return content instanceof TemplateRef;
   // }
 
-  public add(toast: Toast) {
+  public show(toast: Toast) {
     this.toasts.push(toast);
     this.toasts$.next(this.toasts);
   }

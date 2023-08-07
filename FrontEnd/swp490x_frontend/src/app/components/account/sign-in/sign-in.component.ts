@@ -37,7 +37,7 @@ export class SignInComponent implements OnInit {
         .post<SignInResponse>(url, this.signInForm.value)
         .subscribe((res) => {
           if (res) {
-            this._toastService.add({
+            this._toastService.show({
               content: EToastMessage.SIGN_IN_SUCCES,
               classname: EToastClass.SUCCESS,
               delay: 3000,

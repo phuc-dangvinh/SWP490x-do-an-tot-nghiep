@@ -99,7 +99,7 @@ export class UserManagementComponent implements OnInit {
               toastContent = `Deleted ${res.deleted} successfully`;
               toastClass = EToastClass.STANDARD;
           }
-          this._toastService.add({
+          this._toastService.show({
             content: toastContent,
             classname: toastClass,
             delay: 3000,
@@ -116,7 +116,7 @@ export class UserManagementComponent implements OnInit {
     const url = '/user/manage/reset-password';
     this.httpService.post<TextMessage>(url, [id]).subscribe((res) => {
       if (res) {
-        this._toastService.add({
+        this._toastService.show({
           content: EToastMessage.RESET_PASSWORD_SUCCESS,
           classname: EToastClass.SUCCESS,
           delay: 3000,
@@ -174,7 +174,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   public newOrUpdateUser(message: EToastMessage) {
-    this._toastService.add({
+    this._toastService.show({
       content: message,
       classname: EToastClass.SUCCESS,
       delay: 3000,
@@ -192,7 +192,7 @@ export class UserManagementComponent implements OnInit {
     const url = '/user/manage/change-role';
     this.httpService.put<TextMessage>(url, payload).subscribe((res) => {
       this.getUser();
-      this._toastService.add({
+      this._toastService.show({
         content: EToastMessage.CHANGE_ROLE_SUCCESS,
         classname: EToastClass.SUCCESS,
         delay: 3000,
