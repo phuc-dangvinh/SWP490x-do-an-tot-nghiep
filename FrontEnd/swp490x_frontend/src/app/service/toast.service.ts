@@ -1,20 +1,30 @@
 import { Injectable, TemplateRef } from '@angular/core';
+import { Toast } from '../interface/toast';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ToastService {
-  toasts: any[] = [];
+  public toasts$: BehaviorSubject<Toast[]> = new BehaviorSubject<Toast[]>([]);
+  public toasts: Toast[] = [];
 
-  show(textOrTpl: string | TemplateRef<any>, options: any = {}) {
-    this.toasts.push({ textOrTpl, ...options });
+  // public isTemplate(content: string | TemplateRef<any>) {
+  //   return content instanceof TemplateRef;
+  // }
+
+  public show(toast: Toast) {
+    this.toasts.push(toast);
+    this.toasts$.next(this.toasts);
   }
 
-  remove(toast: any) {
+  public remove(toast: Toast) {
     this.toasts = this.toasts.filter((t) => t !== toast);
+    this.toasts$.next(this.toasts);
   }
 
-  clear() {
+  public clear() {
     this.toasts.splice(0, this.toasts.length);
+    this.toasts$.next(this.toasts);
   }
 }

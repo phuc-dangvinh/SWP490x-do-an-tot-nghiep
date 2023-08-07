@@ -4,12 +4,15 @@ import { ROLE } from 'src/app/const/ERole';
 import { User } from 'src/app/interface/user';
 import { HttpService } from 'src/app/service/http.service';
 import { BUTTON } from '../../../const/EButton';
-import { ToastComponent } from '../../share/toast/toast.component';
 import { TextMessage } from 'src/app/interface/text-message';
 import { NotDeleteAdminComponent } from '../../share/pop-up-dialog/not-delete-admin/not-delete-admin.component';
 import { UserDetailComponent } from '../pop-up/user-detail/user-detail.component';
 import { ConfirmDeleteComponent } from '../../share/pop-up-dialog/confirm-delete/confirm-delete.component';
 import { rootApi } from 'src/app/enviroments/environment';
+import { ToastService } from 'src/app/service/toast.service';
+import { EToastClass } from 'src/app/const/EToastClass';
+import { DeleteResponse } from 'src/app/interface/delete-response';
+import { EToastMessage } from 'src/app/const/EToastMessage';
 
 @Component({
   selector: 'app-user-management',
@@ -32,7 +35,6 @@ export class UserManagementComponent implements OnInit {
   public disableCheckAll: boolean = false;
   public alreadyCheckAll: boolean = false;
 
-  @ViewChild('toast') toast: ToastComponent | undefined;
   @ViewChild('userDetailPopup') userDetailPopup:
     | TemplateRef<UserDetailComponent>
     | undefined;
@@ -45,7 +47,8 @@ export class UserManagementComponent implements OnInit {
 
   constructor(
     private httpService: HttpService,
-    private _modalService: NgbModal
+    private _modalService: NgbModal,
+    private _toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -59,6 +62,7 @@ export class UserManagementComponent implements OnInit {
       this.changeSelectPage(
         toLastPage ? this.calcTotalPages() : this.currentPage
       );
+      this.selectedUserIds = [];
     });
   }
 
@@ -73,17 +77,36 @@ export class UserManagementComponent implements OnInit {
 
   public processsDelete(directButtonAction: boolean = false) {
     const url = '/user/manage';
+    const payload = directButtonAction
+      ? [this.selectedTmpUserId]
+      : this.selectedUserIds;
     this.httpService
-      .deleteByPost<TextMessage>(
-        url,
-        directButtonAction ? [this.selectedTmpUserId] : this.selectedUserIds
-      )
+      .deleteByPost<DeleteResponse>(url, payload)
       .subscribe((res) => {
-        if (res.info.includes('failed')) {
-          this.toast?.showDanger(res.info, 3000);
-        } else {
-          this.getUser();
-          this.toast?.showSuccess(res.info, 3000);
+        if (res) {
+          let toastContent = '';
+          let toastClass: EToastClass;
+          switch (res.deleted) {
+            case payload.length:
+              toastContent = EToastMessage.DELETE_SUCCESS;
+              toastClass = EToastClass.SUCCESS;
+              break;
+            case 0:
+              toastContent = EToastMessage.DELETE_FAILED;
+              toastClass = EToastClass.DANGER;
+              break;
+            default:
+              toastContent = `Deleted ${res.deleted} successfully`;
+              toastClass = EToastClass.STANDARD;
+          }
+          this._toastService.show({
+            content: toastContent,
+            classname: toastClass,
+            delay: 3000,
+          });
+          if (res.deleted > 0) {
+            this.getUser();
+          }
         }
         this.closePopup();
       });
@@ -92,7 +115,13 @@ export class UserManagementComponent implements OnInit {
   public resetPassword(id: string) {
     const url = '/user/manage/reset-password';
     this.httpService.post<TextMessage>(url, [id]).subscribe((res) => {
-      this.toast?.showSuccess(res.info, 3000);
+      if (res) {
+        this._toastService.show({
+          content: EToastMessage.RESET_PASSWORD_SUCCESS,
+          classname: EToastClass.SUCCESS,
+          delay: 3000,
+        });
+      }
     });
   }
 
@@ -144,8 +173,12 @@ export class UserManagementComponent implements OnInit {
     this.isEdit = false;
   }
 
-  public newOrUpdateUser(message: string) {
-    this.toast?.showSuccess(message, 3000);
+  public newOrUpdateUser(message: EToastMessage) {
+    this._toastService.show({
+      content: message,
+      classname: EToastClass.SUCCESS,
+      delay: 3000,
+    });
     this.getUser(!this.isEdit);
     this.closePopup();
   }
@@ -159,7 +192,11 @@ export class UserManagementComponent implements OnInit {
     const url = '/user/manage/change-role';
     this.httpService.put<TextMessage>(url, payload).subscribe((res) => {
       this.getUser();
-      this.toast?.showSuccess(res.info, 3000);
+      this._toastService.show({
+        content: EToastMessage.CHANGE_ROLE_SUCCESS,
+        classname: EToastClass.SUCCESS,
+        delay: 3000,
+      });
     });
   }
 

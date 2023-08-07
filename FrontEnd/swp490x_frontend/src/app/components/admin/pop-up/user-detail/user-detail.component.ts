@@ -24,7 +24,7 @@ import { EToastMessage } from 'src/app/const/EToastMessage';
 export class UserDetailComponent implements OnInit {
   @Input() isEdit: boolean = false;
   @Output() clickCancelButton = new EventEmitter<boolean>();
-  @Output() clickSaveButton = new EventEmitter<string>();
+  @Output() clickSaveButton = new EventEmitter<EToastMessage>();
   @Input() userEdit!: User;
   public readonly BUTTON = BUTTON;
   public formUser!: FormGroup;
@@ -105,7 +105,7 @@ export class UserDetailComponent implements OnInit {
           id: this.userEdit?.id,
         };
         this.httpService.put<TextMessage>(url, payload).subscribe((res) => {
-          this.clickSaveButton.emit(res.info);
+          this.clickSaveButton.emit(EToastMessage.UPDATE_USER_SUCCESS);
         });
       } else {
         //new

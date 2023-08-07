@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import phucdvfx12504.swp490x_backend.dto.share.DeleteResponse;
 import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
 import phucdvfx12504.swp490x_backend.dto.user.CheckExistUserRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserChangePasswordRequest;
@@ -41,7 +42,7 @@ public class UserController {
     }
 
     @PostMapping("/manage")
-    public TextMessageResponse delete(@RequestBody List<String> ids) {
+    public DeleteResponse delete(@RequestBody List<String> ids) {
         return userService.delete(ids);
     }
 

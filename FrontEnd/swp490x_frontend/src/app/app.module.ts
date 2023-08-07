@@ -12,9 +12,15 @@ import { PageNotFoundComponent } from './components/share/page-not-found/page-no
 import { AdminModule } from './components/admin/admin.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
+import { ToastComponent } from './components/share/toast-global/toast.component';
 
 @NgModule({
-  declarations: [AppComponent, MenuBarComponent, PageNotFoundComponent],
+  declarations: [
+    AppComponent,
+    MenuBarComponent,
+    PageNotFoundComponent,
+    ToastComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,

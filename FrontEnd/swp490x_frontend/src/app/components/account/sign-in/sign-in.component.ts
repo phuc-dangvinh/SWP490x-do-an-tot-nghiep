@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SignInResponse } from 'src/app/interface/sign-in-response';
 import { FormService } from 'src/app/service/form.service';
 import { HttpService } from 'src/app/service/http.service';
-import { ToastComponent } from '../../share/toast/toast.component';
+import { ToastService } from 'src/app/service/toast.service';
+import { EToastMessage } from 'src/app/const/EToastMessage';
+import { EToastClass } from 'src/app/const/EToastClass';
 
 @Component({
   selector: 'app-sign-in',
@@ -17,12 +19,12 @@ export class SignInComponent implements OnInit {
     email: 'email',
     password: 'password',
   };
-  @ViewChild('toast') toast!: ToastComponent;
 
   constructor(
     private _formService: FormService,
     private _httpService: HttpService,
-    private _router: Router
+    private _router: Router,
+    private _toastService: ToastService
   ) {}
   ngOnInit(): void {
     this.signInForm = this._formService.buildSignInForm();
@@ -35,9 +37,11 @@ export class SignInComponent implements OnInit {
         .post<SignInResponse>(url, this.signInForm.value)
         .subscribe((res) => {
           if (res) {
-            console.log('res login', res);
-            console.log('continue handle process');
-            // this.toast?.showSuccess(EToastMessage.SIGN_IN_SUCCES, 3000);
+            this._toastService.show({
+              content: EToastMessage.SIGN_IN_SUCCES,
+              classname: EToastClass.SUCCESS,
+              delay: 3000,
+            });
             this._router.navigate(['/home']);
             //continue handle process
           }
