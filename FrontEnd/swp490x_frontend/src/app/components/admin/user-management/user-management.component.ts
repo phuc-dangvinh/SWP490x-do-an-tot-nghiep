@@ -62,6 +62,7 @@ export class UserManagementComponent implements OnInit {
       this.changeSelectPage(
         toLastPage ? this.calcTotalPages() : this.currentPage
       );
+      this.selectedUserIds = [];
     });
   }
 
