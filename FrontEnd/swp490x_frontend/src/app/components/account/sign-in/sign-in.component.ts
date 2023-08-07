@@ -7,6 +7,7 @@ import { HttpService } from 'src/app/service/http.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { EToastMessage } from 'src/app/const/EToastMessage';
 import { EToastClass } from 'src/app/const/EToastClass';
+import { EToken } from 'src/app/const/EToken';
 
 @Component({
   selector: 'app-sign-in',
@@ -42,8 +43,8 @@ export class SignInComponent implements OnInit {
               classname: EToastClass.SUCCESS,
               delay: 3000,
             });
+            localStorage.setItem(EToken.ACCESS_TOKEN, res.token);
             this._router.navigate(['/home']);
-            //continue handle process
           }
         });
     }
