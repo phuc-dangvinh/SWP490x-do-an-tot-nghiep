@@ -72,3 +72,20 @@
     </div>
   </div>
 </header>
+
+<div class="wrapper">
+  <div class="nav-wrapper">
+    <i class="bi bi-vimeo" style="font-size: 25px"></i>
+    <ul>
+      <li *ngFor="let item of menuItems" class="main-item">
+        <i
+          *ngIf="item?.icon"
+          class="bi"
+          [class]="item.icon"
+          style="font-size: 22px"
+        ></i>
+        <span>{{ item.name }}</span>
+      </li>
+    </ul>
+  </div>
+</div>
