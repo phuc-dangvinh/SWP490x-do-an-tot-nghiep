@@ -3,5 +3,5 @@ export interface MenuItem {
   name: string;
   horizontalLine?: boolean;
   routerLink?: string;
-  subMenu?: MenuItem[];
+  subItems?: MenuItem[];
 }

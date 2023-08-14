@@ -73,19 +73,37 @@
   </div>
 </header>
 
-<div class="wrapper">
-  <div class="nav-wrapper">
+<div class="outter-wrapper">
+  <div class="inner-wrapper">
     <i class="bi bi-vimeo" style="font-size: 25px"></i>
-    <ul>
-      <li *ngFor="let item of menuItems" class="main-item">
-        <i
-          *ngIf="item?.icon"
-          class="bi"
-          [class]="item.icon"
-          style="font-size: 22px"
-        ></i>
-        <span>{{ item.name }}</span>
-      </li>
+    <ul ngbNav>
+      <ng-container *ngFor="let mainItem of menuItems">
+        <li *ngIf="!mainItem.subItems" ngbNavItem class="main-item">
+          <ng-container *ngTemplateOutlet="displayMainItem"></ng-container>
+        </li>
+        <li *ngIf="mainItem.subItems" ngbDropdown class="main-item">
+          <ng-container *ngTemplateOutlet="displayMainItem"></ng-container>
+        </li>
+        <ng-template #displayMainItem>
+          <i
+            *ngIf="mainItem.icon"
+            class="bi"
+            [class]="mainItem.icon"
+            style="font-size: 22px"
+          ></i>
+          <span class="item-name">{{ mainItem.name }}</span>
+          <ng-container *ngIf="mainItem.subItems">
+            <div ngbDropdownMenu>
+              <button ngbDropdownItem *ngFor="let subItem of mainItem.subItems">
+                {{ subItem.name }}
+              </button>
+            </div>
+          </ng-container>
+        </ng-template>
+        <!-- <ng-template>
+
+        </ng-template> -->
+      </ng-container>
     </ul>
   </div>
 </div>

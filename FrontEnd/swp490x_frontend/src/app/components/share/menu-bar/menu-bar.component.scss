@@ -15,10 +15,10 @@
   outline: 0;
 }
 
-.wrapper {
+.outter-wrapper {
   background-color: rgb(228, 196, 196);
 
-  .nav-wrapper {
+  .inner-wrapper {
     width: 80vw;
     margin-left: auto;
     margin-right: auto;
@@ -26,28 +26,23 @@
     justify-content: space-between;
     align-items: center;
     align-content: center;
+    height: 60px;
 
     ul {
-      display: flex;
-      padding: 0px;
-      height: 100%;
-      // display: flex;
-      // align-items: center;
-      // align-content: center;
 
       li {
         list-style-type: none;
         list-style-position: inside;
         cursor: pointer;
-        // height: 100%;
+
+        .item-name {
+          margin-left: 5px;
+        }
+      }
+
+      .main-item {
+        margin: 0px 15px;
       }
     }
-
-    .main-item {
-      margin: 0px 10px;
-    }
   }
-
-
-
 }

@@ -12,33 +12,23 @@ export class MenuBarComponent implements OnInit {
     this.menuItems = [
       { name: 'Home', icon: 'bi-house', routerLink: '' },
       {
-        name: 'Admin',
+        name: 'Management',
         icon: 'bi-sliders2',
-        subMenu: [
-          {
-            name: 'Management',
-            subMenu: [
-              { name: 'User', routerLink: '' },
-              { name: 'Product', routerLink: '' },
-              { name: 'Category', routerLink: '' },
-            ],
-          },
+        subItems: [
+          { name: 'User', routerLink: '' },
+          { name: 'Product', routerLink: '' },
+          { name: 'Category', routerLink: '' },
         ],
       },
       { name: 'Cart', icon: 'bi-cart', routerLink: '' },
       {
         name: 'Account',
         icon: 'bi-person',
-        subMenu: [
-          {
-            name: 'Management',
-            subMenu: [
-              { name: 'My profile', routerLink: '' },
-              { name: 'Sign in', routerLink: '' },
-              { name: 'Sign up', routerLink: '' },
-              { name: 'Sign out', routerLink: '' },
-            ],
-          },
+        subItems: [
+          { name: 'My profile', routerLink: '' },
+          { name: 'Sign in', routerLink: '' },
+          { name: 'Sign up', routerLink: '' },
+          { name: 'Sign out', routerLink: '' },
         ],
       },
     ];
