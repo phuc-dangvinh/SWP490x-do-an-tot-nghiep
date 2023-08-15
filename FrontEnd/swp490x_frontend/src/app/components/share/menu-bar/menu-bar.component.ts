@@ -10,14 +10,14 @@ export class MenuBarComponent implements OnInit {
   public menuItems: MenuItem[] = [];
   ngOnInit(): void {
     this.menuItems = [
-      { name: 'Home', icon: 'bi-house', routerLink: '' },
+      { name: 'Home', icon: 'bi-house', routerLink: '/home' },
       {
         name: 'Management',
         icon: 'bi-sliders2',
         subItems: [
-          { name: 'User', routerLink: '' },
-          { name: 'Product', routerLink: '' },
-          { name: 'Category', routerLink: '' },
+          { name: 'User', routerLink: '/admin/user-management' },
+          { name: 'Product', routerLink: '/admin/product-management' },
+          { name: 'Category', routerLink: '/admin/category-management' },
         ],
       },
       { name: 'Cart', icon: 'bi-cart', routerLink: '' },
@@ -26,8 +26,8 @@ export class MenuBarComponent implements OnInit {
         icon: 'bi-person',
         subItems: [
           { name: 'My profile', routerLink: '' },
-          { name: 'Sign in', routerLink: '' },
-          { name: 'Sign up', routerLink: '' },
+          { name: 'Sign in', routerLink: '/account/sign-in' },
+          { name: 'Sign up', routerLink: '/account/sign-up' },
           { name: 'Sign out', routerLink: '' },
         ],
       },

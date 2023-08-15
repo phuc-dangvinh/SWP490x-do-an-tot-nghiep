@@ -1,90 +1,28 @@
-<header>
-  <div class="px-3 py-2 text-bg-dark border-bottom">
-    <div class="container">
-      <div
-        class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
-      >
-        <a
-          class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none"
-        >
-          <i class="bi bi-vimeo" style="font-size: 25px"></i>
-        </a>
-
-        <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0">
-          <li>
-            <a class="nav-link text-white" routerLink="/home">
-              <i class="bi bi-house" style="font-size: 22px"></i>
-              Home
-            </a>
-          </li>
-          <li>
-            <a class="nav-link text-white" data-bs-toggle="dropdown">
-              <i class="bi bi-sliders2" style="font-size: 22px"></i>
-              Admin
-            </a>
-            <ul class="dropdown-menu">
-              <li>
-                <a class="dropdown-item" routerLink="/admin/user-management"
-                  >User management</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" routerLink="/admin/product-management"
-                  >Product management</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" routerLink="/admin/category-management"
-                  >Category management</a
-                >
-              </li>
-            </ul>
-          </li>
-          <li>
-            <a class="nav-link text-white">
-              <i class="bi bi-cart" style="font-size: 22px"></i>
-              Cart
-            </a>
-          </li>
-          <li>
-            <a class="nav-link text-white" data-bs-toggle="dropdown">
-              <i class="bi bi-person" style="font-size: 22px"></i>
-              Account
-            </a>
-            <ul class="dropdown-menu">
-              <li>
-                <a class="dropdown-item" routerLink="/account/sign-up"
-                  >Sign up</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" routerLink="/account/sign-in"
-                  >Sign in</a
-                >
-              </li>
-              <li><a class="dropdown-item">My profile</a></li>
-              <li><hr class="dropdown-divider" /></li>
-              <li><a class="dropdown-item">Sign out</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</header>
-
 <div class="outter-wrapper">
   <div class="inner-wrapper">
     <i class="bi bi-vimeo" style="font-size: 25px"></i>
     <ul ngbNav>
       <ng-container *ngFor="let mainItem of menuItems">
         <li *ngIf="!mainItem.subItems" ngbNavItem class="main-item">
-          <ng-container *ngTemplateOutlet="displayMainItem"></ng-container>
+          <span [routerLink]="mainItem.routerLink">
+            <ng-container *ngTemplateOutlet="mainMenuDisplay"></ng-container>
+          </span>
         </li>
         <li *ngIf="mainItem.subItems" ngbDropdown class="main-item">
-          <ng-container *ngTemplateOutlet="displayMainItem"></ng-container>
+          <span ngbDropdownToggle>
+            <ng-container *ngTemplateOutlet="mainMenuDisplay"></ng-container>
+          </span>
+          <div ngbDropdownMenu>
+            <button
+              ngbDropdownItem
+              *ngFor="let subItem of mainItem.subItems"
+              [routerLink]="subItem.routerLink"
+            >
+              {{ subItem.name }}
+            </button>
+          </div>
         </li>
-        <ng-template #displayMainItem>
+        <ng-template #mainMenuDisplay>
           <i
             *ngIf="mainItem.icon"
             class="bi"
@@ -92,17 +30,7 @@
             style="font-size: 22px"
           ></i>
           <span class="item-name">{{ mainItem.name }}</span>
-          <ng-container *ngIf="mainItem.subItems">
-            <div ngbDropdownMenu>
-              <button ngbDropdownItem *ngFor="let subItem of mainItem.subItems">
-                {{ subItem.name }}
-              </button>
-            </div>
-          </ng-container>
         </ng-template>
-        <!-- <ng-template>
-
-        </ng-template> -->
       </ng-container>
     </ul>
   </div>
