@@ -2,20 +2,28 @@
   <div class="inner-wrapper">
     <i class="bi bi-vimeo" style="font-size: 25px"></i>
     <ul ngbNav>
-      <ng-container *ngFor="let mainItem of menuItems">
-        <li *ngIf="!mainItem.subItems" ngbNavItem class="main-item">
+      <ng-container *ngFor="let mainItem of mainItems">
+        <li
+          *ngIf="getSubItems(mainItem.group).length == 0"
+          ngbNavItem
+          class="main-item"
+        >
           <span [routerLink]="mainItem.routerLink">
             <ng-container *ngTemplateOutlet="mainMenuDisplay"></ng-container>
           </span>
         </li>
-        <li *ngIf="mainItem.subItems" ngbDropdown class="main-item">
+        <li
+          *ngIf="getSubItems(mainItem.group).length > 0"
+          ngbDropdown
+          class="main-item"
+        >
           <span ngbDropdownToggle>
             <ng-container *ngTemplateOutlet="mainMenuDisplay"></ng-container>
           </span>
           <div ngbDropdownMenu>
             <button
               ngbDropdownItem
-              *ngFor="let subItem of mainItem.subItems"
+              *ngFor="let subItem of getSubItems(mainItem.group)"
               [routerLink]="subItem.routerLink"
             >
               {{ subItem.name }}

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuItem } from 'src/app/interface/menu-item';
+import { GroupMenu, MenuItem } from 'src/app/interface/menu-item';
 
 @Component({
   selector: 'app-menu-bar',
@@ -10,27 +10,106 @@ export class MenuBarComponent implements OnInit {
   public menuItems: MenuItem[] = [];
   ngOnInit(): void {
     this.menuItems = [
-      { name: 'Home', icon: 'bi-house', routerLink: '/home' },
       {
+        group: GroupMenu.HOME,
+        name: 'Home',
+        icon: 'bi-house',
+        routerLink: '/home',
+        mainItem: true,
+        display: true,
+      },
+      {
+        group: GroupMenu.MANAGEMENT,
         name: 'Management',
         icon: 'bi-sliders2',
-        subItems: [
-          { name: 'User', routerLink: '/admin/user-management' },
-          { name: 'Product', routerLink: '/admin/product-management' },
-          { name: 'Category', routerLink: '/admin/category-management' },
-        ],
+        mainItem: true,
+        display: true,
       },
-      { name: 'Cart', icon: 'bi-cart', routerLink: '' },
       {
+        group: GroupMenu.MANAGEMENT,
+        name: 'User',
+        routerLink: '/admin/user-management',
+        mainItem: false,
+        display: true,
+      },
+      {
+        group: GroupMenu.MANAGEMENT,
+        name: 'Product',
+        routerLink: '/admin/product-management',
+        mainItem: false,
+        display: true,
+      },
+      {
+        group: GroupMenu.MANAGEMENT,
+        name: 'Category',
+        routerLink: '/admin/category-management',
+        mainItem: false,
+        display: true,
+      },
+      {
+        group: GroupMenu.CART,
+        name: 'Cart',
+        icon: 'bi-cart',
+        routerLink: '',
+        mainItem: true,
+        display: true,
+      },
+      {
+        group: GroupMenu.ACCOUNT,
         name: 'Account',
         icon: 'bi-person',
-        subItems: [
-          { name: 'My profile', routerLink: '' },
-          { name: 'Sign in', routerLink: '/account/sign-in' },
-          { name: 'Sign up', routerLink: '/account/sign-up' },
-          { name: 'Sign out', routerLink: '' },
-        ],
+        mainItem: true,
+        display: true,
+      },
+      {
+        group: GroupMenu.ACCOUNT,
+        name: '',
+        icon: 'bi-person',
+        mainItem: true,
+        display: false,
+      },
+      {
+        group: GroupMenu.ACCOUNT,
+        name: 'My profile',
+        routerLink: '',
+        mainItem: false,
+        display: true,
+      },
+      {
+        group: GroupMenu.ACCOUNT,
+        name: 'Sign in',
+        routerLink: '/account/sign-in',
+        mainItem: false,
+        display: true,
+      },
+      {
+        group: GroupMenu.ACCOUNT,
+        name: 'Sign up',
+        routerLink: '/account/sign-up',
+        mainItem: false,
+        display: true,
+      },
+      {
+        group: GroupMenu.ACCOUNT,
+        name: 'Sign out',
+        routerLink: '',
+        mainItem: false,
+        display: true,
       },
     ];
+  }
+
+  get mainItems() {
+    return this.menuItems.filter((item) => item.mainItem && item.display);
+  }
+
+  public getSubItems(groupMenu: GroupMenu) {
+    return this.menuItems.filter(
+      (item) => item.group == groupMenu && !item.mainItem && item.display
+    );
+  }
+
+  private getItem(name: string) {
+    return this.menuItems.find((item) => item.name == name);
   }
 }
