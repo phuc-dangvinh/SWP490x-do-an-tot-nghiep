@@ -12,6 +12,19 @@
     justify-content: space-between;
     height: 60px;
 
+    .logo {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      align-content: center;
+
+      img {
+        border-radius: 50%;
+        width: 45px;
+        height: 45px;
+      }
+    }
+
     ul {
       height: 100%;
 
