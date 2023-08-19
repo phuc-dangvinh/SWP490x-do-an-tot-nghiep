@@ -9,7 +9,6 @@ export class SignUpSuccessComponent {
   @Output() onClickButton: EventEmitter<void> = new EventEmitter<void>();
 
   public handleClick() {
-    console.log('onClickContinueButton');
     this.onClickButton.emit();
   }
 }

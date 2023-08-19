@@ -51,7 +51,11 @@ export class SignInComponent implements OnInit, OnDestroy {
             });
             localStorage.setItem(EToken.ACCESS_TOKEN, res.token);
             this._userService.setCurrentUser(res.user);
-            this._router.navigate(['/home']);
+            this._router.navigate(
+              this._userService.getIsCurrentUserAdmin().getValue()
+                ? ['/admin/user-management']
+                : ['/home']
+            );
           } else {
             this.isInvalid = true;
           }

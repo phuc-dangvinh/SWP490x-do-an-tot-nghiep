@@ -10,11 +10,10 @@
     margin-right: auto;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    align-content: center;
     height: 60px;
 
     ul {
+      height: 100%;
 
       li {
         list-style-type: none;
@@ -26,9 +25,24 @@
           color: red;
         }
 
-        .item-name {
-          margin-left: 5px;
+        span {
+          height: 100%;
+          display: flex;
+          align-items: center;
+          align-content: center;
+
+          img {
+            border-radius: 50%;
+            height: 35px;
+            width: 35px;
+          }
+
+          .item-name {
+            margin-left: 5px;
+          }
         }
+
+
       }
 
       .main-item {

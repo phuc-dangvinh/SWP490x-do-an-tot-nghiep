@@ -37,6 +37,10 @@
             [class]="mainItem.icon"
             style="font-size: 22px"
           ></i>
+          <img
+            *ngIf="currentUser?.avatar && mainItem.name == currentUser.fullname"
+            [src]="currentUser.avatar"
+          />
           <span class="item-name">{{ mainItem.name }}</span>
         </ng-template>
       </ng-container>
