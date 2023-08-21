@@ -16,14 +16,13 @@ import { Subject } from 'rxjs';
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.scss'],
 })
-export class SignInComponent implements OnInit, OnDestroy {
+export class SignInComponent implements OnInit {
   public signInForm!: FormGroup;
   public isInvalid: boolean = false;
   private formFields = {
     email: 'email',
     password: 'password',
   };
-  private unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(
     private _formService: FormService,
@@ -93,10 +92,5 @@ export class SignInComponent implements OnInit, OnDestroy {
       this.signInForm,
       this.formFields.password
     );
-  }
-
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
   }
 }

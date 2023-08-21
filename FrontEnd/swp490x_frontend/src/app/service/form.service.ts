@@ -45,6 +45,16 @@ export class FormService {
     });
   }
 
+  public buildForgotPasswordForm(): FormGroup {
+    return this._formBuilder.group({
+      email: [
+        '',
+        [Validators.required, Validators.email],
+        checkExistEmail(this._httpService, true),
+      ],
+    });
+  }
+
   public getFormControl(
     form: FormGroup,
     controlName: string,
@@ -60,7 +70,8 @@ export class FormService {
   public getErrorMessage(
     form: FormGroup,
     controlName: string,
-    subControlName?: string
+    subControlName?: string,
+    customError?: FormControlError
   ): string[] {
     const formErrors = this.getFormControl(form, controlName).errors;
     const subFormErrors = subControlName
@@ -74,7 +85,11 @@ export class FormService {
           (controlError) => controlError.error == key
         );
         if (errorObj) {
-          errorMessages.push(errorObj.message);
+          errorMessages.push(
+            errorObj.error == customError?.error
+              ? customError.message
+              : errorObj.message
+          );
         }
       });
     }

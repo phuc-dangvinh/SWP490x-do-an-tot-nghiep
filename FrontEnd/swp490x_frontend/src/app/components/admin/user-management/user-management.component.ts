@@ -113,7 +113,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   public resetPassword(id: string) {
-    const url = '/user/manage/reset-password';
+    const url = '/user/reset-password';
     this.httpService.post<TextMessage>(url, [id]).subscribe((res) => {
       if (res) {
         this._toastService.show({

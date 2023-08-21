@@ -57,7 +57,7 @@ public class UserController {
         return userService.changePassword(userChangePasswordRequest);
     }
 
-    @PostMapping("/manage/reset-password")
+    @PostMapping("/reset-password")
     public TextMessageResponse resetPassword(@RequestBody List<String> ids)
             throws UnsupportedEncodingException, MessagingException {
         return userService.resetPassword(ids);

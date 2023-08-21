@@ -6,12 +6,16 @@
     <div class="title">SUCCESS</div>
   </div>
   <div class="body">
-    Congratulations, your account has been successfully created. Please log in
-    to continue.
+    <ng-container *ngIf="content == contentPopupSuccess.SIGN_UP_SUCCES">
+      Congratulations, your account has been successfully created. Please check
+      your email for details and log in to continue.
+    </ng-container>
+    <ng-container *ngIf="content == contentPopupSuccess.RESET_PASSWORD_SUCCES">
+      Congratulations, your account has been reset. Please check your email for
+      details and log in to continue.
+    </ng-container>
   </div>
   <div class="footer">
-    <app-continue-button
-      (clickButton)="handleClick()"
-    ></app-continue-button>
+    <app-continue-button (clickButton)="handleClick()"></app-continue-button>
   </div>
 </div>
