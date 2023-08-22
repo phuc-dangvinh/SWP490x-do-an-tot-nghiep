@@ -114,15 +114,17 @@ export class UserManagementComponent implements OnInit {
 
   public resetPassword(id: string) {
     const url = '/user/reset-password';
-    this.httpService.post<TextMessage>(url, [id]).subscribe((res) => {
-      if (res) {
-        this._toastService.show({
-          content: EToastMessage.RESET_PASSWORD_SUCCESS,
-          classname: EToastClass.SUCCESS,
-          delay: 3000,
-        });
-      }
-    });
+    this.httpService
+      .post<TextMessage>(url, { idOrEmail: id })
+      .subscribe((res) => {
+        if (res) {
+          this._toastService.show({
+            content: EToastMessage.RESET_PASSWORD_SUCCESS,
+            classname: EToastClass.SUCCESS,
+            delay: 3000,
+          });
+        }
+      });
   }
 
   public changeSelectPage(page: number) {

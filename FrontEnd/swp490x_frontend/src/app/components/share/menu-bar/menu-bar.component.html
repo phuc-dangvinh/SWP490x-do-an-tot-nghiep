@@ -1,7 +1,7 @@
-<div class="outter-wrapper">
+<div class="outter-wrapper bg-dark">
   <div class="inner-wrapper">
     <span class="logo">
-      <img src="../../../../assets/images/we-re-growing.jpg">
+      <img src="../../../../assets/images/we-re-growing.jpg" />
     </span>
     <ul ngbNav>
       <ng-container *ngFor="let mainItem of mainItems">
@@ -27,6 +27,7 @@
               ngbDropdownItem
               *ngFor="let subItem of getSubItems(mainItem.group)"
               [routerLink]="subItem.routerLink"
+              (click)="onClickMenuSubItem(subItem)"
             >
               {{ subItem.name }}
             </button>

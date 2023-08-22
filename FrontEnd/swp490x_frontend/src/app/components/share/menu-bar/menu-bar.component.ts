@@ -1,9 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { ROLE } from 'src/app/const/ERole';
 import { rootApi } from 'src/app/enviroments/environment';
 import { GroupMenu, ItemMenuName, MenuItem } from 'src/app/interface/menu-item';
+import { ESessionKeyCredentials } from 'src/app/interface/session-key-credentials.enum';
 import { User } from 'src/app/interface/user';
+import { SessionStorageService } from 'src/app/service/session-storage.service';
 import { UserService } from 'src/app/service/user.service';
 
 @Component({
@@ -11,10 +12,10 @@ import { UserService } from 'src/app/service/user.service';
   templateUrl: './menu-bar.component.html',
   styleUrls: ['./menu-bar.component.scss'],
 })
-export class MenuBarComponent implements OnInit, OnDestroy {
+export class MenuBarComponent implements OnInit {
   private isAdminUser: boolean = false;
   public currentUser!: User;
-  private unsubscribe$: Subject<void> = new Subject<void>();
+  // private unsubscribe$: Subject<void> = new Subject<void>();
   private menuItems: MenuItem[] = [
     {
       group: GroupMenu.HOME,
@@ -110,7 +111,7 @@ export class MenuBarComponent implements OnInit, OnDestroy {
     },
   ];
 
-  constructor(private _userService: UserService) {}
+  constructor(private _sessionStorageService: SessionStorageService) {}
 
   ngOnInit(): void {
     this.getCurentUser();
@@ -161,25 +162,26 @@ export class MenuBarComponent implements OnInit, OnDestroy {
   }
 
   private getCurentUser() {
-    this._userService
-      .getCurrentUser()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((res) => {
-        if (res) {
-          this.currentUser = {
-            ...res,
-            avatar: res.avatar ? `${rootApi}/file/${res.avatar}` : '',
-          };
-          this.isAdminUser = res.authorities.some(
-            (item) => item.authority == ROLE.ADMIN
-          );
-          this.changeDisplayMenuItem();
-        }
-      });
+    const loginUser: User = this._sessionStorageService.getData(
+      ESessionKeyCredentials.USER
+    );
+    if (loginUser) {
+      this.currentUser = {
+        ...loginUser,
+        avatar: loginUser.avatar ? `${rootApi}/file/${loginUser.avatar}` : '',
+      };
+      this.isAdminUser = loginUser.authorities.some(
+        (item) => item.authority == ROLE.ADMIN
+      );
+      this.changeDisplayMenuItem();
+    }
   }
 
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+  public onClickMenuSubItem(menuItem: MenuItem) {
+    switch (menuItem.name) {
+      case ItemMenuName.SIGN_OUT:
+        this._sessionStorageService.clearAllData();
+        this.getCurentUser();
+    }
   }
 }

@@ -57,7 +57,7 @@ export class ForgotPasswordComponent implements OnInit {
     if (this.forgotPasswordForm.valid) {
       const url = '/user/reset-password';
       this._httpService
-        .post(url, [this.emailFormControl.value])
+        .post(url, { idOrEmail: this.emailFormControl.value })
         .subscribe((res) => {
           if (res) {
             this._modalService.open(this.resetSuccesPopup, {

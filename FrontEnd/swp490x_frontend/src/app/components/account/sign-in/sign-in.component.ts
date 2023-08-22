@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SignInResponse } from 'src/app/interface/sign-in-response';
@@ -7,9 +7,9 @@ import { HttpService } from 'src/app/service/http.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { EToastMessage } from 'src/app/const/EToastMessage';
 import { EToastClass } from 'src/app/const/EToastClass';
-import { EToken } from 'src/app/const/EToken';
 import { UserService } from 'src/app/service/user.service';
-import { Subject } from 'rxjs';
+import { SessionStorageService } from 'src/app/service/session-storage.service';
+import { ESessionKeyCredentials } from 'src/app/interface/session-key-credentials.enum';
 
 @Component({
   selector: 'app-sign-in',
@@ -29,7 +29,8 @@ export class SignInComponent implements OnInit {
     private _httpService: HttpService,
     private _router: Router,
     private _toastService: ToastService,
-    private _userService: UserService
+    private _userService: UserService,
+    private _sessionStorageService: SessionStorageService
   ) {}
 
   ngOnInit(): void {
@@ -48,8 +49,14 @@ export class SignInComponent implements OnInit {
               classname: EToastClass.SUCCESS,
               delay: 3000,
             });
-            localStorage.setItem(EToken.ACCESS_TOKEN, res.token);
-            this._userService.setCurrentUser(res.user);
+            this._sessionStorageService.saveData(
+              ESessionKeyCredentials.TOKEN,
+              res.token
+            );
+            this._sessionStorageService.saveData(
+              ESessionKeyCredentials.USER,
+              res.user
+            );
             this._router.navigate(
               this._userService.getIsCurrentUserAdmin().getValue()
                 ? ['/admin/user-management']

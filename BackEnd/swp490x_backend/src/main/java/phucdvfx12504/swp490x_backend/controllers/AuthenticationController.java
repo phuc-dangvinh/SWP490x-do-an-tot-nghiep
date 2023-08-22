@@ -27,6 +27,7 @@ public class AuthenticationController {
     public ResponseEntity<User> register(@RequestBody UserRegisterRequest request)
             throws MessagingException, UnsupportedEncodingException {
         return ResponseEntity.ok(authenticationService.register(request));
+        // authenticationService.register(request);
     }
 
     @PostMapping("/login")

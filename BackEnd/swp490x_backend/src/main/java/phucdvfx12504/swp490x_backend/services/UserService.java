@@ -10,6 +10,7 @@ import phucdvfx12504.swp490x_backend.constant.ERoleName;
 import phucdvfx12504.swp490x_backend.dto.share.DeleteResponse;
 import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
 import phucdvfx12504.swp490x_backend.dto.user.CheckExistUserRequest;
+import phucdvfx12504.swp490x_backend.dto.user.ResetPasswordRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserChangePasswordRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserChangeRoleRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserUpdateRequest;
@@ -28,12 +29,14 @@ public interface UserService {
 
     User changePassword(UserChangePasswordRequest userChangePasswordRequest);
 
-    TextMessageResponse resetPassword(List<String> id) throws UnsupportedEncodingException, MessagingException;
+    TextMessageResponse resetPassword(ResetPasswordRequest request) throws UnsupportedEncodingException, MessagingException;
 
     boolean checkExist(CheckExistUserRequest email);
 
     boolean hasRoleName(User user, ERoleName roleName);
 
     TextMessageResponse changeRole(UserChangeRoleRequest changeRoleRequest);
+
+    List<User> findByIdOrEmail(ResetPasswordRequest request);
 
 }

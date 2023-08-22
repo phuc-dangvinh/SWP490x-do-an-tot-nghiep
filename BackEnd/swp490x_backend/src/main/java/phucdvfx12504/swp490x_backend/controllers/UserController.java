@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.dto.share.DeleteResponse;
 import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
 import phucdvfx12504.swp490x_backend.dto.user.CheckExistUserRequest;
+import phucdvfx12504.swp490x_backend.dto.user.ResetPasswordRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserChangePasswordRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserChangeRoleRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserUpdateRequest;
@@ -58,9 +59,9 @@ public class UserController {
     }
 
     @PostMapping("/reset-password")
-    public TextMessageResponse resetPassword(@RequestBody List<String> ids)
+    public TextMessageResponse resetPassword(@RequestBody ResetPasswordRequest request)
             throws UnsupportedEncodingException, MessagingException {
-        return userService.resetPassword(ids);
+        return userService.resetPassword(request);
     }
 
     @PostMapping("/manage/check-exist")
