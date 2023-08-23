@@ -10,6 +10,7 @@ import { EToastClass } from 'src/app/const/EToastClass';
 import { UserService } from 'src/app/service/user.service';
 import { SessionStorageService } from 'src/app/service/session-storage.service';
 import { ESessionKeyCredentials } from 'src/app/interface/session-key-credentials.enum';
+import { ROLE } from 'src/app/const/ERole';
 
 @Component({
   selector: 'app-sign-in',
@@ -59,7 +60,7 @@ export class SignInComponent implements OnInit {
             );
             this._userService.setIsUserLogin(true);
             this._router.navigate(
-              this._userService.getIsCurrentUserAdmin().getValue()
+              res.user.authorities.some((item) => item.authority == ROLE.ADMIN)
                 ? ['/admin/user-management']
                 : ['/home']
             );

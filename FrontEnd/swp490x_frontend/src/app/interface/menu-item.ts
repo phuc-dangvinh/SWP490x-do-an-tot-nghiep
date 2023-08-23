@@ -1,11 +1,12 @@
 export interface MenuItem {
   group: GroupMenu;
   icon?: string;
-  name: ItemMenuName | string;
+  itemName: ItemMenuName
+  displayName: string;
   horizontalLine?: boolean;
   routerLink?: string;
-  mainItem: boolean;
-  display: boolean;
+  isMainItem: boolean;
+  isActive: boolean;
 }
 
 export enum GroupMenu {
@@ -23,7 +24,7 @@ export enum ItemMenuName {
   CATEGORY = 'Category',
   CART = 'Cart',
   ACCOUNT = 'Account',
-  LOGIN_NAME = '',
+  LOGIN_NAME = 'Login name',
   MY_PROFILE = 'My profile',
   CHANGE_PASSWORD = 'Change password',
   SIGN_IN = 'Sign in',

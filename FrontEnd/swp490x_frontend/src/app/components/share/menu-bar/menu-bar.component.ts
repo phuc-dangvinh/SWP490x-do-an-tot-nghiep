@@ -19,6 +19,7 @@ export class MenuBarComponent implements OnInit, OnDestroy {
   public currentUser!: User;
   private unsubscribe$: Subject<void> = new Subject<void>();
   private menuItems: MenuItem[] = menuItems;
+  private isLogin: boolean = false;
 
   constructor(
     private _sessionStorageService: SessionStorageService,
@@ -26,89 +27,89 @@ export class MenuBarComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.isStoreSessionLogin();
     this._userService
       .getIsUserLogin()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {
-        console.log('getIsUserLogin',res);
-        if (res) {
-          this.getCurentUserLogin();
-        } else {
-          this.handleLogout();
+        this.isLogin = res || this.isStoreSessionLogin();
+        if (this.isLogin) {
+          this.getInfoFromSession();
         }
+        this.changeMenu();
       });
   }
 
   get mainItems() {
-    return this.menuItems.filter((item) => item.mainItem && item.display);
+    return this.menuItems.filter((item) => item.isMainItem && item.isActive);
   }
 
   public getSubItems(groupMenu: GroupMenu) {
     return this.menuItems.filter(
-      (item) => item.group == groupMenu && !item.mainItem && item.display
+      (item) => item.group == groupMenu && !item.isMainItem && item.isActive
     );
   }
 
-  private changeDisplayMenuItem() {
-    if (this.currentUser) {
-      if (this.isAdminUser) {
-        this.changeDisplayItemMenu(ItemMenuName.MANAGEMENT, true);
-      }
-      this.changeDisplayItemMenu(ItemMenuName.ACCOUNT, false);
-      this.changeDisplayItemMenu(ItemMenuName.SIGN_IN, false);
-      this.changeDisplayItemMenu(ItemMenuName.SIGN_UP, false);
-      this.changeDisplayItemMenu(ItemMenuName.MY_PROFILE, true);
-      this.changeDisplayItemMenu(ItemMenuName.SIGN_OUT, true);
-      this.changeDisplayItemMenu(ItemMenuName.LOGIN_NAME, true);
-      this.setDisplayLoginName(this.currentUser.fullname);
+  private changeMenu() {
+    if (this.isAdminUser) {
+      this.toggleItem(ItemMenuName.MANAGEMENT, this.isLogin);
     }
+    this.toggleItem(ItemMenuName.ACCOUNT, !this.isLogin);
+    this.toggleItem(ItemMenuName.SIGN_IN, !this.isLogin);
+    this.toggleItem(ItemMenuName.SIGN_UP, !this.isLogin);
+    this.setDisplayName(this.isLogin ? this.currentUser.fullname : '');
+    this.toggleItem(ItemMenuName.LOGIN_NAME, this.isLogin);
+    this.toggleItem(ItemMenuName.MY_PROFILE, this.isLogin);
+    this.toggleItem(ItemMenuName.SIGN_OUT, this.isLogin);
   }
 
-  private changeDisplayItemMenu(
-    itemName: ItemMenuName | string,
-    state: boolean
-  ) {
-    let itemMenu = this.menuItems.find((item) => item.name == itemName);
+  private toggleItem(itemName: ItemMenuName, state: boolean) {
+    let itemMenu = this.menuItems.find((item) => item.itemName == itemName);
     if (itemMenu) {
-      itemMenu.display = state;
+      itemMenu.isActive = state;
     }
   }
 
-  private setDisplayLoginName(loginName: string) {
+  private setDisplayName(loginName: string) {
     let itemMenu = this.menuItems.find(
-      (item) => item.name == ItemMenuName.LOGIN_NAME
+      (item) => item.itemName == ItemMenuName.LOGIN_NAME
     );
     if (itemMenu) {
-      itemMenu.name = loginName;
+      itemMenu.displayName = loginName;
     }
   }
 
-  private getCurentUserLogin() {
-    const loginUser: User = this._sessionStorageService.getData(
+  private getInfoFromSession() {
+    const sessionUser: User = this._sessionStorageService.getData(
       ESessionKeyCredentials.USER
     );
-    if (loginUser) {
+    if (sessionUser) {
       this.currentUser = {
-        ...loginUser,
-        avatar: loginUser.avatar ? `${rootApi}/file/${loginUser.avatar}` : '',
+        ...sessionUser,
+        avatar: sessionUser.avatar
+          ? `${rootApi}/file/${sessionUser.avatar}`
+          : '',
       };
-      this.isAdminUser = loginUser.authorities.some(
+      this.isAdminUser = sessionUser.authorities.some(
         (item) => item.authority == ROLE.ADMIN
       );
-      this.changeDisplayMenuItem();
-    }
-  }
-
-  public onClickMenuSubItem(menuItem: MenuItem) {
-    switch (menuItem.name) {
-      case ItemMenuName.SIGN_OUT:
-        this._userService.setIsUserLogin(false);
     }
   }
 
   private handleLogout() {
     this._sessionStorageService.clearAllData();
-    this.menuItems = menuItems;
+    this._userService.setIsUserLogin(false);
+  }
+
+  public clickSubItem(menuItem: MenuItem) {
+    switch (menuItem.itemName) {
+      case ItemMenuName.SIGN_OUT:
+        this.handleLogout();
+    }
+  }
+
+  private isStoreSessionLogin() {
+    return !!this._sessionStorageService.getData(ESessionKeyCredentials.USER);
   }
 
   ngOnDestroy(): void {

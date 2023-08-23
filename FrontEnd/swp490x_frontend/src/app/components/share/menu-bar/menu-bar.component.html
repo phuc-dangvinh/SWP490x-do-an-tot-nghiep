@@ -27,9 +27,9 @@
               ngbDropdownItem
               *ngFor="let subItem of getSubItems(mainItem.group)"
               [routerLink]="subItem.routerLink"
-              (click)="onClickMenuSubItem(subItem)"
+              (click)="clickSubItem(subItem)"
             >
-              {{ subItem.name }}
+              {{ subItem.displayName }}
             </button>
           </div>
         </li>
@@ -41,10 +41,10 @@
             style="font-size: 22px"
           ></i>
           <img
-            *ngIf="currentUser?.avatar && mainItem.name == currentUser.fullname"
+            *ngIf="currentUser?.avatar && mainItem.displayName == currentUser.fullname"
             [src]="currentUser.avatar"
           />
-          <span class="item-name">{{ mainItem.name }}</span>
+          <span class="item-name">{{ mainItem.displayName }}</span>
         </ng-template>
       </ng-container>
     </ul>

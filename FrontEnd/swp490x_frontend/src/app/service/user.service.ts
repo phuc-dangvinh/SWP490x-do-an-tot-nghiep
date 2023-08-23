@@ -7,28 +7,28 @@ import { ROLE } from '../const/ERole';
   providedIn: 'root',
 })
 export class UserService {
-  private currentUser$: BehaviorSubject<User> = new BehaviorSubject<any>(null);
-  private isCurrentUserAdmin$: BehaviorSubject<boolean> = new BehaviorSubject(
-    false
-  );
+  // private currentUser$: BehaviorSubject<User> = new BehaviorSubject<any>(null);
+  // private isCurrentUserAdmin$: BehaviorSubject<boolean> = new BehaviorSubject(
+  //   false
+  // );
   private isUserLogin$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false
   );
 
-  public getCurrentUser() {
-    return this.currentUser$;
-  }
+  // public getCurrentUser() {
+  //   return this.currentUser$;
+  // }
 
-  public setCurrentUser(user: User) {
-    this.currentUser$.next(user);
-    this.isCurrentUserAdmin$.next(
-      user.authorities.some((item) => item.authority == ROLE.ADMIN)
-    );
-  }
+  // public setCurrentUser(user: User) {
+  //   this.currentUser$.next(user);
+  //   this.isCurrentUserAdmin$.next(
+  //     user.authorities.some((item) => item.authority == ROLE.ADMIN)
+  //   );
+  // }
 
-  public getIsCurrentUserAdmin() {
-    return this.isCurrentUserAdmin$;
-  }
+  // public getIsCurrentUserAdmin() {
+  //   return this.isCurrentUserAdmin$;
+  // }
 
   public getIsUserLogin() {
     return this.isUserLogin$;
