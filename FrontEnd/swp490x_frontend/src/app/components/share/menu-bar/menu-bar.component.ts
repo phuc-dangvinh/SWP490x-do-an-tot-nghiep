@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 import { ROLE } from 'src/app/const/ERole';
+import { menuItems } from 'src/app/const/menu-items';
 import { rootApi } from 'src/app/enviroments/environment';
 import { GroupMenu, ItemMenuName, MenuItem } from 'src/app/interface/menu-item';
 import { ESessionKeyCredentials } from 'src/app/interface/session-key-credentials.enum';
@@ -12,109 +14,29 @@ import { UserService } from 'src/app/service/user.service';
   templateUrl: './menu-bar.component.html',
   styleUrls: ['./menu-bar.component.scss'],
 })
-export class MenuBarComponent implements OnInit {
+export class MenuBarComponent implements OnInit, OnDestroy {
   private isAdminUser: boolean = false;
   public currentUser!: User;
-  // private unsubscribe$: Subject<void> = new Subject<void>();
-  private menuItems: MenuItem[] = [
-    {
-      group: GroupMenu.HOME,
-      name: ItemMenuName.HOME,
-      icon: 'bi-house',
-      routerLink: '/home',
-      mainItem: true,
-      display: true,
-    },
-    {
-      group: GroupMenu.MANAGEMENT,
-      name: ItemMenuName.MANAGEMENT,
-      icon: 'bi-sliders2',
-      mainItem: true,
-      display: false,
-    },
-    {
-      group: GroupMenu.MANAGEMENT,
-      name: ItemMenuName.USER,
-      routerLink: '/admin/user-management',
-      mainItem: false,
-      display: true,
-    },
-    {
-      group: GroupMenu.MANAGEMENT,
-      name: ItemMenuName.PRODUCT,
-      routerLink: '/admin/product-management',
-      mainItem: false,
-      display: true,
-    },
-    {
-      group: GroupMenu.MANAGEMENT,
-      name: ItemMenuName.CATEGORY,
-      routerLink: '/admin/category-management',
-      mainItem: false,
-      display: true,
-    },
-    {
-      group: GroupMenu.CART,
-      name: ItemMenuName.CART,
-      icon: 'bi-cart',
-      routerLink: '',
-      mainItem: true,
-      display: true,
-    },
-    {
-      group: GroupMenu.ACCOUNT,
-      name: ItemMenuName.ACCOUNT,
-      icon: 'bi-person',
-      mainItem: true,
-      display: true,
-    },
-    {
-      group: GroupMenu.ACCOUNT,
-      name: ItemMenuName.LOGIN_NAME,
-      mainItem: true,
-      display: false,
-    },
-    {
-      group: GroupMenu.ACCOUNT,
-      name: ItemMenuName.MY_PROFILE,
-      routerLink: '',
-      mainItem: false,
-      display: false,
-    },
-    {
-      group: GroupMenu.ACCOUNT,
-      name: ItemMenuName.CHANGE_PASSWORD,
-      routerLink: '',
-      mainItem: false,
-      display: false,
-    },
-    {
-      group: GroupMenu.ACCOUNT,
-      name: ItemMenuName.SIGN_IN,
-      routerLink: '/account/sign-in',
-      mainItem: false,
-      display: true,
-    },
-    {
-      group: GroupMenu.ACCOUNT,
-      name: ItemMenuName.SIGN_UP,
-      routerLink: '/account/sign-up',
-      mainItem: false,
-      display: true,
-    },
-    {
-      group: GroupMenu.ACCOUNT,
-      name: ItemMenuName.SIGN_OUT,
-      routerLink: '',
-      mainItem: false,
-      display: false,
-    },
-  ];
+  private unsubscribe$: Subject<void> = new Subject<void>();
+  private menuItems: MenuItem[] = menuItems;
 
-  constructor(private _sessionStorageService: SessionStorageService) {}
+  constructor(
+    private _sessionStorageService: SessionStorageService,
+    private _userService: UserService
+  ) {}
 
   ngOnInit(): void {
-    this.getCurentUser();
+    this._userService
+      .getIsUserLogin()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((res) => {
+        console.log('getIsUserLogin',res);
+        if (res) {
+          this.getCurentUserLogin();
+        } else {
+          this.handleLogout();
+        }
+      });
   }
 
   get mainItems() {
@@ -161,7 +83,7 @@ export class MenuBarComponent implements OnInit {
     }
   }
 
-  private getCurentUser() {
+  private getCurentUserLogin() {
     const loginUser: User = this._sessionStorageService.getData(
       ESessionKeyCredentials.USER
     );
@@ -180,8 +102,17 @@ export class MenuBarComponent implements OnInit {
   public onClickMenuSubItem(menuItem: MenuItem) {
     switch (menuItem.name) {
       case ItemMenuName.SIGN_OUT:
-        this._sessionStorageService.clearAllData();
-        this.getCurentUser();
+        this._userService.setIsUserLogin(false);
     }
+  }
+
+  private handleLogout() {
+    this._sessionStorageService.clearAllData();
+    this.menuItems = menuItems;
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

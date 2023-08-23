@@ -11,6 +11,9 @@ export class UserService {
   private isCurrentUserAdmin$: BehaviorSubject<boolean> = new BehaviorSubject(
     false
   );
+  private isUserLogin$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    false
+  );
 
   public getCurrentUser() {
     return this.currentUser$;
@@ -25,5 +28,13 @@ export class UserService {
 
   public getIsCurrentUserAdmin() {
     return this.isCurrentUserAdmin$;
+  }
+
+  public getIsUserLogin() {
+    return this.isUserLogin$;
+  }
+
+  public setIsUserLogin(isLogin: boolean) {
+    this.isUserLogin$.next(isLogin);
   }
 }

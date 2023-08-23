@@ -57,6 +57,7 @@ export class SignInComponent implements OnInit {
               ESessionKeyCredentials.USER,
               res.user
             );
+            this._userService.setIsUserLogin(true);
             this._router.navigate(
               this._userService.getIsCurrentUserAdmin().getValue()
                 ? ['/admin/user-management']
