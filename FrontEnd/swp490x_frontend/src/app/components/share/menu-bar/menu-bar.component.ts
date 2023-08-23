@@ -6,7 +6,7 @@ import { rootApi } from 'src/app/enviroments/environment';
 import { GroupMenu, ItemMenuName, MenuItem } from 'src/app/interface/menu-item';
 import { ESessionKeyCredentials } from 'src/app/interface/session-key-credentials.enum';
 import { User } from 'src/app/interface/user';
-import { SessionStorageService } from 'src/app/service/session-storage.service';
+import { LocalStorageService } from 'src/app/service/local-storage.service';
 import { UserService } from 'src/app/service/user.service';
 
 @Component({
@@ -22,7 +22,7 @@ export class MenuBarComponent implements OnInit, OnDestroy {
   private isLogin: boolean = false;
 
   constructor(
-    private _sessionStorageService: SessionStorageService,
+    private _localStorageService: LocalStorageService,
     private _userService: UserService
   ) {}
 
@@ -80,7 +80,7 @@ export class MenuBarComponent implements OnInit, OnDestroy {
   }
 
   private getInfoFromSession() {
-    const sessionUser: User = this._sessionStorageService.getData(
+    const sessionUser: User = this._localStorageService.getData(
       ESessionKeyCredentials.USER
     );
     if (sessionUser) {
@@ -97,7 +97,7 @@ export class MenuBarComponent implements OnInit, OnDestroy {
   }
 
   private handleLogout() {
-    this._sessionStorageService.clearAllData();
+    this._localStorageService.clearAllData();
     this._userService.setIsUserLogin(false);
   }
 
@@ -109,7 +109,7 @@ export class MenuBarComponent implements OnInit, OnDestroy {
   }
 
   private isStoreSessionLogin() {
-    return !!this._sessionStorageService.getData(ESessionKeyCredentials.USER);
+    return !!this._localStorageService.getData(ESessionKeyCredentials.USER);
   }
 
   ngOnDestroy(): void {

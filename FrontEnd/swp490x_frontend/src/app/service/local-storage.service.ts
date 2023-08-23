@@ -3,13 +3,13 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class SessionStorageService {
+export class LocalStorageService {
   public saveData(key: string, data: any): void {
-    sessionStorage.setItem(key, JSON.stringify(data));
+    localStorage.setItem(key, JSON.stringify(data));
   }
 
   public getData(key: string): any {
-    const data = sessionStorage.getItem(key);
+    const data = localStorage.getItem(key);
     if (data) {
       return JSON.parse(data);
     } else {
@@ -18,10 +18,10 @@ export class SessionStorageService {
   }
 
   public removeData(key: string): void {
-    sessionStorage.removeItem(key);
+    localStorage.removeItem(key);
   }
 
   public clearAllData(): void {
-    sessionStorage.clear();
+    localStorage.clear();
   }
 }

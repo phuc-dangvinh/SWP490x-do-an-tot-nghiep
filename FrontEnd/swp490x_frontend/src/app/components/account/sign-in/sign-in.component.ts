@@ -8,9 +8,9 @@ import { ToastService } from 'src/app/service/toast.service';
 import { EToastMessage } from 'src/app/const/EToastMessage';
 import { EToastClass } from 'src/app/const/EToastClass';
 import { UserService } from 'src/app/service/user.service';
-import { SessionStorageService } from 'src/app/service/session-storage.service';
 import { ESessionKeyCredentials } from 'src/app/interface/session-key-credentials.enum';
 import { ROLE } from 'src/app/const/ERole';
+import { LocalStorageService } from 'src/app/service/local-storage.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -31,7 +31,7 @@ export class SignInComponent implements OnInit {
     private _router: Router,
     private _toastService: ToastService,
     private _userService: UserService,
-    private _sessionStorageService: SessionStorageService
+    private _localStorageService: LocalStorageService
   ) {}
 
   ngOnInit(): void {
@@ -50,11 +50,11 @@ export class SignInComponent implements OnInit {
               classname: EToastClass.SUCCESS,
               delay: 3000,
             });
-            this._sessionStorageService.saveData(
+            this._localStorageService.saveData(
               ESessionKeyCredentials.TOKEN,
               res.token
             );
-            this._sessionStorageService.saveData(
+            this._localStorageService.saveData(
               ESessionKeyCredentials.USER,
               res.user
             );
