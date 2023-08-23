@@ -3,7 +3,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { ROLE } from 'src/app/const/ERole';
 import { menuItems } from 'src/app/const/menu-items';
 import { rootApi } from 'src/app/enviroments/environment';
-import { GroupMenu, ItemMenuName, MenuItem } from 'src/app/interface/menu-item';
+import { GroupMenu, ItemMenuName, MenuItem } from 'src/app/interface/menu-item.interface';
 import { ESessionKeyCredentials } from 'src/app/interface/session-key-credentials.enum';
 import { User } from 'src/app/interface/user';
 import { LocalStorageService } from 'src/app/service/local-storage.service';
@@ -60,6 +60,7 @@ export class MenuBarComponent implements OnInit, OnDestroy {
     this.setDisplayName(this.isLogin ? this.currentUser.fullname : '');
     this.toggleItem(ItemMenuName.LOGIN_NAME, this.isLogin);
     this.toggleItem(ItemMenuName.MY_PROFILE, this.isLogin);
+    this.toggleItem(ItemMenuName.CHANGE_PASSWORD, this.isLogin);
     this.toggleItem(ItemMenuName.SIGN_OUT, this.isLogin);
   }
 

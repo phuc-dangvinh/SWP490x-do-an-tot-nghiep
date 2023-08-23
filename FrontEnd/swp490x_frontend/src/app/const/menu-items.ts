@@ -1,4 +1,4 @@
-import { MenuItem, GroupMenu, ItemMenuName } from '../interface/menu-item';
+import { MenuItem, GroupMenu, ItemMenuName } from '../interface/menu-item.interface';
 
 export const menuItems: MenuItem[] = [
   {
@@ -70,6 +70,14 @@ export const menuItems: MenuItem[] = [
     group: GroupMenu.ACCOUNT,
     itemName: ItemMenuName.MY_PROFILE,
     displayName: ItemMenuName.MY_PROFILE,
+    routerLink: '',
+    isMainItem: false,
+    isActive: false,
+  },
+  {
+    group: GroupMenu.ACCOUNT,
+    itemName: ItemMenuName.CHANGE_PASSWORD,
+    displayName: ItemMenuName.CHANGE_PASSWORD,
     routerLink: '',
     isMainItem: false,
     isActive: false,
