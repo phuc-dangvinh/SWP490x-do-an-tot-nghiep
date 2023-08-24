@@ -6,7 +6,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpService } from 'src/app/service/http.service';
 import { Router } from '@angular/router';
 import { EContentPopupSuccess } from 'src/app/interface/content-popup-success.enum';
-import { TextMessage } from 'src/app/interface/text-message';
 import { FormControlError } from 'src/app/interface/form-control-error';
 
 @Component({

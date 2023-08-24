@@ -8,6 +8,7 @@ import { HomeComponent } from './components/home/home/home.component';
 import { SignUpComponent } from './components/account/sign-up/sign-up.component';
 import { SignInComponent } from './components/account/sign-in/sign-in.component';
 import { ForgotPasswordComponent } from './components/account/forgot-password/forgot-password.component';
+import { ChangePasswordComponent } from './components/account/change-password/change-password.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'account/sign-up', component: SignUpComponent },
   { path: 'account/sign-in', component: SignInComponent },
   { path: 'account/forgot-password', component: ForgotPasswordComponent },
+  { path: 'account/change-password', component: ChangePasswordComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent },
 ];

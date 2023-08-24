@@ -3,7 +3,11 @@ import { Subject, takeUntil } from 'rxjs';
 import { ROLE } from 'src/app/const/ERole';
 import { menuItems } from 'src/app/const/menu-items';
 import { rootApi } from 'src/app/enviroments/environment';
-import { GroupMenu, ItemMenuName, MenuItem } from 'src/app/interface/menu-item.interface';
+import {
+  GroupMenu,
+  ItemMenuName,
+  MenuItem,
+} from 'src/app/interface/menu-item.interface';
 import { ESessionKeyCredentials } from 'src/app/interface/session-key-credentials.enum';
 import { User } from 'src/app/interface/user';
 import { LocalStorageService } from 'src/app/service/local-storage.service';
@@ -27,14 +31,13 @@ export class MenuBarComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.isStoreSessionLogin();
     this._userService
       .getIsUserLogin()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {
-        this.isLogin = res || this.isStoreSessionLogin();
+        this.isLogin = res;
         if (this.isLogin) {
-          this.getInfoFromSession();
+          this.getInfoFromLocal();
         }
         this.changeMenu();
       });
@@ -80,7 +83,7 @@ export class MenuBarComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getInfoFromSession() {
+  private getInfoFromLocal() {
     const sessionUser: User = this._localStorageService.getData(
       ESessionKeyCredentials.USER
     );
@@ -107,10 +110,6 @@ export class MenuBarComponent implements OnInit, OnDestroy {
       case ItemMenuName.SIGN_OUT:
         this.handleLogout();
     }
-  }
-
-  private isStoreSessionLogin() {
-    return !!this._localStorageService.getData(ESessionKeyCredentials.USER);
   }
 
   ngOnDestroy(): void {

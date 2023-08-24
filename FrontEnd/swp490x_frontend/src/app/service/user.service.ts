@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { User } from '../interface/user';
-import { ROLE } from '../const/ERole';
+import { LocalStorageService } from './local-storage.service';
+import { ESessionKeyCredentials } from '../interface/session-key-credentials.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +14,8 @@ export class UserService {
   private isUserLogin$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false
   );
+
+  constructor(private _localStorageService: LocalStorageService) {}
 
   // public getCurrentUser() {
   //   return this.currentUser$;
@@ -31,6 +33,9 @@ export class UserService {
   // }
 
   public getIsUserLogin() {
+    this.setIsUserLogin(
+      !!this._localStorageService.getData(ESessionKeyCredentials.USER)
+    );
     return this.isUserLogin$;
   }
 

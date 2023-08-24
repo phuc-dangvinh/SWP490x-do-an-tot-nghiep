@@ -17,3 +17,17 @@ export function checkExistEmail(
     );
   };
 }
+
+export function checkCorrectCurrentPassword(
+  httpService: HttpService,
+  email: string
+): AsyncValidatorFn {
+  return (control: AbstractControl) => {
+    const url = '/user/manage/check-exist';
+    return httpService.post<boolean>(url, { email: control.value }).pipe(
+      map((result) => {
+        return { emailExist: true };
+      })
+    );
+  };
+}

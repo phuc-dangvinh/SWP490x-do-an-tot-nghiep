@@ -3,9 +3,12 @@ import {
   AbstractControl,
   FormBuilder,
   FormGroup,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { checkExistEmail } from './async-validator-fn';
+import {
+  checkExistEmail
+} from './async-validator-fn';
 import { HttpService } from './http.service';
 import { FormControlError } from '../interface/form-control-error';
 
@@ -18,6 +21,10 @@ export class FormService {
     { error: 'email', message: 'Email is not valid' },
     { error: 'passwordNotMatch', message: 'Repeat password is incorrect' },
     { error: 'emailExist', message: 'This email is taken' },
+    {
+      error: 'wrongConfirmNewPassword',
+      message: 'The password confirmation does not match',
+    },
   ];
 
   constructor(
@@ -55,6 +62,30 @@ export class FormService {
     });
   }
 
+  public buildChangePasswordForm(): FormGroup {
+    return this._formBuilder.group({
+      currentPassword: ['', [Validators.required]],
+      changePassword: this._formBuilder.group(
+        {
+          newPassword: ['', [Validators.required]],
+          confirmNewPassword: ['', [Validators.required]],
+        },
+        {
+          validators: this.checkConfirmNewPassword,
+        }
+      ),
+    });
+  }
+
+  public checkConfirmNewPassword(
+    control: AbstractControl
+  ): ValidationErrors | null {
+    const controlValue = control.value;
+    return controlValue.newPassword === controlValue.confirmNewPassword
+      ? null
+      : { wrongConfirmNewPassword: true };
+  }
+
   public getFormControl(
     form: FormGroup,
     controlName: string,
@@ -71,16 +102,21 @@ export class FormService {
     form: FormGroup,
     controlName: string,
     subControlName?: string,
-    customError?: FormControlError
+    customError?: FormControlError,
+    includeParentControlError: boolean = false
   ): string[] {
-    const formErrors = this.getFormControl(form, controlName).errors;
-    const subFormErrors = subControlName
+    const controlErrors = this.getFormControl(form, controlName).errors;
+    const subControlErrors = subControlName
       ? this.getFormControl(form, controlName, subControlName).errors
       : null;
-    const finalFormErrors = subControlName ? subFormErrors : formErrors;
+    const finalControlErrors = subControlName
+      ? includeParentControlError
+        ? { ...controlErrors, ...subControlErrors }
+        : subControlErrors
+      : controlErrors;
     let errorMessages: string[] = [];
-    if (finalFormErrors) {
-      Object.keys(finalFormErrors).forEach((key) => {
+    if (finalControlErrors) {
+      Object.keys(finalControlErrors).forEach((key) => {
         const errorObj = this.controlErrors.find(
           (controlError) => controlError.error == key
         );
