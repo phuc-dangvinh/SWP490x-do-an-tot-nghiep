@@ -73,27 +73,9 @@ export class UserDetailComponent implements OnInit {
         checkExistEmail(this.httpService),
       ],
       phone: ['', [Validators.required]],
-      // password: this.formBuilder.group(
-      //   {
-      //     typePassword: ['', [Validators.required]],
-      //     repeatPassword: ['', [Validators.required]],
-      //   },
-      //   {
-      //     validators: this.checkRepeatPassword,
-      //   }
-      // ),
       isAdmin: [false, [Validators.required]],
     });
   }
-
-  // public checkRepeatPassword(
-  //   passwordControl: AbstractControl
-  // ): ValidationErrors | null {
-  //   const passwordValue = passwordControl.value;
-  //   return passwordValue.typePassword === passwordValue.repeatPassword
-  //     ? null
-  //     : { passwordNotMatch: true };
-  // }
 
   private submitForm() {
     if (this.formUser.valid) {

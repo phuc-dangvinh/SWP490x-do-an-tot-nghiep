@@ -9,6 +9,7 @@ import jakarta.mail.MessagingException;
 import phucdvfx12504.swp490x_backend.constant.ERoleName;
 import phucdvfx12504.swp490x_backend.dto.share.DeleteResponse;
 import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
+import phucdvfx12504.swp490x_backend.dto.user.CheckCurrentPasswordRequest;
 import phucdvfx12504.swp490x_backend.dto.user.CheckExistUserRequest;
 import phucdvfx12504.swp490x_backend.dto.user.ResetPasswordRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserChangePasswordRequest;
@@ -29,7 +30,8 @@ public interface UserService {
 
     User changePassword(UserChangePasswordRequest userChangePasswordRequest);
 
-    TextMessageResponse resetPassword(ResetPasswordRequest request) throws UnsupportedEncodingException, MessagingException;
+    TextMessageResponse resetPassword(ResetPasswordRequest request)
+            throws UnsupportedEncodingException, MessagingException;
 
     boolean checkExist(CheckExistUserRequest email);
 
@@ -38,5 +40,7 @@ public interface UserService {
     TextMessageResponse changeRole(UserChangeRoleRequest changeRoleRequest);
 
     List<User> findByIdOrEmail(ResetPasswordRequest request);
+
+    boolean checkCurrentPassword(CheckCurrentPasswordRequest request);
 
 }

@@ -6,11 +6,12 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import {
-  checkExistEmail
-} from './async-validator-fn';
+import { checkCurrentPassword, checkExistEmail } from './async-validator-fn';
 import { HttpService } from './http.service';
 import { FormControlError } from '../interface/form-control-error';
+import { IPasswordStrengthMeterService } from 'angular-password-strength-meter';
+import { checkStrengthPassword } from './sync-validator-fn';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -25,11 +26,21 @@ export class FormService {
       error: 'wrongConfirmNewPassword',
       message: 'The password confirmation does not match',
     },
+    {
+      error: 'weakPassword',
+      message: 'Weak password',
+    },
+    {
+      error: 'wrongPassword',
+      message: 'Wrong password',
+    },
   ];
 
   constructor(
     private _formBuilder: FormBuilder,
-    private _httpService: HttpService
+    private _httpService: HttpService,
+    private _passwordStrengthMeterService: IPasswordStrengthMeterService,
+    private _userService: UserService
   ) {}
 
   public buildSignUpForm(): FormGroup {
@@ -64,10 +75,23 @@ export class FormService {
 
   public buildChangePasswordForm(): FormGroup {
     return this._formBuilder.group({
-      currentPassword: ['', [Validators.required]],
+      currentPassword: [
+        '',
+        [Validators.required],
+        checkCurrentPassword(
+          this._httpService,
+          this._userService.getCurrentUser().email
+        ),
+      ],
       changePassword: this._formBuilder.group(
         {
-          newPassword: ['', [Validators.required]],
+          newPassword: [
+            '',
+            [
+              Validators.required,
+              checkStrengthPassword(this._passwordStrengthMeterService),
+            ],
+          ],
           confirmNewPassword: ['', [Validators.required]],
         },
         {

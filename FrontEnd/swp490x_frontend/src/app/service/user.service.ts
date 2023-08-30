@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { LocalStorageService } from './local-storage.service';
 import { ESessionKeyCredentials } from '../interface/session-key-credentials.enum';
+import { User } from '../interface/user';
 
 @Injectable({
   providedIn: 'root',
@@ -41,5 +42,9 @@ export class UserService {
 
   public setIsUserLogin(isLogin: boolean) {
     this.isUserLogin$.next(isLogin);
+  }
+
+  public getCurrentUser(): User {
+    return this._localStorageService.getData(ESessionKeyCredentials.USER);
   }
 }

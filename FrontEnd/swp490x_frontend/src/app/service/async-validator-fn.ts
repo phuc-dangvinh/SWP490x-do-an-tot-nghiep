@@ -7,7 +7,7 @@ export function checkExistEmail(
   opposite: boolean = false
 ): AsyncValidatorFn {
   return (control: AbstractControl) => {
-    const url = '/user/manage/check-exist';
+    const url = '/user/check-exist';
     return httpService.post<boolean>(url, { email: control.value }).pipe(
       map((result) => {
         return (result && !opposite) || (!result && opposite)
@@ -18,16 +18,18 @@ export function checkExistEmail(
   };
 }
 
-export function checkCorrectCurrentPassword(
+export function checkCurrentPassword(
   httpService: HttpService,
   email: string
 ): AsyncValidatorFn {
   return (control: AbstractControl) => {
-    const url = '/user/manage/check-exist';
-    return httpService.post<boolean>(url, { email: control.value }).pipe(
-      map((result) => {
-        return { emailExist: true };
-      })
-    );
+    const url = '/user/check-current-password';
+    return httpService
+      .post<boolean>(url, { email: email, password: control.value })
+      .pipe(
+        map((result) => {
+          return !result ? { wrongPassword: true } : null;
+        })
+      );
   };
 }

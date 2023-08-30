@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormService } from 'src/app/service/form.service';
 import { HttpService } from 'src/app/service/http.service';
 
@@ -18,7 +17,7 @@ export class ChangePasswordComponent implements OnInit {
     newPassword: 'newPassword',
     confirmNewPassword: 'confirmNewPassword',
   };
-  private strengthNewPassword: number = 0;
+  public showPasswordStrengthMeter: boolean = false;
 
   constructor(
     private _formService: FormService,
@@ -79,7 +78,11 @@ export class ChangePasswordComponent implements OnInit {
 
   public submitForm() {}
 
-  public getStrengthPassword(event: number) {
-    this.strengthNewPassword = event;
+  public onFocusInputNewPassword() {
+    this.showPasswordStrengthMeter = true;
+  }
+
+  public onBlurInputNewPassword() {
+    this.showPasswordStrengthMeter = false;
   }
 }

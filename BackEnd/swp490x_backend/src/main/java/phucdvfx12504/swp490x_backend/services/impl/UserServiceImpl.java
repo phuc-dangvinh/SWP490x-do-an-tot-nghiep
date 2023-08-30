@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.constant.ERoleName;
 import phucdvfx12504.swp490x_backend.dto.share.DeleteResponse;
 import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
+import phucdvfx12504.swp490x_backend.dto.user.CheckCurrentPasswordRequest;
 import phucdvfx12504.swp490x_backend.dto.user.CheckExistUserRequest;
 import phucdvfx12504.swp490x_backend.dto.user.ResetPasswordRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserChangePasswordRequest;
@@ -158,6 +159,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findByIdOrEmail(ResetPasswordRequest request) {
         return userRepositoryCustom.findByIdOrEmail(request.getIdOrEmail());
+    }
+
+    @Override
+    public boolean checkCurrentPassword(CheckCurrentPasswordRequest request) {
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        return passwordEncoder.matches(request.getPassword(), user.getPassword());
     }
 
 }
