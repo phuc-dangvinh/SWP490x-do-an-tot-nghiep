@@ -80,7 +80,7 @@ export class FormService {
         [Validators.required],
         checkCurrentPassword(
           this._httpService,
-          this._userService.getCurrentUser().email
+          this._userService.getCurrentUser().getValue()?.['email'] ?? ''
         ),
       ],
       changePassword: this._formBuilder.group(
@@ -105,9 +105,10 @@ export class FormService {
     control: AbstractControl
   ): ValidationErrors | null {
     const controlValue = control.value;
-    return controlValue.newPassword === controlValue.confirmNewPassword
-      ? null
-      : { wrongConfirmNewPassword: true };
+    return controlValue.confirmNewPassword &&
+      controlValue.newPassword !== controlValue.confirmNewPassword
+      ? { wrongConfirmNewPassword: true }
+      : null;
   }
 
   public getFormControl(

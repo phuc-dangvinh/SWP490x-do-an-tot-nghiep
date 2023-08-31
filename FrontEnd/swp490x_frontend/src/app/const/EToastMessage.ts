@@ -6,4 +6,6 @@ export enum EToastMessage {
   DELETE_FAILED = 'Delete failed',
   RESET_PASSWORD_SUCCESS = 'Reset password successfully',
   CHANGE_ROLE_SUCCESS = 'Change successfully',
+  CHANGE_PASSWORD_SUCCESS = 'Change password successfully',
+  FAIL = 'Fail',
 }

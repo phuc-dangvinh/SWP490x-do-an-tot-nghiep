@@ -54,7 +54,7 @@ public class UserController {
         return userService.update(userUpdate);
     }
 
-    @PutMapping("/change-password")
+    @PostMapping("/change-password")
     public User changePassword(@RequestBody UserChangePasswordRequest userChangePasswordRequest) {
         return userService.changePassword(userChangePasswordRequest);
     }
