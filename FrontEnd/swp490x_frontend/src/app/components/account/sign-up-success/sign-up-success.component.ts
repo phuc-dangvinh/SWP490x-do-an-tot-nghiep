@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { EContentPopupSuccess } from 'src/app/interface/content-popup-success.enum';
 
 @Component({
   selector: 'app-sign-up-success',
@@ -6,10 +7,11 @@ import { Component, EventEmitter, Output } from '@angular/core';
   styleUrls: ['./sign-up-success.component.scss'],
 })
 export class SignUpSuccessComponent {
+  @Input() content: EContentPopupSuccess = EContentPopupSuccess.SIGN_UP_SUCCES;
   @Output() onClickButton: EventEmitter<void> = new EventEmitter<void>();
+  public readonly contentPopupSuccess = EContentPopupSuccess;
 
   public handleClick() {
-    console.log('onClickContinueButton');
     this.onClickButton.emit();
   }
 }

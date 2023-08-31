@@ -18,41 +18,78 @@ import phucdvfx12504.swp490x_backend.dto.user.UserRegisterRequest;
 import phucdvfx12504.swp490x_backend.entities.User;
 import phucdvfx12504.swp490x_backend.repositories.RoleRepository;
 import phucdvfx12504.swp490x_backend.repositories.UserRepository;
+import phucdvfx12504.swp490x_backend.services.EmailService;
 import phucdvfx12504.swp490x_backend.utils.CommonLangPasswordUtils;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
-    private final JwtService jwtService;
-    private final AuthenticationManager athenticationManager;
-    private final CommonLangPasswordUtils commonLangPasswordUtils;
+  private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
+  private final RoleRepository roleRepository;
+  private final JwtService jwtService;
+  private final AuthenticationManager athenticationManager;
+  private final CommonLangPasswordUtils commonLangPasswordUtils;
+  private final EmailService emailService;
 
-    @Transactional
-    public User register(UserRegisterRequest request)
-            throws MessagingException, UnsupportedEncodingException {
-        User user = User.builder()
-                .avatar(request.getAvatar())
-                .fullname(request.getFullname())
-                .email(request.getEmail())
-                .phone(request.getPhone())
-                .password(passwordEncoder.encode(commonLangPasswordUtils.generateCommonLangPassword()))
-                .roles(Set.of(roleRepository.findByName(request.getIsAdmin() ? ERoleName.ADMIN : ERoleName.USER).get()))
-                .build();
-        return userRepository.save(user);
-        // return TextMessageResponse.builder().info("Register successfully!").build();
-        // String jwtToken = jwtService.generateToken(user);
-        // return AuthenticationResponse.builder().token(jwtToken).build();
-    }
+  @Transactional
+  public User register(UserRegisterRequest request)
+      throws MessagingException, UnsupportedEncodingException {
+    String rawPasswordGenerate = commonLangPasswordUtils.generateCommonLangPassword();
+    User userRequest = User.builder()
+        .avatar(request.getAvatar())
+        .fullname(request.getFullname().trim())
+        .email(request.getEmail().toLowerCase().trim())
+        .phone(request.getPhone().trim())
+        .password(passwordEncoder.encode(rawPasswordGenerate))
+        .roles(Set.of(roleRepository.findByName(request.getIsAdmin() ? ERoleName.ADMIN : ERoleName.USER).get()))
+        .build();
+    User userSaveSuccess = userRepository.save(userRequest);
+    // send email
+    String to = userSaveSuccess.getEmail();
+    String subject = "Sign up success";
+    String text = this.replaceEmailContent(
+        userSaveSuccess.getFullname(), userSaveSuccess.getEmail(), rawPasswordGenerate);
+    emailService.sendMimeEmail(to, subject, text);
+    //
+    return userSaveSuccess;
+  }
 
-    public AuthenticationResponse login(UserLoginRequest request) {
-        athenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
-        String jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().user(user).token(jwtToken).build();
-    }
+  public AuthenticationResponse login(UserLoginRequest request) {
+    athenticationManager
+        .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+    User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+    String jwtToken = jwtService.generateToken(user);
+    return AuthenticationResponse.builder().user(user).token(jwtToken).build();
+  }
+
+  private String replaceEmailContent(String fullname, String email, String password) {
+    String content = "<html>\r\n" + //
+        "  <body>\r\n" + //
+        "    Hi {fullname},\r\n" + //
+        "    <br />\r\n" + //
+        "    You have created an account successfully.\r\n" + //
+        "    <br />\r\n" + //
+        "    <br />\r\n" + //
+        "    Here is info about your account:\r\n" + //
+        "    <br />\r\n" + //
+        "    - Username: {email}\r\n" + //
+        "    <br />\r\n" + //
+        "    - Password: {password}\r\n" + //
+        "    <br />\r\n" + //
+        "    To keep your account safe, you should change your password at the first\r\n" + //
+        "    sign-in.\r\n" + //
+        "    <br />\r\n" + //
+        "    <br />\r\n" + //
+        "    Thank you for your using our service.\r\n" + //
+        "    <br />\r\n" + //
+        "    Best regard!\r\n" + //
+        "  </body>\r\n" + //
+        "</html>";
+    content = content.replace("{fullname}", fullname);
+    content = content.replace("{email}", email);
+    content = content.replace("{password}", password);
+    return content;
+  }
 
 }

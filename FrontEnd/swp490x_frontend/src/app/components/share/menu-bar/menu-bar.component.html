@@ -1,74 +1,52 @@
-<header>
-  <div class="px-3 py-2 text-bg-dark border-bottom">
-    <div class="container">
-      <div
-        class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
-      >
-        <a
-          class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none"
+<div class="outter-wrapper bg-dark">
+  <div class="inner-wrapper">
+    <span class="logo">
+      <img src="../../../../assets/images/we-re-growing.jpg" />
+    </span>
+    <ul ngbNav>
+      <ng-container *ngFor="let mainItem of mainItems">
+        <li
+          *ngIf="getSubItems(mainItem.group).length == 0"
+          ngbNavItem
+          class="main-item"
         >
-          <i class="bi bi-vimeo" style="font-size: 25px"></i>
-        </a>
-
-        <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0">
-          <li>
-            <a class="nav-link text-white" routerLink="/home">
-              <i class="bi bi-house" style="font-size: 22px"></i>
-              Home
-            </a>
-          </li>
-          <li>
-            <a class="nav-link text-white" data-bs-toggle="dropdown">
-              <i class="bi bi-sliders2" style="font-size: 22px"></i>
-              Admin
-            </a>
-            <ul class="dropdown-menu">
-              <li>
-                <a class="dropdown-item" routerLink="/admin/user-management"
-                  >User management</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" routerLink="/admin/product-management"
-                  >Product management</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" routerLink="/admin/category-management"
-                  >Category management</a
-                >
-              </li>
-            </ul>
-          </li>
-          <li>
-            <a class="nav-link text-white">
-              <i class="bi bi-cart" style="font-size: 22px"></i>
-              Cart
-            </a>
-          </li>
-          <li>
-            <a class="nav-link text-white" data-bs-toggle="dropdown">
-              <i class="bi bi-person" style="font-size: 22px"></i>
-              Account
-            </a>
-            <ul class="dropdown-menu">
-              <li>
-                <a class="dropdown-item" routerLink="/account/sign-up"
-                  >Sign up</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" routerLink="/account/sign-in"
-                  >Sign in</a
-                >
-              </li>
-              <li><a class="dropdown-item">My profile</a></li>
-              <li><hr class="dropdown-divider" /></li>
-              <li><a class="dropdown-item">Sign out</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </div>
+          <span [routerLink]="mainItem.routerLink">
+            <ng-container *ngTemplateOutlet="mainMenuDisplay"></ng-container>
+          </span>
+        </li>
+        <li
+          *ngIf="getSubItems(mainItem.group).length > 0"
+          ngbDropdown
+          class="main-item"
+        >
+          <span ngbDropdownToggle>
+            <ng-container *ngTemplateOutlet="mainMenuDisplay"></ng-container>
+          </span>
+          <div ngbDropdownMenu>
+            <button
+              ngbDropdownItem
+              *ngFor="let subItem of getSubItems(mainItem.group)"
+              [routerLink]="subItem.routerLink"
+              (click)="clickSubItem(subItem)"
+            >
+              {{ subItem.displayName }}
+            </button>
+          </div>
+        </li>
+        <ng-template #mainMenuDisplay>
+          <i
+            *ngIf="mainItem.icon"
+            class="bi"
+            [class]="mainItem.icon"
+            style="font-size: 22px"
+          ></i>
+          <img
+            *ngIf="currentUser?.avatar && mainItem.displayName == currentUser.fullname"
+            [src]="currentUser.avatar"
+          />
+          <span class="item-name">{{ mainItem.displayName }}</span>
+        </ng-template>
+      </ng-container>
+    </ul>
   </div>
-</header>
+</div>

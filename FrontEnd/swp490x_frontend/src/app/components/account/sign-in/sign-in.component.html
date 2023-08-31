@@ -1,13 +1,22 @@
 <div class="wrapper">
   <form [formGroup]="signInForm">
     <h3>Login</h3>
+    <div *ngIf="isInvalid" class="invalid">
+      <div class="invalid-title">Wrong credentials</div>
+      <div>Invalid email or password</div>
+    </div>
     <app-form-control
       [label]="'Email'"
       [touchedOrDirty]="emailFormControl.touched || emailFormControl.dirty"
       [errorMessages]="emailErrorMessages"
     >
       <ng-container>
-        <input formControlName="email" type="email" class="form-control" />
+        <input
+          formControlName="email"
+          type="email"
+          class="form-control"
+          (click)="touchForm()"
+        />
       </ng-container>
     </app-form-control>
     <app-form-control
@@ -22,16 +31,19 @@
           formControlName="password"
           type="password"
           class="form-control"
+          (click)="touchForm()"
         />
       </ng-container>
     </app-form-control>
-
+    <div class="text-primary forgot-password">
+      <a routerLink="/account/forgot-password">Forgot password?</a>
+    </div>
     <div class="button-sign-in">
       <app-sign-in-button (clickButton)="submitForm()"></app-sign-in-button>
     </div>
     <div class="mt-3 text-center">
-      If you don't have an account,
-      <a routerLink="/account/sign-in">please sign up here</a>
+      If you don't have an account, please
+      <a routerLink="/account/sign-up">sign up here</a>
     </div>
   </form>
 </div>

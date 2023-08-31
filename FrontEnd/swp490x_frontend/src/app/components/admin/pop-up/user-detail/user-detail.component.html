@@ -99,65 +99,6 @@
           </div>
         </ng-container>
       </div>
-      <!-- <div formGroupName="password">
-        <div class="mb-3">
-          <label for="password" class="form-label text-primary"
-            >Password:</label
-          >
-          <input
-            formControlName="typePassword"
-            type="password"
-            class="form-control"
-            id="password"
-          />
-          <ng-container
-            *ngIf="
-              getErrorMessage('password', 'typePassword') &&
-              (getFormControl('password', 'typePassword').dirty ||
-                getFormControl('password', 'typePassword').touched)
-            "
-          >
-            <div
-              class="error-control left-center mt-1"
-              *ngFor="
-                let message of getErrorMessage('password', 'typePassword')
-              "
-            >
-              <div class="center-center"><i class="bi bi-exclamation"></i></div>
-              <span class="ms-1">{{ message }}</span>
-            </div>
-          </ng-container>
-        </div>
-        <div class="mb-3">
-          <label for="repeat-password" class="form-label text-primary"
-            >Repeat password:</label
-          >
-          <input
-            formControlName="repeatPassword"
-            type="password"
-            class="form-control"
-            id="repeat-password"
-          />
-          <ng-container
-            *ngIf="
-              getErrorMessage('password', 'repeatPassword') &&
-              (getFormControl('password', 'repeatPassword').dirty ||
-                getFormControl('password', 'repeatPassword').touched)
-            "
-          >
-            <div
-              class="error-control left-center mt-1"
-              *ngFor="
-                let message of getErrorMessage('password', 'repeatPassword')
-              "
-            >
-              <div class="center-center"><i class="bi bi-exclamation"></i></div>
-              <span class="ms-1">{{ message }}</span>
-            </div>
-          </ng-container>
-        </div>
-      </div> -->
-
       <div>
         <label class="form-label text-primary">Admin</label>
         <app-slider-button

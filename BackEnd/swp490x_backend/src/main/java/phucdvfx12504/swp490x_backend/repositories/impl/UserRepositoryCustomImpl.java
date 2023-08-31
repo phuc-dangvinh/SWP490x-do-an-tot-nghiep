@@ -31,9 +31,25 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         Path<String> emailPath = user.get("email");
         Path<String> phonePath = user.get("phone");
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(criteriaBuilder.like(criteriaBuilder.lower(fullnamePath), "%" + keyword.toLowerCase().trim() + "%"));
-        predicates.add(criteriaBuilder.like(criteriaBuilder.lower(emailPath), "%" + keyword.toLowerCase().trim() + "%"));
+        predicates.add(
+                criteriaBuilder.like(criteriaBuilder.lower(fullnamePath), "%" + keyword.toLowerCase().trim() + "%"));
+        predicates
+                .add(criteriaBuilder.like(criteriaBuilder.lower(emailPath), "%" + keyword.toLowerCase().trim() + "%"));
         predicates.add(criteriaBuilder.like(criteriaBuilder.lower(phonePath), "%" + keyword.trim() + "%"));
+        query.select(user).where(criteriaBuilder.or(predicates.toArray(new Predicate[predicates.size()])));
+        return entityManager.createQuery(query).getResultList();
+    }
+
+    @Override
+    public List<User> findByIdOrEmail(String idOrEmail) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> query = criteriaBuilder.createQuery(User.class);
+        Root<User> user = query.from(User.class);
+        Path<String> idPath = user.get("id");
+        Path<String> emailPath = user.get("email");
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(criteriaBuilder.equal(idPath, idOrEmail.toLowerCase().trim()));
+        predicates.add(criteriaBuilder.equal(emailPath, idOrEmail.toLowerCase().trim()));
         query.select(user).where(criteriaBuilder.or(predicates.toArray(new Predicate[predicates.size()])));
         return entityManager.createQuery(query).getResultList();
     }

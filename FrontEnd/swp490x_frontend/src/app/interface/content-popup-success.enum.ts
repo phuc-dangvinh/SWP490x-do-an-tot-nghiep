@@ -1,0 +1,4 @@
+export enum EContentPopupSuccess {
+  SIGN_UP_SUCCES = 'SIGN UP SUCCES ',
+  RESET_PASSWORD_SUCCES = 'RESET PASSWORD SUCCES',
+}

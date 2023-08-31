@@ -8,6 +8,10 @@ import { ButtonsModule } from '../share/buttons/buttons.module';
 import { FileUploadComponent } from '../share/file-upload/file-upload.component';
 import { SignUpSuccessComponent } from './sign-up-success/sign-up-success.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AppRoutingModule } from 'src/app/app-routing.module';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
+import { PasswordStrengthMeterModule } from 'angular-password-strength-meter';
 
 @NgModule({
   declarations: [
@@ -16,6 +20,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     FormControlComponent,
     FileUploadComponent,
     SignUpSuccessComponent,
+    ForgotPasswordComponent,
+    ChangePasswordComponent,
   ],
   imports: [
     CommonModule,
@@ -23,6 +29,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ReactiveFormsModule,
     ButtonsModule,
     NgbModule,
+    AppRoutingModule,
+    PasswordStrengthMeterModule.forRoot(),
   ],
 })
 export class AccountModule {}

@@ -18,7 +18,9 @@ import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.dto.share.DeleteResponse;
 import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
+import phucdvfx12504.swp490x_backend.dto.user.CheckCurrentPasswordRequest;
 import phucdvfx12504.swp490x_backend.dto.user.CheckExistUserRequest;
+import phucdvfx12504.swp490x_backend.dto.user.ResetPasswordRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserChangePasswordRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserChangeRoleRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserUpdateRequest;
@@ -52,18 +54,18 @@ public class UserController {
         return userService.update(userUpdate);
     }
 
-    @PutMapping("/change-password")
+    @PostMapping("/change-password")
     public User changePassword(@RequestBody UserChangePasswordRequest userChangePasswordRequest) {
         return userService.changePassword(userChangePasswordRequest);
     }
 
-    @PostMapping("/manage/reset-password")
-    public TextMessageResponse resetPassword(@RequestBody List<String> ids)
+    @PostMapping("/reset-password")
+    public TextMessageResponse resetPassword(@RequestBody ResetPasswordRequest request)
             throws UnsupportedEncodingException, MessagingException {
-        return userService.resetPassword(ids);
+        return userService.resetPassword(request);
     }
 
-    @PostMapping("/manage/check-exist")
+    @PostMapping("/check-exist")
     public boolean checkExist(@RequestBody CheckExistUserRequest user) {
         return userService.checkExist(user);
     }
@@ -72,5 +74,10 @@ public class UserController {
     @CrossOrigin
     public TextMessageResponse changeRole(@RequestBody UserChangeRoleRequest changeRoleRequest) {
         return userService.changeRole(changeRoleRequest);
+    }
+
+    @PostMapping("/check-current-password")
+    public boolean checkCurrentPassword(@RequestBody CheckCurrentPasswordRequest request) {
+        return userService.checkCurrentPassword(request);
     }
 }

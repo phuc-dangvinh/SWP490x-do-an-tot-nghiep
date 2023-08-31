@@ -11,8 +11,31 @@
       text-align: center;
     }
 
-    .button-sign-in {
+    .invalid {
+      border-radius: 8px;
       margin-top: 30px;
+      margin-bottom: 10px;
+      border: 1px solid #EB806F;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      text-align: center;
+      background-color: #FFEBE9;
+
+      .invalid-title {
+        font-weight: bold;
+      }
+    }
+
+    .button-sign-in {
+      margin-top: 20px;
+    }
+
+    a {
+      text-decoration: none;
+    }
+    .forgot-password{
+      text-align: end;
+      cursor: pointer;
     }
   }
 }

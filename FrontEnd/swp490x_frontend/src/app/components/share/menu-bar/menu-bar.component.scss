@@ -1,16 +1,65 @@
-.form-control-dark {
-  border-color: var(--bs-gray);
-}
+.outter-wrapper {
+  color: white;
+  position: sticky;
+  top: 0px;
 
-.form-control-dark:focus {
-  border-color: #fff;
-  box-shadow: 0 0 0 .25rem rgba(255, 255, 255, .25);
-}
+  .inner-wrapper {
+    width: 80vw;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: space-between;
+    height: 60px;
 
-.text-small {
-  font-size: 85%;
-}
+    .logo {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      align-content: center;
 
-.dropdown-toggle:not(:focus) {
-  outline: 0;
+      img {
+        border-radius: 50%;
+        width: 45px;
+        height: 45px;
+      }
+    }
+
+    ul {
+      height: 100%;
+
+      li {
+        list-style-type: none;
+        list-style-position: inside;
+        cursor: pointer;
+        height: 100%;
+
+        &:hover {
+          color: red;
+        }
+
+        span {
+          height: 100%;
+          display: flex;
+          align-items: center;
+          align-content: center;
+
+          img {
+            border-radius: 50%;
+            height: 35px;
+            width: 35px;
+          }
+
+          .item-name {
+            margin-left: 5px;
+          }
+        }
+
+
+      }
+
+      .main-item {
+        margin: 0px 15px;
+      }
+    }
+  }
 }

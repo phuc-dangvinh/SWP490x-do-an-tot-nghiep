@@ -28,7 +28,8 @@ public class SecurityConfig {
 	private final String[] PUBLIC_LIST_URL = {
 			"/api/auth/login/**",
 			"/api/auth/register/**",
-			"/home/**"
+			"/home/**",
+			"**/reset-password"
 	};
 
 	private final String[] ADMIN_ROLE_URL = {

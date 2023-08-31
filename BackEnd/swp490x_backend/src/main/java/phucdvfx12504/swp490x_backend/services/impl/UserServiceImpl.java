@@ -15,7 +15,9 @@ import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.constant.ERoleName;
 import phucdvfx12504.swp490x_backend.dto.share.DeleteResponse;
 import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
+import phucdvfx12504.swp490x_backend.dto.user.CheckCurrentPasswordRequest;
 import phucdvfx12504.swp490x_backend.dto.user.CheckExistUserRequest;
+import phucdvfx12504.swp490x_backend.dto.user.ResetPasswordRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserChangePasswordRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserChangeRoleRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserUpdateRequest;
@@ -93,9 +95,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public TextMessageResponse resetPassword(List<String> ids) throws UnsupportedEncodingException, MessagingException {
-        for (String id : ids) {
-            User user = userRepository.findById(id).orElseThrow();
+    public TextMessageResponse resetPassword(ResetPasswordRequest request)
+            throws UnsupportedEncodingException, MessagingException {
+        List<User> users = userRepositoryCustom.findByIdOrEmail(request.getIdOrEmail());
+        if (users.size() > 0) {
+            User user = users.get(0);
             String newPassword = commonLangPasswordUtils.generateCommonLangPassword();
             user.setPassword(passwordEncoder.encode(passwordEncoder.encode(newPassword)));
             // send email
@@ -105,8 +109,10 @@ public class UserServiceImpl implements UserService {
             emailService.sendMimeEmail(to, subject, text);
             //
             userRepository.save(user);
+            return TextMessageResponse.builder().info("Reset password successfully").build();
+        } else {
+            return TextMessageResponse.builder().info("No found").build();
         }
-        return TextMessageResponse.builder().info("Reset password successfully!").build();
     }
 
     private String replaceEmailContent(String password) {
@@ -148,6 +154,17 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.save(user);
         return TextMessageResponse.builder().info("Change successfully!").build();
+    }
+
+    @Override
+    public List<User> findByIdOrEmail(ResetPasswordRequest request) {
+        return userRepositoryCustom.findByIdOrEmail(request.getIdOrEmail());
+    }
+
+    @Override
+    public boolean checkCurrentPassword(CheckCurrentPasswordRequest request) {
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        return passwordEncoder.matches(request.getPassword(), user.getPassword());
     }
 
 }

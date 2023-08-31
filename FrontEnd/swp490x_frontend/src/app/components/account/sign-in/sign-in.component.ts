@@ -7,7 +7,10 @@ import { HttpService } from 'src/app/service/http.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { EToastMessage } from 'src/app/const/EToastMessage';
 import { EToastClass } from 'src/app/const/EToastClass';
-import { EToken } from 'src/app/const/EToken';
+import { UserService } from 'src/app/service/user.service';
+import { ESessionKeyCredentials } from 'src/app/interface/session-key-credentials.enum';
+import { ROLE } from 'src/app/const/ERole';
+import { LocalStorageService } from 'src/app/service/local-storage.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -16,6 +19,7 @@ import { EToken } from 'src/app/const/EToken';
 })
 export class SignInComponent implements OnInit {
   public signInForm!: FormGroup;
+  public isInvalid: boolean = false;
   private formFields = {
     email: 'email',
     password: 'password',
@@ -25,8 +29,11 @@ export class SignInComponent implements OnInit {
     private _formService: FormService,
     private _httpService: HttpService,
     private _router: Router,
-    private _toastService: ToastService
+    private _toastService: ToastService,
+    private _userService: UserService,
+    private _localStorageService: LocalStorageService
   ) {}
+
   ngOnInit(): void {
     this.signInForm = this._formService.buildSignInForm();
   }
@@ -43,11 +50,29 @@ export class SignInComponent implements OnInit {
               classname: EToastClass.SUCCESS,
               delay: 3000,
             });
-            localStorage.setItem(EToken.ACCESS_TOKEN, res.token);
-            this._router.navigate(['/home']);
+            this._localStorageService.saveData(
+              ESessionKeyCredentials.TOKEN,
+              res.token
+            );
+            this._localStorageService.saveData(
+              ESessionKeyCredentials.USER,
+              res.user
+            );
+            this._userService.setIsUserLogin(true);
+            this._router.navigate(
+              res.user.authorities.some((item) => item.authority == ROLE.ADMIN)
+                ? ['/admin/user-management']
+                : ['/home']
+            );
+          } else {
+            this.isInvalid = true;
           }
         });
     }
+  }
+
+  public touchForm() {
+    this.isInvalid = false;
   }
 
   get emailFormControl(): AbstractControl {

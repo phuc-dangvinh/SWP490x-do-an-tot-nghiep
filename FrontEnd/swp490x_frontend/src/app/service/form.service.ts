@@ -3,11 +3,15 @@ import {
   AbstractControl,
   FormBuilder,
   FormGroup,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { checkExistEmail } from './async-validator-fn';
+import { checkCurrentPassword, checkExistEmail } from './async-validator-fn';
 import { HttpService } from './http.service';
 import { FormControlError } from '../interface/form-control-error';
+import { IPasswordStrengthMeterService } from 'angular-password-strength-meter';
+import { checkStrengthPassword } from './sync-validator-fn';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,11 +22,25 @@ export class FormService {
     { error: 'email', message: 'Email is not valid' },
     { error: 'passwordNotMatch', message: 'Repeat password is incorrect' },
     { error: 'emailExist', message: 'This email is taken' },
+    {
+      error: 'wrongConfirmNewPassword',
+      message: 'The password confirmation does not match',
+    },
+    {
+      error: 'weakPassword',
+      message: 'Weak password',
+    },
+    {
+      error: 'wrongPassword',
+      message: 'Wrong password',
+    },
   ];
 
   constructor(
     private _formBuilder: FormBuilder,
-    private _httpService: HttpService
+    private _httpService: HttpService,
+    private _passwordStrengthMeterService: IPasswordStrengthMeterService,
+    private _userService: UserService
   ) {}
 
   public buildSignUpForm(): FormGroup {
@@ -45,6 +63,54 @@ export class FormService {
     });
   }
 
+  public buildForgotPasswordForm(): FormGroup {
+    return this._formBuilder.group({
+      email: [
+        '',
+        [Validators.required, Validators.email],
+        checkExistEmail(this._httpService, true),
+      ],
+    });
+  }
+
+  public buildChangePasswordForm(): FormGroup {
+    return this._formBuilder.group({
+      currentPassword: [
+        '',
+        [Validators.required],
+        checkCurrentPassword(
+          this._httpService,
+          this._userService.getCurrentUser().getValue()?.['email'] ?? ''
+        ),
+      ],
+      changePassword: this._formBuilder.group(
+        {
+          newPassword: [
+            '',
+            [
+              Validators.required,
+              checkStrengthPassword(this._passwordStrengthMeterService),
+            ],
+          ],
+          confirmNewPassword: ['', [Validators.required]],
+        },
+        {
+          validators: this.checkConfirmNewPassword,
+        }
+      ),
+    });
+  }
+
+  public checkConfirmNewPassword(
+    control: AbstractControl
+  ): ValidationErrors | null {
+    const controlValue = control.value;
+    return controlValue.confirmNewPassword &&
+      controlValue.newPassword !== controlValue.confirmNewPassword
+      ? { wrongConfirmNewPassword: true }
+      : null;
+  }
+
   public getFormControl(
     form: FormGroup,
     controlName: string,
@@ -60,21 +126,31 @@ export class FormService {
   public getErrorMessage(
     form: FormGroup,
     controlName: string,
-    subControlName?: string
+    subControlName?: string,
+    customError?: FormControlError,
+    includeParentControlError: boolean = false
   ): string[] {
-    const formErrors = this.getFormControl(form, controlName).errors;
-    const subFormErrors = subControlName
+    const controlErrors = this.getFormControl(form, controlName).errors;
+    const subControlErrors = subControlName
       ? this.getFormControl(form, controlName, subControlName).errors
       : null;
-    const finalFormErrors = subControlName ? subFormErrors : formErrors;
+    const finalControlErrors = subControlName
+      ? includeParentControlError
+        ? { ...controlErrors, ...subControlErrors }
+        : subControlErrors
+      : controlErrors;
     let errorMessages: string[] = [];
-    if (finalFormErrors) {
-      Object.keys(finalFormErrors).forEach((key) => {
+    if (finalControlErrors) {
+      Object.keys(finalControlErrors).forEach((key) => {
         const errorObj = this.controlErrors.find(
           (controlError) => controlError.error == key
         );
         if (errorObj) {
-          errorMessages.push(errorObj.message);
+          errorMessages.push(
+            errorObj.error == customError?.error
+              ? customError.message
+              : errorObj.message
+          );
         }
       });
     }
