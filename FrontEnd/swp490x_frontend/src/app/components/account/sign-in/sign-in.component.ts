@@ -8,7 +8,7 @@ import { ToastService } from 'src/app/service/toast.service';
 import { EToastMessage } from 'src/app/const/EToastMessage';
 import { EToastClass } from 'src/app/const/EToastClass';
 import { UserService } from 'src/app/service/user.service';
-import { ESessionKeyCredentials } from 'src/app/interface/session-key-credentials.enum';
+import { EKeyCredentials } from 'src/app/interface/key-credentials.enum';
 import { ROLE } from 'src/app/const/ERole';
 import { LocalStorageService } from 'src/app/service/local-storage.service';
 
@@ -51,11 +51,11 @@ export class SignInComponent implements OnInit {
               delay: 3000,
             });
             this._localStorageService.saveData(
-              ESessionKeyCredentials.TOKEN,
+              EKeyCredentials.TOKEN,
               res.token
             );
             this._localStorageService.saveData(
-              ESessionKeyCredentials.USER,
+              EKeyCredentials.USER,
               res.user
             );
             this._userService.setIsUserLogin(true);

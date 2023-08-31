@@ -8,7 +8,7 @@ import {
   ItemMenuName,
   MenuItem,
 } from 'src/app/interface/menu-item.interface';
-import { ESessionKeyCredentials } from 'src/app/interface/session-key-credentials.enum';
+import { EKeyCredentials } from 'src/app/interface/key-credentials.enum';
 import { User } from 'src/app/interface/user';
 import { LocalStorageService } from 'src/app/service/local-storage.service';
 import { UserService } from 'src/app/service/user.service';
@@ -85,7 +85,7 @@ export class MenuBarComponent implements OnInit, OnDestroy {
 
   private getInfoFromLocal() {
     const sessionUser: User = this._localStorageService.getData(
-      ESessionKeyCredentials.USER
+      EKeyCredentials.USER
     );
     if (sessionUser) {
       this.currentUser = {
