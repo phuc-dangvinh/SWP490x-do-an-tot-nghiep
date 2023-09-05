@@ -43,12 +43,6 @@ public class SecurityConfig {
 			new AntPathRequestMatcher("/api/file/get/**"),
 	};
 
-	// @Bean
-	// public WebSecurityCustomizer webSecurityCustomizer() {
-	// return (web) -> web.ignoring().requestMatchers(new
-	// AntPathRequestMatcher("/home/**"));
-	// }
-
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		return http
@@ -58,11 +52,11 @@ public class SecurityConfig {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(
 						requests -> requests
-								.requestMatchers(PUBLIC_LIST_URL).permitAll()
-								.requestMatchers(ADMIN_ROLE_URL).hasAuthority(ERoleName.ADMIN.toString())
-								.requestMatchers(USER_ROLE_URL).hasAnyAuthority(ERoleName.USER.toString(), ERoleName.ADMIN.toString())
-								.anyRequest().authenticated())
-				// .anyRequest().permitAll())
+								// .requestMatchers(PUBLIC_LIST_URL).permitAll()
+								// .requestMatchers(ADMIN_ROLE_URL).hasAuthority(ERoleName.ADMIN.toString())
+								// .requestMatchers(USER_ROLE_URL).hasAnyAuthority(ERoleName.USER.toString(), ERoleName.ADMIN.toString())
+								// .anyRequest().authenticated())
+				.anyRequest().permitAll())
 				.authenticationProvider(authenticationProvider)
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 				.exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
