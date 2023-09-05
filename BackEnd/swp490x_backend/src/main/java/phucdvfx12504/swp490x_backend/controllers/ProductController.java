@@ -2,6 +2,7 @@ package phucdvfx12504.swp490x_backend.controllers;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,6 +19,7 @@ import phucdvfx12504.swp490x_backend.services.ProductService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/product")
+@CrossOrigin
 public class ProductController {
   private final ProductService productService;
 

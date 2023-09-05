@@ -21,7 +21,6 @@ export class HttpService {
     if (token) {
       headers = headers.set('Authorization', `Bearer ${token}`);
     }
-    console.log('headers', headers);
     return {
       headers: headers,
     };
@@ -39,7 +38,6 @@ export class HttpService {
   }
 
   get<T>(url: string): Observable<T> {
-    console.log('httpOptions', this.getHttpOptions());
     return this.http
       .get<T>(rootApi + url, this.getHttpOptions())
       .pipe(tap(), catchError(this.handleError<T>()));
@@ -67,12 +65,12 @@ export class HttpService {
     const formData: FormData = new FormData();
     formData.append('file', file);
     return this.http
-      .post<T>(rootApi + url, formData)
+      .post<T>(rootApi + url, formData, this.getHttpOptions())
       .pipe(tap(), catchError(this.handleError<T>()));
   }
   getFile<T>(url: string, fileName: string) {
     return this.http
-      .get<T>(rootApi + url + fileName)
+      .get<T>(rootApi + url + fileName, this.getHttpOptions())
       .pipe(tap(), catchError(this.handleError<T>()));
   }
 }

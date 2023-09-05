@@ -91,7 +91,7 @@ export class MenuBarComponent implements OnInit, OnDestroy {
       this.currentUser = {
         ...sessionUser,
         avatar: sessionUser.avatar
-          ? `${rootApi}/file/${sessionUser.avatar}`
+          ? `${rootApi}/file/get/${sessionUser.avatar}`
           : '',
       };
       this.isAdminUser = sessionUser.authorities.some(

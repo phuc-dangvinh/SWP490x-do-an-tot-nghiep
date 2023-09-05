@@ -24,20 +24,23 @@ public class SecurityConfig {
 	private final AuthenticationProvider authenticationProvider;
 	private final AuthEntryPoint authEntryPoint;
 
-	private final AntPathRequestMatcher H2_DATABASE_URL = new AntPathRequestMatcher("/h2-console/**");
-	private final String[] PUBLIC_LIST_URL = {
-			"/api/auth/login/**",
-			"/api/auth/register/**",
-			"/home/**",
-			"**/reset-password"
+	private final AntPathRequestMatcher[] PUBLIC_LIST_URL = {
+			new AntPathRequestMatcher("/h2-console/**"),
+			new AntPathRequestMatcher("/api/auth/login/**"),
+			new AntPathRequestMatcher("/api/auth/register/**"),
+	};
+	private final AntPathRequestMatcher[] ADMIN_ROLE_URL = {
+			new AntPathRequestMatcher("/api/user/manage/**"),
+			new AntPathRequestMatcher("/api/file/manager/**"),
 	};
 
-	private final String[] ADMIN_ROLE_URL = {
-			"/api/user/manage/**"
-	};
-
-	private final String[] USER_ROLE_URL = {
-			"/api/user/change-password/**"
+	private final AntPathRequestMatcher[] USER_ROLE_URL = {
+			new AntPathRequestMatcher("/api/user/change-password/**"),
+			new AntPathRequestMatcher("/api/user/check-exist/**"),
+			new AntPathRequestMatcher("/api/user/check-current-password/**"),
+			new AntPathRequestMatcher("/api/user/manage/reset-password/**"),
+			new AntPathRequestMatcher("/api/file/upload/**"),
+			new AntPathRequestMatcher("/api/file/get/**"),
 	};
 
 	// @Bean
@@ -51,15 +54,13 @@ public class SecurityConfig {
 		return http
 				.csrf(csrf -> csrf.disable())
 				.cors(cors -> cors.disable())
-				.headers(headers -> headers.frameOptions().disable())
+				.headers(headers -> headers.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(
 						requests -> requests
-								.requestMatchers(H2_DATABASE_URL).permitAll()
 								.requestMatchers(PUBLIC_LIST_URL).permitAll()
 								.requestMatchers(ADMIN_ROLE_URL).hasAuthority(ERoleName.ADMIN.toString())
-								.requestMatchers(USER_ROLE_URL)
-								.hasAnyAuthority(ERoleName.USER.toString(), ERoleName.ADMIN.toString())
+								.requestMatchers(USER_ROLE_URL).hasAnyAuthority(ERoleName.USER.toString(), ERoleName.ADMIN.toString())
 								.anyRequest().authenticated())
 				// .anyRequest().permitAll())
 				.authenticationProvider(authenticationProvider)
@@ -67,5 +68,4 @@ public class SecurityConfig {
 				.exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
 				.build();
 	}
-
 }

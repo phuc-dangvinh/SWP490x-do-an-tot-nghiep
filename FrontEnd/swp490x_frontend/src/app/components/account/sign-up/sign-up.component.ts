@@ -42,7 +42,7 @@ export class SignUpComponent implements OnInit {
   }
 
   public onHasSrcFile(event: string) {
-    this.avatarSrc = `${rootApi}/file/${event}`;
+    this.avatarSrc = `${rootApi}/file/get/${event}`;
     this.signUpForm.controls['avatar'].setValue(event);
   }
 

@@ -163,7 +163,7 @@ export class UserDetailComponent implements OnInit {
       const url = '/file/upload';
       this.httpService.uploadFile<TextMessage>(url, file).subscribe((res) => {
         if (res) {
-          this.srcFile = `${rootApi}/file/${res.info}`;
+          this.srcFile = `${rootApi}/file/get/${res.info}`;
           this.formUser.controls['avatar'].setValue(res.info);
         }
       });
