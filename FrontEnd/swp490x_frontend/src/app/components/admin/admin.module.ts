@@ -9,6 +9,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmDeleteComponent } from '../share/pop-up-dialog/confirm-delete/confirm-delete.component';
 import { NotDeleteAdminComponent } from '../share/pop-up-dialog/not-delete-admin/not-delete-admin.component';
+import { MenuModule } from 'primeng/menu';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
   declarations: [
@@ -25,6 +28,9 @@ import { NotDeleteAdminComponent } from '../share/pop-up-dialog/not-delete-admin
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
+    MenuModule,
+    ButtonModule,
+    InputTextModule
   ],
 })
 export class AdminModule {}

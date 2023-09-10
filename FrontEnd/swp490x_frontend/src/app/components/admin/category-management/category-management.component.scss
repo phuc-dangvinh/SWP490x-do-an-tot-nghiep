@@ -1,0 +1,14 @@
+:host ::ng-deep .wrapper-category {
+  margin-top: 50px;
+  width: 20%;
+  background-color: aquamarine;
+
+  .p-menu {
+    width: 100%;
+  }
+
+  input,
+  button {
+    width: 100%;
+  }
+}

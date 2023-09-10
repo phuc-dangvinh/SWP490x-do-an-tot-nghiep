@@ -1,1 +1,5 @@
-<p>category-management works!</p>
+<div class="wrapper-category">
+  <p-menu [model]="items" styleClass="categories-list"></p-menu>
+  <input *ngIf="showInputNew" type="text" pInputText [(ngModel)]="newName" />
+  <p-button label="New" styleClass="p-button-info"></p-button>
+</div>
