@@ -1,0 +1,20 @@
+<div class="wrapper">
+  <p-button
+    styleClass="p-button-raised p-button-text p-button-info p-button-custom"
+    (onClick)="addNewCategory()"
+  >
+    <i class="pi pi-plus"></i>
+    <span class="ml-2 font-bold ms-2">New</span>
+  </p-button>
+  <p-listbox
+    styleClass="p-listbox-outlined"
+    [options]="listCategories"
+    [(ngModel)]="selectedCategory"
+    optionLabel="name"
+    (onChange)="onChangeSelectCategory()"
+  >
+  </p-listbox>
+</div>
+<ng-template #testPopup>
+  <div>This is a popup</div>
+</ng-template>

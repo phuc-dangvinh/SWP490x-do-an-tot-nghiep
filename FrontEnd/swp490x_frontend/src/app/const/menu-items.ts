@@ -35,14 +35,6 @@ export const menuItems: MenuItem[] = [
     isActive: true,
   },
   {
-    group: GroupMenu.MANAGEMENT,
-    itemName: ItemMenuName.CATEGORY,
-    displayName: ItemMenuName.CATEGORY,
-    routerLink: '/admin/category-management',
-    isMainItem: false,
-    isActive: true,
-  },
-  {
     group: GroupMenu.CART,
     itemName: ItemMenuName.CART,
     displayName: ItemMenuName.CART,

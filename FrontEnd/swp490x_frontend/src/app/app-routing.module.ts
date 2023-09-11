@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CategoryManagementComponent } from './components/admin/category-management/category-management.component';
 import { ProductManagementComponent } from './components/admin/product-management/product-management.component';
 import { UserManagementComponent } from './components/admin/user-management/user-management.component';
 import { PageNotFoundComponent } from './components/share/page-not-found/page-not-found.component';
@@ -13,7 +12,6 @@ import { ChangePasswordComponent } from './components/account/change-password/ch
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'admin/user-management', component: UserManagementComponent },
-  { path: 'admin/category-management', component: CategoryManagementComponent },
   { path: 'admin/product-management', component: ProductManagementComponent },
   { path: 'account/sign-up', component: SignUpComponent },
   { path: 'account/sign-in', component: SignInComponent },

@@ -1,0 +1,16 @@
+:host ::ng-deep .wrapper {
+  // background-color: aquamarine;
+  height: 80vh;
+  width: 20%;
+  // border: solid 1px;
+  // border-radius: 8px;
+  // padding: 0px 10px;
+
+  .p-listbox-outlined {
+    border: none;
+  }
+
+  .p-button-custom {
+    width: 100%;
+  }
+}
