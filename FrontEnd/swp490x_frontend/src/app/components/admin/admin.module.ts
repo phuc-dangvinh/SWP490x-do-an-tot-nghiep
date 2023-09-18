@@ -13,6 +13,7 @@ import { CategoryLeftSideComponent } from './category-left-side/category-left-si
 import { ButtonModule } from 'primeng/button';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { AddNewCategoryComponent } from './pop-up/add-new-category/add-new-category.component';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { AddNewCategoryComponent } from './pop-up/add-new-category/add-new-categ
     ListboxModule,
     ButtonModule,
     DynamicDialogModule,
+    InputTextModule
   ],
 })
 export class AdminModule {}

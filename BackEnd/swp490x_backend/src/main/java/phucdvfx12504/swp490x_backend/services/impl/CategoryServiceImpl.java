@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.dto.category.CategoryUpdateRequest;
+import phucdvfx12504.swp490x_backend.dto.category.NewCategoryRequest;
 import phucdvfx12504.swp490x_backend.entities.Category;
 import phucdvfx12504.swp490x_backend.repositories.CategoryRepository;
 import phucdvfx12504.swp490x_backend.services.CategoryService;
@@ -39,4 +40,8 @@ public class CategoryServiceImpl implements CategoryService {
     return categoryRepository.save(category);
   }
 
+  @Override
+  public Category addNew(NewCategoryRequest request) {
+    return categoryRepository.save(Category.builder().name(request.getName()).build());
+  }
 }

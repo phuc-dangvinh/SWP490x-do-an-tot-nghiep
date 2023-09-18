@@ -1,8 +1,4 @@
-import {
-  Component,
-  OnDestroy,
-  OnInit
-} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Category } from 'src/app/interface/category.interface';
 import { AddNewCategoryComponent } from '../pop-up/add-new-category/add-new-category.component';
@@ -11,6 +7,7 @@ import { AddNewCategoryComponent } from '../pop-up/add-new-category/add-new-cate
   selector: 'app-category-left-side',
   templateUrl: './category-left-side.component.html',
   styleUrls: ['./category-left-side.component.scss'],
+  providers: [DialogService],
 })
 export class CategoryLeftSideComponent implements OnInit, OnDestroy {
   public listCategories: Category[] = [];
@@ -48,7 +45,7 @@ export class CategoryLeftSideComponent implements OnInit, OnDestroy {
     console.log('addNewCategory');
     this.ref = this.dialogService.open(AddNewCategoryComponent, {
       header: 'Add new Category',
-      width: '70%',
+      width: '50%',
     });
   }
 

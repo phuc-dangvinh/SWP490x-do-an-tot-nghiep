@@ -1,1 +1,16 @@
-<p>add-new-category works!</p>
+<span class="p-float-label mt-4">
+  <input
+    pInputText
+    id="newCategoryName"
+    [(ngModel)]="newCategoryName"
+    (focus)="onFocusInput()"
+    (blur)="onBlurInput()"
+    [ngClass]="{ 'ng-invalid ng-dirty': isErrorInput }"
+  />
+  <label htmlFor="newCategoryName">Input name</label>
+</span>
+<p-button
+  label="Add"
+  styleClass="p-button-raised p-button-success p-button-add-new-category mt-4"
+  (onClick)="addNewCategory()"
+></p-button>

@@ -32,6 +32,7 @@ public class SecurityConfig {
 	private final AntPathRequestMatcher[] ADMIN_ROLE_URL = {
 			new AntPathRequestMatcher("/api/user/manage/**"),
 			new AntPathRequestMatcher("/api/file/manager/**"),
+			new AntPathRequestMatcher("/api/category/manager/**"),
 	};
 
 	private final AntPathRequestMatcher[] USER_ROLE_URL = {
