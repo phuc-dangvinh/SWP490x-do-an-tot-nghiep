@@ -2,7 +2,6 @@ package phucdvfx12504.swp490x_backend.controllers;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +16,6 @@ import phucdvfx12504.swp490x_backend.services.CategoryService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/category")
-@CrossOrigin
 public class CategoryController {
   private final CategoryService categoryService;
 

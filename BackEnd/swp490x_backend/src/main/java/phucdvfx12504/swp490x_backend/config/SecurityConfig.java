@@ -12,9 +12,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.auth.AuthEntryPoint;
 import phucdvfx12504.swp490x_backend.auth.JwtAuthenticationFilter;
@@ -48,23 +45,19 @@ public class SecurityConfig {
 	};
 
 	@Bean
-	CorsConfigurationSource corsConfigurationSource() {
-	CorsConfiguration configuration = new CorsConfiguration();
-	configuration.setAllowedOrigins(Arrays.asList("*"));
-	configuration.setAllowedMethods(Arrays.asList("*"));
-	configuration.setAllowedHeaders(Arrays.asList("*"));
-	UrlBasedCorsConfigurationSource source = new
-	UrlBasedCorsConfigurationSource();
-	source.registerCorsConfiguration("/**", configuration);
-	return source;
-	}
-
-
-	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		//https://reflectoring.io/spring-cors/
 		return http
 				.csrf(csrf -> csrf.disable())
-				// .cors(cors -> cors.disable())
+				.cors(cors -> cors.configurationSource(request -> {
+					CorsConfiguration configuration = new CorsConfiguration();
+					configuration.setAllowedOrigins(Arrays.asList("*"));
+					configuration.setAllowedMethods(Arrays.asList("*"));
+					configuration.setAllowedHeaders(Arrays.asList("*"));
+					configuration.setExposedHeaders(Arrays.asList("*"));
+					// configuration.setAllowCredentials(true);
+					return configuration;
+				}))
 				.headers(headers -> headers.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(
