@@ -1,5 +1,7 @@
 package phucdvfx12504.swp490x_backend.config;
 
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -9,6 +11,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.auth.AuthEntryPoint;
@@ -26,29 +31,40 @@ public class SecurityConfig {
 
 	private final AntPathRequestMatcher[] PUBLIC_LIST_URL = {
 			new AntPathRequestMatcher("/h2-console/**"),
-			new AntPathRequestMatcher("/api/auth/login/**"),
-			new AntPathRequestMatcher("/api/auth/register/**"),
+			new AntPathRequestMatcher("/**/login/**"),
+			new AntPathRequestMatcher("/**/register/**"),
+			new AntPathRequestMatcher("/**/user/reset-password/**")
 	};
 	private final AntPathRequestMatcher[] ADMIN_ROLE_URL = {
-			new AntPathRequestMatcher("/api/user/manage/**"),
-			new AntPathRequestMatcher("/api/file/manager/**"),
-			new AntPathRequestMatcher("/api/category/manager/**"),
+			new AntPathRequestMatcher("/**/manage/**")
 	};
 
 	private final AntPathRequestMatcher[] USER_ROLE_URL = {
-			new AntPathRequestMatcher("/api/user/change-password/**"),
-			new AntPathRequestMatcher("/api/user/check-exist/**"),
-			new AntPathRequestMatcher("/api/user/check-current-password/**"),
-			new AntPathRequestMatcher("/api/user/manage/reset-password/**"),
-			new AntPathRequestMatcher("/api/file/upload/**"),
-			new AntPathRequestMatcher("/api/file/get/**"),
+			new AntPathRequestMatcher("/**/user/change-password/**"),
+			new AntPathRequestMatcher("/**/user/check-exist/**"),
+			new AntPathRequestMatcher("/**/user/check-current-password/**"),
+			new AntPathRequestMatcher("/**/file/upload/**"),
+			new AntPathRequestMatcher("/**/file/get/**")
 	};
+
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+	CorsConfiguration configuration = new CorsConfiguration();
+	configuration.setAllowedOrigins(Arrays.asList("*"));
+	configuration.setAllowedMethods(Arrays.asList("*"));
+	configuration.setAllowedHeaders(Arrays.asList("*"));
+	UrlBasedCorsConfigurationSource source = new
+	UrlBasedCorsConfigurationSource();
+	source.registerCorsConfiguration("/**", configuration);
+	return source;
+	}
+
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		return http
 				.csrf(csrf -> csrf.disable())
-				.cors(cors -> cors.disable())
+				// .cors(cors -> cors.disable())
 				.headers(headers -> headers.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(

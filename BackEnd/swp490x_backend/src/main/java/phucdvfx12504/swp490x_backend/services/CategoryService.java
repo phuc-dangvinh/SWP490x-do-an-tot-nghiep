@@ -10,7 +10,7 @@ import phucdvfx12504.swp490x_backend.entities.Category;
 
 @Service
 public interface CategoryService {
-  Category addNew(NewCategoryRequest request)
+  Category addNew(NewCategoryRequest request);
 
   List<Category> getAll();
 

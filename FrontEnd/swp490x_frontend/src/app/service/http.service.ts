@@ -16,19 +16,14 @@ export class HttpService {
 
   private getHttpOptions() {
     let headers = new HttpHeaders();
-    headers = headers.set('Content-Type', 'application/json');
+    // headers = headers.set('Content-Type', 'application/json');
+    headers = headers.set('Access-Control-Allow-Origin', '*');
     let token = this._localStorageService.getData(EKeyCredentials.TOKEN);
     if (token) {
-      headers = headers.set('Authorization', `Bearer ${token}`);
+      headers = headers.set('Authorization', 'Bearer ' + token);
     }
-    return {
-      headers: headers,
-    };
+    return { headers: headers };
   }
-
-  // private httpOptions = {
-  //   headers: this.getHttpOptions(),
-  // };
 
   private handleError<T>(result?: T) {
     return (error: any): Observable<T> => {

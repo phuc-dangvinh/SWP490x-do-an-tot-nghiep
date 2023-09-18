@@ -1,4 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
+import { Category } from 'src/app/interface/category.interface';
+import { HttpService } from 'src/app/service/http.service';
 
 @Component({
   selector: 'app-add-new-category',
@@ -9,6 +11,8 @@ import { Component, ViewEncapsulation } from '@angular/core';
 export class AddNewCategoryComponent {
   public newCategoryName: string = '';
   public isErrorInput: boolean = false;
+
+  constructor(private httpService: HttpService) {}
 
   public onFocusInput() {
     this.isErrorInput = false;
@@ -24,6 +28,14 @@ export class AddNewCategoryComponent {
     this.onBlurInput();
     if (this.newCategoryName) {
       console.log('process addNewCategory');
+      const url = '/category/manage/add-new';
+      this.httpService
+        .post<Category>(url, { name: this.newCategoryName })
+        .subscribe((res) => {
+          console.log('result add new Category', res);
+          if (res) {
+          }
+        });
     }
   }
 }

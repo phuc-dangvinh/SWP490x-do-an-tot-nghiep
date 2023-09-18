@@ -18,7 +18,7 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService {
     // https://allkeysgenerator.com/
     private static final String SECRET_KEY = "24432646294A404E635266556A576E5A7234753778214125442A472D4B615064";
-    private static final long EXPIRE_TIME = 1 * 60 * 60 * 1000;
+    private static final long EXPIRE_TIME = 4 * 60 * 60 * 1000;
 
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
