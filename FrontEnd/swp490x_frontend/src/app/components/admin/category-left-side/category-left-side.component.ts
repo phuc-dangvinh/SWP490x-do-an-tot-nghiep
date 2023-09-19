@@ -24,10 +24,13 @@ export class CategoryLeftSideComponent implements OnInit, OnDestroy {
     this.getListCategories();
   }
 
-  public addNewCategory() {
+  public showPopupAddNewCategory() {
     this.ref = this.dialogService.open(AddNewCategoryComponent, {
       header: 'Add new Category',
       width: '50%',
+    });
+    this.ref.onClose.subscribe((data) => {
+      console.log('onClose.subscribe', data);
     });
   }
 
@@ -38,7 +41,6 @@ export class CategoryLeftSideComponent implements OnInit, OnDestroy {
   private getListCategories() {
     const url = '/category/manage/get-all';
     this.httpService.get<Category[]>(url).subscribe((res) => {
-      console.log('getListCategories', res);
       if (res) {
         this.listCategories = res;
       }

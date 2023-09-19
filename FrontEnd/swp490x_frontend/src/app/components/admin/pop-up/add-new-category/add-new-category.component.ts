@@ -1,4 +1,9 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Output,
+  ViewEncapsulation,
+} from '@angular/core';
 import { Category } from 'src/app/interface/category.interface';
 import { HttpService } from 'src/app/service/http.service';
 
@@ -9,6 +14,7 @@ import { HttpService } from 'src/app/service/http.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class AddNewCategoryComponent {
+  @Output() closePopup = new EventEmitter<void>();
   public newCategoryName: string = '';
   public isErrorInput: boolean = false;
 
@@ -34,6 +40,8 @@ export class AddNewCategoryComponent {
         .subscribe((res) => {
           console.log('result add new Category', res);
           if (res) {
+            console.log('show toat success');
+            this.closePopup.emit();
           }
         });
     }
