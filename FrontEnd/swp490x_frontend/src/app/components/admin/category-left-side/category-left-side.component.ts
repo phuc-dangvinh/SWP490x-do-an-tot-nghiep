@@ -3,12 +3,13 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Category } from 'src/app/interface/category.interface';
 import { HttpService } from 'src/app/service/http.service';
 import { AddNewCategoryComponent } from '../pop-up/add-new-category/add-new-category.component';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-category-left-side',
   templateUrl: './category-left-side.component.html',
   styleUrls: ['./category-left-side.component.scss'],
-  providers: [DialogService],
+  providers: [DialogService, MessageService],
 })
 export class CategoryLeftSideComponent implements OnInit, OnDestroy {
   public listCategories: Category[] = [];
@@ -16,8 +17,9 @@ export class CategoryLeftSideComponent implements OnInit, OnDestroy {
   public ref: DynamicDialogRef | undefined;
 
   constructor(
-    public dialogService: DialogService,
-    private httpService: HttpService
+    private dialogService: DialogService,
+    private httpService: HttpService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -29,8 +31,8 @@ export class CategoryLeftSideComponent implements OnInit, OnDestroy {
       header: 'Add new Category',
       width: '50%',
     });
-    this.ref.onClose.subscribe((data) => {
-      console.log('onClose.subscribe', data);
+    this.ref.onClose.subscribe(() => {
+      this.getListCategories();
     });
   }
 
@@ -47,9 +49,18 @@ export class CategoryLeftSideComponent implements OnInit, OnDestroy {
     });
   }
 
+  public test() {
+    console.log('vào test');
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'Message Content',
+    });
+  }
+
   ngOnDestroy(): void {
     if (this.ref) {
-      this.ref.close();
+      this.ref.destroy();
     }
   }
 }

@@ -14,6 +14,7 @@ import { ButtonModule } from 'primeng/button';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { AddNewCategoryComponent } from './pop-up/add-new-category/add-new-category.component';
 import { InputTextModule } from 'primeng/inputtext';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { InputTextModule } from 'primeng/inputtext';
     ListboxModule,
     ButtonModule,
     DynamicDialogModule,
-    InputTextModule
+    InputTextModule,
+    ToastModule
   ],
 })
 export class AdminModule {}
