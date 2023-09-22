@@ -1,13 +1,32 @@
 :host ::ng-deep .wrapper {
-  // background-color: aquamarine;
   height: 80vh;
   width: 20%;
-  // border: solid 1px;
-  // border-radius: 8px;
-  // padding: 0px 10px;
 
   .p-listbox-outlined {
     border: none;
+
+    .p-listbox-list {
+      padding: 0px;
+
+      .p-listbox-item {
+        width: 100%;
+        padding: 0px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 50px;
+
+        .icon-delete-category {
+          visibility: hidden;
+        }
+
+        &:hover {
+          .icon-delete-category {
+            visibility: visible;
+          }
+        }
+      }
+    }
   }
 
   .p-button-custom {

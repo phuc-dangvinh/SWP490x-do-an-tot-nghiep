@@ -3,9 +3,18 @@
     styleClass="p-listbox-outlined"
     [options]="listCategories"
     [(ngModel)]="selectedCategory"
-    optionLabel="name"
     (onChange)="onChangeSelectCategory()"
   >
+    <ng-template let-category pTemplate="item">
+      <div class="p-listbox-item">
+        <span>{{ category.name }}</span>
+        <i
+          (click)="deleteCategory()"
+          class="pi pi-trash icon-delete-category"
+          style="color: red"
+        ></i>
+      </div>
+    </ng-template>
   </p-listbox>
   <p-button
     styleClass="p-button-raised p-button-text p-button-info p-button-custom"
@@ -15,4 +24,4 @@
     <span class="ml-2 font-bold ms-2">New</span>
   </p-button>
 </div>
-<button (click)="test()">test</button>
+<p-toast></p-toast>

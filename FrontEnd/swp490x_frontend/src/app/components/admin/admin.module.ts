@@ -36,7 +36,7 @@ import { ToastModule } from 'primeng/toast';
     ButtonModule,
     DynamicDialogModule,
     InputTextModule,
-    ToastModule
+    ToastModule,
   ],
 })
 export class AdminModule {}
