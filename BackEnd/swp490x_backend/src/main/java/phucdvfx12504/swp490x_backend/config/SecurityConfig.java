@@ -30,7 +30,8 @@ public class SecurityConfig {
 			new AntPathRequestMatcher("/h2-console/**"),
 			new AntPathRequestMatcher("/**/login/**"),
 			new AntPathRequestMatcher("/**/register/**"),
-			new AntPathRequestMatcher("/**/user/reset-password/**")
+			new AntPathRequestMatcher("/**/user/reset-password/**"),
+			new AntPathRequestMatcher("/**/category/get-all/**")
 	};
 	private final AntPathRequestMatcher[] ADMIN_ROLE_URL = {
 			new AntPathRequestMatcher("/**/manage/**")

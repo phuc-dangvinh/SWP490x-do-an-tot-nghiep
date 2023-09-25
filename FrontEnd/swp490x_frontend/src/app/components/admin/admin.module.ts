@@ -5,7 +5,7 @@ import { ProductManagementComponent } from './product-management/product-managem
 import { UserDetailComponent } from './pop-up/user-detail/user-detail.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { AddNewCategoryComponent } from './pop-up/add-new-category/add-new-category.component';
+import { AddEditCategoryComponent } from './pop-up/add-edit-category/add-edit-category.component';
 import { CategoryComponent } from './product-management/category/category.component';
 import { ShareModule } from '../share/share.module';
 
@@ -14,7 +14,7 @@ import { ShareModule } from '../share/share.module';
     UserManagementComponent,
     ProductManagementComponent,
     UserDetailComponent,
-    AddNewCategoryComponent,
+    AddEditCategoryComponent,
     CategoryComponent,
   ],
   imports: [

@@ -35,16 +35,13 @@ export function checkCurrentPassword(
 }
 
 export function checkExistCategoryName(
-  httpService: HttpService,
-  opposite: boolean = false
+  httpService: HttpService
 ): AsyncValidatorFn {
   return (control: AbstractControl) => {
-    const url = '/user/check-exist';
-    return httpService.post<boolean>(url, { email: control.value }).pipe(
-      map((result) => {
-        return (result && !opposite) || (!result && opposite)
-          ? { emailExist: true }
-          : null;
+    const url = '/category/manage/exist';
+    return httpService.post<boolean>(url, control.value).pipe(
+      map((res) => {
+        return res ? { existNameCategory: true } : null;
       })
     );
   };

@@ -2,5 +2,47 @@
   <div class="wrapper-left-side">
     <app-category></app-category>
   </div>
-  <div class="wrapper-body"></div>
+  <div class="wrapper-main ms-3">
+    <div class="header-action">
+      <div class="wrapper-button">
+        <button class="button-new">New</button>
+        <button class="button-delete">Delete</button>
+      </div>
+      <div class="wrapper-search">
+        <input type="text" />
+        <button class="button-search">Search</button>
+      </div>
+    </div>
+    <div class="wrapper-table mt-5">
+      <table>
+        <thead>
+          <tr>
+            <td>select</td>
+            <td>Picture</td>
+            <td>Name</td>
+            <td>Price</td>
+            <td>Description</td>
+            <td>Category</td>
+            <td>Action</td>
+          </tr>
+        </thead>
+        <tbody *ngFor="let product of productList">
+          <td>select</td>
+          <td>check</td>
+          <td>
+            <img [src]="product.image" />
+          </td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.price }}</td>
+          <td>{{ product.description }}</td>
+          <td>--tmp category</td>
+          <td>
+            <i class="bi bi-pencil action-button"></i>
+            <i class="bi bi-trash3 ms-3 action-button" style="color: red"></i>
+          </td>
+        </tbody>
+      </table>
+    </div>
+    <div class="wrapper-paging">Paging 1-2-3</div>
+  </div>
 </div>

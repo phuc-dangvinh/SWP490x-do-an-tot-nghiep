@@ -150,7 +150,6 @@ export class UserDetailComponent implements OnInit {
     this.formUser.controls['isAdmin'].setValue(
       user.authorities.some((item) => item.authority == ROLE.ADMIN)
     );
-    const test = this.formUser.controls['isAdmin'].value;
     if (this.formUser.controls['isAdmin'].value == true) {
       this.formUser.controls['isAdmin'].disable();
     }

@@ -16,7 +16,6 @@ export class HttpService {
 
   private getHttpOptions() {
     let headers = new HttpHeaders();
-    // headers = headers.set('Content-Type', 'application/json');
     headers = headers.set('Access-Control-Allow-Origin', '*');
     let token = this._localStorageService.getData(EKeyCredentials.TOKEN);
     if (token) {

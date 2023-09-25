@@ -6,7 +6,11 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { checkCurrentPassword, checkExistCategoryName, checkExistEmail } from './async-validator-fn';
+import {
+  checkCurrentPassword,
+  checkExistCategoryName,
+  checkExistEmail,
+} from './async-validator-fn';
 import { HttpService } from './http.service';
 import { FormControlError } from '../interface/form-control-error';
 import { IPasswordStrengthMeterService } from 'angular-password-strength-meter';
@@ -33,6 +37,10 @@ export class FormService {
     {
       error: 'wrongPassword',
       message: 'Wrong password',
+    },
+    {
+      error: 'existNameCategory',
+      message: 'Name is already exits',
     },
   ];
 
@@ -106,7 +114,7 @@ export class FormService {
       categoryName: [
         '',
         [Validators.required],
-        checkExistCategoryName(this._httpService, true),
+        checkExistCategoryName(this._httpService),
       ],
     });
   }
