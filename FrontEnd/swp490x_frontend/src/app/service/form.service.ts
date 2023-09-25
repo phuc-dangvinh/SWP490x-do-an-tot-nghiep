@@ -6,7 +6,7 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { checkCurrentPassword, checkExistEmail } from './async-validator-fn';
+import { checkCurrentPassword, checkExistCategoryName, checkExistEmail } from './async-validator-fn';
 import { HttpService } from './http.service';
 import { FormControlError } from '../interface/form-control-error';
 import { IPasswordStrengthMeterService } from 'angular-password-strength-meter';
@@ -98,6 +98,16 @@ export class FormService {
           validators: this.checkConfirmNewPassword,
         }
       ),
+    });
+  }
+
+  public buildFormAddNewCategory(): FormGroup {
+    return this._formBuilder.group({
+      categoryName: [
+        '',
+        [Validators.required],
+        checkExistCategoryName(this._httpService, true),
+      ],
     });
   }
 

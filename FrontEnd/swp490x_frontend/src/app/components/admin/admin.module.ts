@@ -8,13 +8,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmDeleteComponent } from '../share/pop-up-dialog/confirm-delete/confirm-delete.component';
 import { NotDeleteAdminComponent } from '../share/pop-up-dialog/not-delete-admin/not-delete-admin.component';
-import { ListboxModule } from 'primeng/listbox';
-import { CategoryLeftSideComponent } from './category-left-side/category-left-side.component';
-import { ButtonModule } from 'primeng/button';
-import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { AddNewCategoryComponent } from './pop-up/add-new-category/add-new-category.component';
-import { InputTextModule } from 'primeng/inputtext';
-import { ToastModule } from 'primeng/toast';
+import { CategoryComponent } from './product-management/category/category.component';
+import { FormControlComponent } from '../share/form-control/form-control.component';
 
 @NgModule({
   declarations: [
@@ -23,8 +19,9 @@ import { ToastModule } from 'primeng/toast';
     UserDetailComponent,
     ConfirmDeleteComponent,
     NotDeleteAdminComponent,
-    CategoryLeftSideComponent,
     AddNewCategoryComponent,
+    CategoryComponent,
+    FormControlComponent
   ],
   imports: [
     CommonModule,
@@ -32,11 +29,6 @@ import { ToastModule } from 'primeng/toast';
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
-    ListboxModule,
-    ButtonModule,
-    DynamicDialogModule,
-    InputTextModule,
-    ToastModule,
   ],
 })
 export class AdminModule {}
