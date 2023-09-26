@@ -1,20 +1,19 @@
 .wrapper {
   padding: 30px;
 
-  input {
-    height: 50px;
-    width: 100%;
-    background-color: white;
-    border: 2px solid black;
+  .wrapper-content {
+    .wrapper-content-above {
+      img {
+        height: 220px;
+        width: 220px;
+      }
+    }
   }
 
-  &-button {
-    display: flex;
-    justify-content: flex-end;
-
+  .wrapper-footer {
     button {
       height: 50px;
-      width: 70px;
+      width: 100px;
     }
 
     .button-save {

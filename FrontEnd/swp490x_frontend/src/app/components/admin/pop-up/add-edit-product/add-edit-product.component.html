@@ -1,0 +1,28 @@
+<div class="wrapper">
+  <h3 class="text-center">Add product</h3>
+  <form>
+    <div class="wrapper-content">
+      <div class="wrapper-content-above">
+        <!-- <div>img</div> -->
+        <div>
+          <img [src]="productEdit.image" />
+        </div>
+        <div>
+          <!-- <div>{{ productEdit.name }}</div> -->
+          <app-form-control label="Name"></app-form-control>
+          <!-- <div>{{ productEdit.price }}</div> -->
+          <app-form-control label="Price"></app-form-control>
+          <!-- <div>category</div> -->
+          <app-form-control label="Category"></app-form-control>
+        </div>
+      </div>
+      <div class="wrapper-content-below">
+        <app-form-control label="Description"></app-form-control>
+      </div>
+    </div>
+  </form>
+  <div class="wrapper-footer">
+    <button class="button-save">Save</button>
+    <button class="button-cancel ms-3">Cancel</button>
+  </div>
+</div>

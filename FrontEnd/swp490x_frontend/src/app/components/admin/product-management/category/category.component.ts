@@ -1,4 +1,10 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Output,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { Category } from 'src/app/interface/category.interface';
 import { HttpService } from 'src/app/service/http.service';
 import { AddEditCategoryComponent } from '../../pop-up/add-edit-category/add-edit-category.component';
@@ -20,6 +26,9 @@ export class CategoryComponent {
   @ViewChild('confirmDelete') confirmDelete:
     | TemplateRef<ConfirmDeleteComponent>
     | undefined;
+  @Output() emitListCategories: EventEmitter<Category[]> = new EventEmitter<
+    Category[]
+  >();
   public listCategories: Category[] = [];
   public actionCategory!: Category;
   public selectedCategory!: Category;
@@ -39,6 +48,7 @@ export class CategoryComponent {
     const url = '/category/get-all';
     this._httpService.get<Category[]>(url).subscribe((res) => {
       if (res) {
+        this.emitListCategories.emit(res);
         let listCategoriesAdd = [{ id: '', name: 'ALL' }, ...res];
         this.listCategories = listCategoriesAdd;
       }

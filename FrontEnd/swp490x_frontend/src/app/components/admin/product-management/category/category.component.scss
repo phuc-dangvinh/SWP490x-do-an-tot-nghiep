@@ -1,6 +1,8 @@
 .wrapper {
   height: 100%;
   overflow: auto;
+  padding: 0px 20px;
+  box-shadow: 10px 5px 5px #D9D9D9;
 
   .category-selected {
     background-color: black;
