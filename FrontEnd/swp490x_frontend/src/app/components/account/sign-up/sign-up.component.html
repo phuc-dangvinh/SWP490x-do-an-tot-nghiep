@@ -17,7 +17,11 @@
             <app-file-upload
               (hasSrcFile)="onHasSrcFile($event)"
               (hasFileName)="onHasFileName($event)"
-            ></app-file-upload>
+            >
+              <button type="button" class="btn btn-light">
+                <i class="bi bi-paperclip"></i> Select file
+              </button>
+            </app-file-upload>
           </div>
           <div class="select-file-warning">(File must be <= 1Mb)</div>
         </div>

@@ -10,6 +10,7 @@ import {
   checkCurrentPassword,
   checkExistCategoryName,
   checkExistEmail,
+  checkExistProductName,
 } from './async-validator-fn';
 import { HttpService } from './http.service';
 import { FormControlError } from '../interface/form-control-error';
@@ -41,6 +42,10 @@ export class FormService {
     {
       error: 'existNameCategory',
       message: 'Name is already exits',
+    },
+    {
+      error: 'priceEqualZero',
+      message: 'Price must be greater than 0',
     },
   ];
 
@@ -109,6 +114,20 @@ export class FormService {
     });
   }
 
+  public buildFormAddOrEditProduct(): FormGroup {
+    return this._formBuilder.group({
+      name: [
+        '',
+        [Validators.required],
+        checkExistProductName(this._httpService),
+      ],
+      price: ['', [Validators.required, this.checkPriceGreaterThanZero]],
+      description: ['', [Validators.required]],
+      categoryId: ['', [Validators.required]],
+      image: ['', [Validators.required]],
+    });
+  }
+
   public buildFormAddNewCategory(): FormGroup {
     return this._formBuilder.group({
       categoryName: [
@@ -127,6 +146,12 @@ export class FormService {
       controlValue.newPassword !== controlValue.confirmNewPassword
       ? { wrongConfirmNewPassword: true }
       : null;
+  }
+
+  public checkPriceGreaterThanZero(
+    control: AbstractControl
+  ): ValidationErrors | null {
+    return (control.value as number) > 0 ? null : { priceEqualZero: true };
   }
 
   public getFormControl(
