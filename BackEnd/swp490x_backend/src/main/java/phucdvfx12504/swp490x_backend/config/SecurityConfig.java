@@ -31,7 +31,10 @@ public class SecurityConfig {
 			new AntPathRequestMatcher("/**/login/**"),
 			new AntPathRequestMatcher("/**/register/**"),
 			new AntPathRequestMatcher("/**/user/reset-password/**"),
-			new AntPathRequestMatcher("/**/category/get-all/**")
+			new AntPathRequestMatcher("/**/category/get-all/**"),
+			new AntPathRequestMatcher("/**/file/get/**"),
+			new AntPathRequestMatcher("/**/product/get-all/**"),
+			new AntPathRequestMatcher("/**/product/get-by-category/**")
 	};
 	private final AntPathRequestMatcher[] ADMIN_ROLE_URL = {
 			new AntPathRequestMatcher("/**/manage/**")
@@ -42,12 +45,11 @@ public class SecurityConfig {
 			new AntPathRequestMatcher("/**/user/check-exist/**"),
 			new AntPathRequestMatcher("/**/user/check-current-password/**"),
 			new AntPathRequestMatcher("/**/file/upload/**"),
-			new AntPathRequestMatcher("/**/file/get/**")
 	};
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		//https://reflectoring.io/spring-cors/
+		// https://reflectoring.io/spring-cors/
 		return http
 				.csrf(csrf -> csrf.disable())
 				.cors(cors -> cors.configurationSource(request -> {

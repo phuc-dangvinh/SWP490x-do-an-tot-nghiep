@@ -1,11 +1,11 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { rootApi } from 'src/app/enviroments/environment';
 import { Category } from 'src/app/interface/category.interface';
 import { Product } from 'src/app/interface/product.interface';
 import { HttpService } from 'src/app/service/http.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { AddEditProductComponent } from '../pop-up/add-edit-product/add-edit-product.component';
-import { mockProductList } from './mock-products';
 
 @Component({
   selector: 'app-product-management',
@@ -18,6 +18,10 @@ export class ProductManagementComponent implements OnInit {
     | undefined;
   public productList: Product[] = [];
   public listCategories: Category[] = [];
+  private selectedCategoryId: string = '';
+  public isEdit: boolean = false;
+  public productEdit!: Product;
+  public rootApiRequest = rootApi;
 
   constructor(
     private _httpService: HttpService,
@@ -26,7 +30,7 @@ export class ProductManagementComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.productList = mockProductList;
+    this.getListProductByCategory();
   }
 
   public getListCategories(list: Category[]) {
@@ -34,6 +38,32 @@ export class ProductManagementComponent implements OnInit {
   }
 
   public showPopupAddProduct() {
-    this._modalService.open(this.addOrEditProduct, { size: 'lg' });
+    this.isEdit = false;
+    this._modalService.open(this.addOrEditProduct, { size: 'xl' });
+  }
+
+  public showPopupEditProduct(product: Product) {
+    this.isEdit = true;
+    this.productEdit = product;
+    this._modalService.open(this.addOrEditProduct, { size: 'xl' });
+  }
+
+  public handleSelectedCategory(category: Category) {
+    this.selectedCategoryId = category.id;
+  }
+
+  public getListProductByCategory() {
+    const url = `/product/get-by-category?id=${this.selectedCategoryId}`;
+    this._httpService.get<Product[]>(url).subscribe((res) => {
+      if (res) {
+        this.productList = res;
+        // this.productList = res.map((item) => {
+        //   return {
+        //     ...item,
+        //     image: `${rootApi}/file/get/${item.image}`,
+        //   };
+        // });
+      }
+    });
   }
 }

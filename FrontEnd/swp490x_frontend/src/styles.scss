@@ -1,9 +1,9 @@
 @import 'bootstrap/scss/bootstrap';
-@import "primeng/resources/themes/lara-light-blue/theme.css";
-@import "primeng/resources/primeng.css";
-@import "primeicons/primeicons.css";
+// @import "primeng/resources/themes/lara-light-blue/theme.css";
+// @import "primeng/resources/primeng.css";
+// @import "primeicons/primeicons.css";
 @import "~@ng-select/ng-select/themes/default.theme.css";
-@import "~@ng-select/ng-select/themes/material.theme.css";
+// @import "~@ng-select/ng-select/themes/material.theme.css";
 
 body {
   font-family: var(--font-family);
@@ -37,4 +37,30 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-end;
+}
+
+.ng-select-category {
+  .ng-select-container {
+    height: 50px !important;
+    width: 100%;
+    border: 1px solid #D9D9D9;
+    border-radius: 0px;
+  }
+
+  .ng-dropdown-panel {
+    margin-top: 0px;
+  }
+
+  &.ng-select-opened {
+    .ng-select-container {
+      border: 2px solid black;
+      border-radius: 5px;
+    }
+  }
+
+  &.ng-select-focused:not(.ng-select-opened)>.ng-select-container {
+    border: 2px solid black;
+    border-radius: 5px;
+    box-shadow: none;
+  }
 }

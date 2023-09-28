@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import phucdvfx12504.swp490x_backend.dto.product.NewProductRequest;
 import phucdvfx12504.swp490x_backend.dto.product.ProductUpdateRequest;
 import phucdvfx12504.swp490x_backend.entities.Product;
 
@@ -17,4 +18,7 @@ public interface ProductService {
 
   Product update(ProductUpdateRequest productUpdate);
 
+  Product add(NewProductRequest request);
+
+  List<Product> getByCategory(String categoryId);
 }

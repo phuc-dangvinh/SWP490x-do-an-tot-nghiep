@@ -28,9 +28,11 @@ public class Product {
   private String name;
   @Column(nullable = false)
   private double price;
+  @Column(nullable = false)
   private String description;
+  @Column(nullable = false)
   private String image;
-  @ManyToOne
+  @ManyToOne()
   @JoinColumn(name = "category_id")
   private Category category;
   @ManyToMany(mappedBy = "products")

@@ -29,9 +29,11 @@ export class CategoryComponent {
   @Output() emitListCategories: EventEmitter<Category[]> = new EventEmitter<
     Category[]
   >();
+  @Output() selectCategory: EventEmitter<Category> =
+    new EventEmitter<Category>();
   public listCategories: Category[] = [];
-  public actionCategory!: Category;
   public selectedCategory!: Category;
+  public actionCategory!: Category;
   public isEdit: boolean = false;
 
   constructor(
@@ -103,7 +105,7 @@ export class CategoryComponent {
   }
 
   public onSelectCategory(category: Category) {
-    console.log('selected category: ', category);
     this.selectedCategory = category;
+    this.selectCategory.emit(category);
   }
 }

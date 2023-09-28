@@ -2,6 +2,7 @@
   <div class="wrapper-left-side">
     <app-category
       (emitListCategories)="getListCategories($event)"
+      (selectCategory)="handleSelectedCategory($event)"
     ></app-category>
   </div>
   <div class="wrapper-main ms-5">
@@ -36,7 +37,7 @@
               <input type="checkbox" />
             </td>
             <td>
-              <img [src]="product.image" />
+              <img [src]="rootApiRequest + '/file/get/' + product.image" />
             </td>
             <td class="product-name">{{ product.name }}</td>
             <td class="product-price">{{ product.price | number }} VND</td>
@@ -45,7 +46,10 @@
               <span class="category">--tmp category</span>
             </td>
             <td class="td-action">
-              <div class="td-button-edit">
+              <div
+                class="td-button-edit"
+                (click)="showPopupEditProduct(product)"
+              >
                 <i class="bi bi-pencil"></i>
               </div>
               <div class="td-button-delete ms-2">
@@ -60,6 +64,11 @@
   </div>
 </div>
 <ng-template #addOrEditProduct>
-  <app-add-edit-product [listCategories]="listCategories">
+  <app-add-edit-product
+    [listCategories]="listCategories"
+    [isEdit]="isEdit"
+    [productEdit]="productEdit"
+    (clickSave)="getListProductByCategory()"
+  >
   </app-add-edit-product>
 </ng-template>
