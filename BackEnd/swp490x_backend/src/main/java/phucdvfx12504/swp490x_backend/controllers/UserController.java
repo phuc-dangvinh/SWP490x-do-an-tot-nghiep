@@ -3,7 +3,6 @@ package phucdvfx12504.swp490x_backend.controllers;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,7 +27,6 @@ import phucdvfx12504.swp490x_backend.services.UserService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
-@CrossOrigin
 public class UserController {
     private final UserService userService;
 

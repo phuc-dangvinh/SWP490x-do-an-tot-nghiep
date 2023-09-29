@@ -2,7 +2,6 @@ package phucdvfx12504.swp490x_backend.controllers;
 
 import java.io.UnsupportedEncodingException;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +18,6 @@ import phucdvfx12504.swp490x_backend.entities.User;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
 

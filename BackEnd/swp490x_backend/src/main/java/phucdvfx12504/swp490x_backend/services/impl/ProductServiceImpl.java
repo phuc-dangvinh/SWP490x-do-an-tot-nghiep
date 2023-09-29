@@ -1,5 +1,6 @@
 package phucdvfx12504.swp490x_backend.services.impl;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -9,8 +10,10 @@ import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.dto.product.NewProductRequest;
 import phucdvfx12504.swp490x_backend.dto.product.ProductUpdateRequest;
 import phucdvfx12504.swp490x_backend.entities.Category;
+import phucdvfx12504.swp490x_backend.entities.ImageProduct;
 import phucdvfx12504.swp490x_backend.entities.Product;
 import phucdvfx12504.swp490x_backend.repositories.CategoryRepository;
+import phucdvfx12504.swp490x_backend.repositories.ImageProductRepository;
 import phucdvfx12504.swp490x_backend.repositories.ProductRepository;
 import phucdvfx12504.swp490x_backend.repositories.ProductRepositoryCustom;
 import phucdvfx12504.swp490x_backend.services.ProductService;
@@ -23,6 +26,7 @@ public class ProductServiceImpl implements ProductService {
   private final ProductRepositoryCustom productRepositoryCustom;
   private final UpdatePropertyUtils propertyUtils;
   private final CategoryRepository categoryRepository;
+  private final ImageProductRepository imageProductRepository;
 
   @Override
   public List<Product> getAll() {
@@ -54,8 +58,12 @@ public class ProductServiceImpl implements ProductService {
   @Transactional
   public Product add(NewProductRequest request) {
     Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow();
+    List<ImageProduct> imageProducts = new LinkedList<>();
+    for (String imageId : request.getImageIds()) {
+      imageProducts.add(imageProductRepository.findById(imageId).orElseThrow());
+    }
     Product newProduct = Product.builder()
-        .image(request.getImage())
+        .imageProducts(imageProducts)
         .name(request.getName())
         .price(request.getPrice())
         .category(category)

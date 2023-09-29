@@ -1,12 +1,11 @@
 import {
-  AfterViewInit,
+  AfterContentChecked,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
-  OnChanges,
   OnInit,
   Output,
-  SimpleChanges,
 } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -21,9 +20,7 @@ import { HttpService } from 'src/app/service/http.service';
   templateUrl: './add-edit-product.component.html',
   styleUrls: ['./add-edit-product.component.scss'],
 })
-export class AddEditProductComponent
-  implements OnInit, OnChanges, AfterViewInit
-{
+export class AddEditProductComponent implements OnInit, AfterContentChecked {
   @Input() isEdit: boolean = false;
   @Input() productEdit!: Product;
   @Input() listCategories: Category[] = [];
@@ -37,33 +34,16 @@ export class AddEditProductComponent
     image: 'image',
   };
   public srcFile: string = '';
-  public selectedCategoryId: string = '';
-  public isLoading: boolean = true;
 
   constructor(
     private _httpService: HttpService,
     private _formService: FormService,
-    private _modalService: NgbModal
+    private _modalService: NgbModal,
+    private _changeDetector: ChangeDetectorRef
   ) {}
 
-  ngAfterViewInit(): void {
-    this.isLoading = false;
-    // this.fillForm();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    // const product: Product = changes['productEdit'].currentValue;
-    // console.log('product change', product);
-    // if (product) {
-    //   console.log('vào if change');
-    //   this.srcFile = `${rootApi}/file/get/${this.productEdit.image}`;
-    //   this.imageFormControl.setValue(this.productEdit.image);
-    //   this.nameFormControl.setValue(this.productEdit.name);
-    //   this.priceFormControl.setValue(this.productEdit.price);
-    //   this.selectedCategoryId = this.productEdit.category.id;
-    //   this.descriptionFormControl.setValue(this.productEdit.description);
-    //   console.log('form change', this.formAddOrEditProduct.value);
-    // }
+  ngAfterContentChecked(): void {
+    this._changeDetector.detectChanges();
   }
 
   ngOnInit(): void {
@@ -88,7 +68,6 @@ export class AddEditProductComponent
         this._httpService
           .post(url, this.formAddOrEditProduct.value)
           .subscribe((res) => {
-            console.log('res save new product: ', res);
             if (res) {
               this.clickSave.emit();
               this._modalService.dismissAll();
@@ -104,7 +83,7 @@ export class AddEditProductComponent
       this.imageFormControl.setValue(this.productEdit.image);
       this.nameFormControl.setValue(this.productEdit.name);
       this.priceFormControl.setValue(this.productEdit.price);
-      this.selectedCategoryId = this.productEdit.category.id;
+      this.categoryIdFormControl.setValue(this.productEdit.category.id);
       this.descriptionFormControl.setValue(this.productEdit.description);
     }
   }

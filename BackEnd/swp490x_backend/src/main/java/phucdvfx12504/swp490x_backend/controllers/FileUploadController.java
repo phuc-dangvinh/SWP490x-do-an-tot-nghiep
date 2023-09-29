@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +22,6 @@ import phucdvfx12504.swp490x_backend.services.FileUploadService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/file")
-@CrossOrigin
 public class FileUploadController {
   private final FileUploadService fileUploadService;
 
@@ -59,7 +57,7 @@ public class FileUploadController {
     }
   }
 
-  @DeleteMapping("/manager/{fileName:.+}")
+  @DeleteMapping("/manager/delete/{fileName:.+}")
   public boolean deleteFile(@PathVariable String fileName) {
     return fileUploadService.delete(fileName);
   }

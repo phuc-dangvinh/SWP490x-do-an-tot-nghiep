@@ -51,8 +51,8 @@ export class CategoryComponent {
     this._httpService.get<Category[]>(url).subscribe((res) => {
       if (res) {
         this.emitListCategories.emit(res);
-        let listCategoriesAdd = [{ id: '', name: 'ALL' }, ...res];
-        this.listCategories = listCategoriesAdd;
+        this.listCategories =
+          res.length > 0 ? [{ id: '', name: 'ALL' }, ...res] : res;
       }
     });
   }
