@@ -124,7 +124,6 @@ export class FormService {
       price: ['', [Validators.required, this.checkPriceGreaterThanZero]],
       description: ['', [Validators.required]],
       categoryId: ['', [Validators.required]],
-      image: ['', [Validators.required]],
     });
   }
 

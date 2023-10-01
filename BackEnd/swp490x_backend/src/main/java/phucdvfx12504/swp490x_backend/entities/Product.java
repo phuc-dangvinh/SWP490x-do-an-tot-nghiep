@@ -35,7 +35,7 @@ public class Product {
   private String description;
   @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   List<ImageProduct> imageProducts;
-  @ManyToOne()
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "category_id")
   private Category category;
   @ManyToMany(mappedBy = "products")

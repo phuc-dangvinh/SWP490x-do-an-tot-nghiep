@@ -7,6 +7,7 @@ import { FormService } from 'src/app/service/form.service';
 import { HttpService } from 'src/app/service/http.service';
 import { SignUpSuccessComponent } from '../sign-up-success/sign-up-success.component';
 import { Router } from '@angular/router';
+import { TextMessage } from 'src/app/interface/text-message';
 
 @Component({
   selector: 'app-sign-up',
@@ -41,9 +42,9 @@ export class SignUpComponent implements OnInit {
     this.avatarFileName = event;
   }
 
-  public onHasSrcFile(event: string) {
-    this.avatarSrc = `${rootApi}/file/get/${event}`;
-    this.signUpForm.controls['avatar'].setValue(event);
+  public onHasSrcFile(event: TextMessage) {
+    this.avatarSrc = `${rootApi}/file/get/${event.info}`;
+    this.signUpForm.controls['avatar'].setValue(event.info);
   }
 
   public submitForm() {

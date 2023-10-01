@@ -11,7 +11,7 @@ import { AbstractControl, FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { rootApi } from 'src/app/enviroments/environment';
 import { Category } from 'src/app/interface/category.interface';
-import { Product } from 'src/app/interface/product.interface';
+import { ImageProduct, Product } from 'src/app/interface/product.interface';
 import { FormService } from 'src/app/service/form.service';
 import { HttpService } from 'src/app/service/http.service';
 
@@ -31,9 +31,10 @@ export class AddEditProductComponent implements OnInit, AfterContentChecked {
     price: 'price',
     description: 'description',
     categoryId: 'categoryId',
-    image: 'image',
   };
-  public srcFile: string = '';
+  public images: ImageProduct[] = [];
+  public rootApiRequest = rootApi;
+  public urlUploadImage: string = '/image/product/manage/upload';
 
   constructor(
     private _httpService: HttpService,
@@ -42,18 +43,19 @@ export class AddEditProductComponent implements OnInit, AfterContentChecked {
     private _changeDetector: ChangeDetectorRef
   ) {}
 
-  ngAfterContentChecked(): void {
-    this._changeDetector.detectChanges();
-  }
-
   ngOnInit(): void {
     this.formAddOrEditProduct = this._formService.buildFormAddOrEditProduct();
     this.fillForm();
   }
 
-  public onHasSrcFile(event: string) {
-    this.srcFile = `${rootApi}/file/get/${event}`;
-    this.imageFormControl.setValue(event);
+  ngAfterContentChecked(): void {
+    this._changeDetector.detectChanges();
+  }
+
+  public onHasResultUploadFile(event: ImageProduct) {
+    console.log('fileNameApi before', this.images);
+    this.images.push(event);
+    console.log('fileNameApi after', this.images);
   }
 
   public onCancel() {
@@ -79,13 +81,15 @@ export class AddEditProductComponent implements OnInit, AfterContentChecked {
 
   private fillForm() {
     if (this.isEdit) {
-      this.srcFile = `${rootApi}/file/get/${this.productEdit.image}`;
-      this.imageFormControl.setValue(this.productEdit.image);
       this.nameFormControl.setValue(this.productEdit.name);
       this.priceFormControl.setValue(this.productEdit.price);
       this.categoryIdFormControl.setValue(this.productEdit.category.id);
       this.descriptionFormControl.setValue(this.productEdit.description);
     }
+  }
+
+  public deleteImage(image: ImageProduct) {
+    console.log('delete image: ', image);
   }
 
   get nameFormControl(): AbstractControl {
@@ -116,13 +120,6 @@ export class AddEditProductComponent implements OnInit, AfterContentChecked {
     );
   }
 
-  get imageFormControl(): AbstractControl {
-    return this._formService.getFormControl(
-      this.formAddOrEditProduct,
-      this.formFields.image
-    );
-  }
-
   get nameErrorMessages() {
     return this._formService.getErrorMessage(
       this.formAddOrEditProduct,
@@ -148,13 +145,6 @@ export class AddEditProductComponent implements OnInit, AfterContentChecked {
     return this._formService.getErrorMessage(
       this.formAddOrEditProduct,
       this.formFields.categoryId
-    );
-  }
-
-  get imageErrorMessages() {
-    return this._formService.getErrorMessage(
-      this.formAddOrEditProduct,
-      this.formFields.image
     );
   }
 }

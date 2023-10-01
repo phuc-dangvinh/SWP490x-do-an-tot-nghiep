@@ -5,6 +5,11 @@ export interface Product {
   name: string;
   price: number;
   description: string;
-  image: string;
+  image: ImageProduct[];
   category: Category;
+}
+
+export interface ImageProduct {
+  id: string;
+  fileName: string;
 }

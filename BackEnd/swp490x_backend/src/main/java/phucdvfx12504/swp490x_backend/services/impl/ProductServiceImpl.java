@@ -58,18 +58,18 @@ public class ProductServiceImpl implements ProductService {
   @Transactional
   public Product add(NewProductRequest request) {
     Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow();
-    List<ImageProduct> imageProducts = new LinkedList<>();
+    Product product = productRepository.save(
+        Product.builder()
+            .name(request.getName())
+            .price(request.getPrice())
+            .category(category)
+            .description(request.getDescription())
+            .build());
     for (String imageId : request.getImageIds()) {
-      imageProducts.add(imageProductRepository.findById(imageId).orElseThrow());
+      ImageProduct imageProduct = imageProductRepository.findById(imageId).orElseThrow();
+      imageProduct.setProduct(product);
     }
-    Product newProduct = Product.builder()
-        .imageProducts(imageProducts)
-        .name(request.getName())
-        .price(request.getPrice())
-        .category(category)
-        .description(request.getDescription())
-        .build();
-    return productRepository.save(newProduct);
+    return productRepository.findById(product.getId()).orElseThrow();
   }
 
   @Override

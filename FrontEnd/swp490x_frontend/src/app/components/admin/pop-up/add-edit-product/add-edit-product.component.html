@@ -4,24 +4,22 @@
   <form [formGroup]="formAddOrEditProduct">
     <div class="wrapper-content">
       <div class="wrapper-content-left">
-        <app-form-control
-          label="Image"
-          [touchedOrDirty]="imageFormControl.touched || imageFormControl.dirty"
-          [errorMessages]="imageErrorMessages"
-        >
-          <div class="wrapper-img">
-            <app-file-upload
-              *ngIf="!srcFile"
-              (hasSrcFile)="onHasSrcFile($event)"
-            >
-              <button class="no-img">Select image</button>
-            </app-file-upload>
-            <ng-container *ngIf="srcFile">
-              <img [src]="srcFile" />
-              <app-file-upload (hasSrcFile)="onHasSrcFile($event)">
-                <button class="btn-change-img mt-2">Change</button>
-              </app-file-upload>
+        <app-form-control label="Image">
+          <div class="wrapper-img-all">
+            <ng-container *ngFor="let image of images">
+              <div class="wrapper-img-one">
+                <img [src]="rootApiRequest + '/file/get/' + image.fileName" />
+                <button class="btn-del-img" (click)="deleteImage(image)">
+                  Delete
+                </button>
+              </div>
             </ng-container>
+            <app-file-upload
+              [urlUpload]="urlUploadImage"
+              (hasResultUpload)="onHasResultUploadFile($event)"
+            >
+              <button class="btn-add-img">Add</button>
+            </app-file-upload>
           </div>
         </app-form-control>
       </div>

@@ -57,12 +57,6 @@ export class ProductManagementComponent implements OnInit {
     this._httpService.get<Product[]>(url).subscribe((res) => {
       if (res) {
         this.productList = res;
-        // this.productList = res.map((item) => {
-        //   return {
-        //     ...item,
-        //     image: `${rootApi}/file/get/${item.image}`,
-        //   };
-        // });
       }
     });
   }
