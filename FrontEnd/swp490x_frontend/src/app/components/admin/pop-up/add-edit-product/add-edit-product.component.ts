@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { switchMap } from 'rxjs';
 import { rootApi } from 'src/app/enviroments/environment';
 import { Category } from 'src/app/interface/category.interface';
 import { ImageProduct, Product } from 'src/app/interface/product.interface';
@@ -53,9 +54,8 @@ export class AddEditProductComponent implements OnInit, AfterContentChecked {
   }
 
   public onHasResultUploadFile(event: ImageProduct) {
-    console.log('fileNameApi before', this.images);
+    console.log('add', event);
     this.images.push(event);
-    console.log('fileNameApi after', this.images);
   }
 
   public onCancel() {
@@ -90,6 +90,24 @@ export class AddEditProductComponent implements OnInit, AfterContentChecked {
 
   public deleteImage(image: ImageProduct) {
     console.log('delete image: ', image);
+    const urlDatabase = `/image/product/manage/delete/${image.id}`;
+    const urlFile = `/file/manage/delete/${image.fileName}`;
+    this._httpService
+      .delete(urlDatabase)
+      .pipe(
+        // switchMap(() => {
+        //   this.images = this.images.filter((item) => item.id !== image.id);
+        //   return this._httpService.delete(urlFile);
+        // })
+      )
+      .subscribe((res) => {
+        console.log('deleteImage', res);
+        if (res) {
+          console.log('image before: ', this.images);
+          // this.images = this.images.filter((item) => item.id !== image.id);
+          console.log('image after: ', this.images);
+        }
+      });
   }
 
   get nameFormControl(): AbstractControl {

@@ -22,7 +22,6 @@ export class FileUploadComponent {
         .uploadFile<TextMessage>(this.urlUpload, file)
         .subscribe((res) => {
           if (res) {
-            console.log('file upload', res);
             this.hasResultUpload.emit(res);
           }
         });

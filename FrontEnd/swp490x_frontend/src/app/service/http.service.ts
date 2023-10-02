@@ -55,6 +55,12 @@ export class HttpService {
       .pipe(tap(), catchError(this.handleError<T>()));
   }
 
+  delete<T>(url: string) {
+    return this.http
+      .delete<T>(rootApi + url, this.getHttpOptions())
+      .pipe(tap(), catchError(this.handleError<T>()));
+  }
+
   uploadFile<T>(url: string, file: File) {
     const formData: FormData = new FormData();
     formData.append('file', file);

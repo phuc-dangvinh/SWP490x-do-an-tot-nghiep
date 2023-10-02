@@ -43,7 +43,7 @@ public class FileUploadController {
     }
   }
 
-  @GetMapping("/manager/get-all")
+  @GetMapping("/manage/get-all")
   public List<String> getUploadedFiles() {
     try {
       return fileUploadService.loadAll().map(path -> {
@@ -57,12 +57,12 @@ public class FileUploadController {
     }
   }
 
-  @DeleteMapping("/manager/delete/{fileName:.+}")
+  @DeleteMapping("/manage/delete/{fileName:.+}")
   public boolean deleteFile(@PathVariable String fileName) {
     return fileUploadService.delete(fileName);
   }
 
-  @DeleteMapping("/manager/delete-all")
+  @DeleteMapping("/manage/delete-all")
   public void deleteAllFile() {
     fileUploadService.deleteAll();
   }

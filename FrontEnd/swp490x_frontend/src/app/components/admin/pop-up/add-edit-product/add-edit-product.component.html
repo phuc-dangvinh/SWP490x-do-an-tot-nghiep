@@ -8,7 +8,8 @@
           <div class="wrapper-img-all">
             <ng-container *ngFor="let image of images">
               <div class="wrapper-img-one">
-                <img [src]="rootApiRequest + '/file/get/' + image.fileName" />
+                <!-- <img [src]="rootApiRequest + '/file/get/' + image.fileName" /> -->
+                <img src="https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg" />
                 <button class="btn-del-img" (click)="deleteImage(image)">
                   Delete
                 </button>

@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
+import phucdvfx12504.swp490x_backend.dto.image.product.ImageProductDeleteRequest;
 import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
 import phucdvfx12504.swp490x_backend.entities.ImageProduct;
 import phucdvfx12504.swp490x_backend.repositories.ImageProductRepository;
@@ -26,10 +27,10 @@ public class ImageProductServiceImpl implements ImageProductService {
 
   @Override
   @Transactional
-  public TextMessageResponse delete(String id) {
-    ImageProduct imageProduct = imageProductRepository.findById(id).orElseThrow();
-    imageProductRepository.deleteById(id);
-    fileUploadService.delete(imageProduct.getFileName());
+  public TextMessageResponse delete(ImageProductDeleteRequest image) {
+    // ImageProduct image = imageProductRepository.findById(id).orElseThrow();
+    // fileUploadService.delete(image.getFileName());
+    imageProductRepository.deleteById(image.getId());
     return TextMessageResponse.builder().info("Deleted").build();
   }
 }
