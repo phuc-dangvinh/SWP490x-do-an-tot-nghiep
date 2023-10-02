@@ -89,25 +89,12 @@ export class AddEditProductComponent implements OnInit, AfterContentChecked {
   }
 
   public deleteImage(image: ImageProduct) {
-    console.log('delete image: ', image);
-    const urlDatabase = `/image/product/manage/delete/${image.id}`;
-    const urlFile = `/file/manage/delete/${image.fileName}`;
-    this._httpService
-      .delete(urlDatabase)
-      .pipe(
-        // switchMap(() => {
-        //   this.images = this.images.filter((item) => item.id !== image.id);
-        //   return this._httpService.delete(urlFile);
-        // })
-      )
-      .subscribe((res) => {
-        console.log('deleteImage', res);
-        if (res) {
-          console.log('image before: ', this.images);
-          // this.images = this.images.filter((item) => item.id !== image.id);
-          console.log('image after: ', this.images);
-        }
-      });
+    const url = '/image/product/manage/delete';
+    this._httpService.deleteByPost(url, image).subscribe((res) => {
+      if (res) {
+        this.images = this.images.filter((item) => item.id !== image.id);
+      }
+    });
   }
 
   get nameFormControl(): AbstractControl {

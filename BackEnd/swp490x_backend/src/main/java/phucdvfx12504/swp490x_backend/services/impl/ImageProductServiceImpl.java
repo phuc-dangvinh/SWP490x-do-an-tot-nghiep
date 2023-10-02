@@ -28,9 +28,8 @@ public class ImageProductServiceImpl implements ImageProductService {
   @Override
   @Transactional
   public TextMessageResponse delete(ImageProductDeleteRequest image) {
-    // ImageProduct image = imageProductRepository.findById(id).orElseThrow();
-    // fileUploadService.delete(image.getFileName());
     imageProductRepository.deleteById(image.getId());
+    fileUploadService.delete(image.getFileName());
     return TextMessageResponse.builder().info("Deleted").build();
   }
 }

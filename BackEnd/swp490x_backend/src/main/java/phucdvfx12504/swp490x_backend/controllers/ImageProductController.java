@@ -25,7 +25,7 @@ public class ImageProductController {
     return imageProductService.upload(file);
   }
 
-  @DeleteMapping("/manage/delete")
+  @PostMapping("/manage/delete")
   public TextMessageResponse delete(@RequestBody ImageProductDeleteRequest request) {
     return imageProductService.delete(request);
   }
