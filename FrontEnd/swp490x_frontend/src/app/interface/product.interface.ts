@@ -5,7 +5,7 @@ export interface Product {
   name: string;
   price: number;
   description: string;
-  image: ImageProduct[];
+  imageProducts: ImageProduct[];
   category: Category;
 }
 

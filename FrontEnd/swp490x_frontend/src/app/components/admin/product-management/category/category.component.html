@@ -44,5 +44,13 @@
   <app-confirm-delete
     (clickCancelButton)="dismissPopup()"
     (clickOkButton)="processDeleteCategory()"
-  ></app-confirm-delete>
+  >
+    <div>
+      <p>
+        All information will be permanently deleted.
+        <br />
+        <span class="text-danger">This operation can not be undone.</span>
+      </p>
+    </div>
+  </app-confirm-delete>
 </ng-template>

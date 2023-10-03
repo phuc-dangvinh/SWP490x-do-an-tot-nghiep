@@ -37,7 +37,15 @@
               <input type="checkbox" />
             </td>
             <td>
-              <img [src]="rootApiRequest + '/file/get/' + product.image" />
+              <ng-container *ngIf="product.imageProducts">
+                <img
+                  [src]="
+                    rootApiRequest +
+                    '/file/get/' +
+                    product.imageProducts[0].fileName
+                  "
+                />
+              </ng-container>
             </td>
             <td class="product-name">{{ product.name }}</td>
             <td class="product-price">{{ product.price | number }} VND</td>
@@ -69,6 +77,7 @@
     [isEdit]="isEdit"
     [productEdit]="productEdit"
     (clickSave)="getListProductByCategory()"
+    (clickCancel)="getListProductByCategory()"
   >
   </app-add-edit-product>
 </ng-template>

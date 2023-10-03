@@ -9,7 +9,7 @@
             <ng-container *ngFor="let image of images">
               <div class="wrapper-img-one">
                 <img [src]="rootApiRequest + '/file/get/' + image.fileName" />
-                <button class="btn-del-img" (click)="deleteImage(image)">
+                <button class="btn-del-img" (click)="openConfirmDelete(image)">
                   Delete
                 </button>
               </div>
@@ -74,3 +74,9 @@
     <button class="button-cancel ms-3" (click)="onCancel()">Cancel</button>
   </div>
 </div>
+<ng-template #confirmDelete let-modelDelete>
+  <app-confirm-delete
+    (clickOkButton)="processDeleteImage()"
+    (clickCancelButton)="cancelDelete()"
+  ></app-confirm-delete>
+</ng-template>

@@ -68,6 +68,7 @@ public class ProductServiceImpl implements ProductService {
     for (String imageId : request.getImageIds()) {
       ImageProduct imageProduct = imageProductRepository.findById(imageId).orElseThrow();
       imageProduct.setProduct(product);
+      imageProductRepository.save(imageProduct);
     }
     return productRepository.findById(product.getId()).orElseThrow();
   }

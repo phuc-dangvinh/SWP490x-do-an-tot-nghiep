@@ -6,10 +6,12 @@ import {
   Input,
   OnInit,
   Output,
+  TemplateRef,
+  ViewChild,
 } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { switchMap } from 'rxjs';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmDeleteComponent } from 'src/app/components/share/pop-up-dialog/confirm-delete/confirm-delete.component';
 import { rootApi } from 'src/app/enviroments/environment';
 import { Category } from 'src/app/interface/category.interface';
 import { ImageProduct, Product } from 'src/app/interface/product.interface';
@@ -26,6 +28,10 @@ export class AddEditProductComponent implements OnInit, AfterContentChecked {
   @Input() productEdit!: Product;
   @Input() listCategories: Category[] = [];
   @Output() clickSave = new EventEmitter<void>();
+  @Output() clickCancel = new EventEmitter<void>();
+  @ViewChild('confirmDelete') confirmDelete:
+    | TemplateRef<ConfirmDeleteComponent>
+    | undefined;
   public formAddOrEditProduct!: FormGroup;
   public formFields = {
     name: 'name',
@@ -36,6 +42,8 @@ export class AddEditProductComponent implements OnInit, AfterContentChecked {
   public images: ImageProduct[] = [];
   public rootApiRequest = rootApi;
   public urlUploadImage: string = '/image/product/manage/upload';
+  public activeModel!: NgbModalRef;
+  private imagePendingDelete!: ImageProduct;
 
   constructor(
     private _httpService: HttpService,
@@ -54,12 +62,15 @@ export class AddEditProductComponent implements OnInit, AfterContentChecked {
   }
 
   public onHasResultUploadFile(event: ImageProduct) {
-    console.log('add', event);
+    if (this.isEdit) {
+    //set image for product
+    }
     this.images.push(event);
   }
 
   public onCancel() {
     this._modalService.dismissAll();
+    this.clickCancel.emit();
   }
 
   public onSave() {
@@ -67,20 +78,32 @@ export class AddEditProductComponent implements OnInit, AfterContentChecked {
       if (this.isEdit) {
       } else {
         const url = '/product/manage/add';
-        this._httpService
-          .post(url, this.formAddOrEditProduct.value)
-          .subscribe((res) => {
-            if (res) {
-              this.clickSave.emit();
-              this._modalService.dismissAll();
-            }
-          });
+        const payload = {
+          ...this.formAddOrEditProduct.value,
+          imageIds: this.images.map((item) => item.id),
+        };
+        this._httpService.post(url, payload).subscribe((res) => {
+          if (res) {
+            this.clickSave.emit();
+            this._modalService.dismissAll();
+          }
+        });
       }
     }
   }
 
+  public openConfirmDelete(image: ImageProduct) {
+    this.imagePendingDelete = image;
+    this.activeModel = this._modalService.open(this.confirmDelete);
+  }
+
+  public cancelDelete() {
+    this.activeModel.dismiss();
+  }
+
   private fillForm() {
     if (this.isEdit) {
+      this.images = this.productEdit.imageProducts;
       this.nameFormControl.setValue(this.productEdit.name);
       this.priceFormControl.setValue(this.productEdit.price);
       this.categoryIdFormControl.setValue(this.productEdit.category.id);
@@ -88,13 +111,18 @@ export class AddEditProductComponent implements OnInit, AfterContentChecked {
     }
   }
 
-  public deleteImage(image: ImageProduct) {
+  public processDeleteImage() {
     const url = '/image/product/manage/delete';
-    this._httpService.deleteByPost(url, image).subscribe((res) => {
-      if (res) {
-        this.images = this.images.filter((item) => item.id !== image.id);
-      }
-    });
+    this._httpService
+      .deleteByPost(url, this.imagePendingDelete)
+      .subscribe((res) => {
+        if (res) {
+          this.images = this.images.filter(
+            (item) => item.id !== this.imagePendingDelete.id
+          );
+          this.activeModel.dismiss();
+        }
+      });
   }
 
   get nameFormControl(): AbstractControl {
