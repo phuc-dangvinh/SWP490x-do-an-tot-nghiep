@@ -6,7 +6,7 @@
       <div class="wrapper-content-left">
         <app-form-control label="Image">
           <div class="wrapper-img-all">
-            <ng-container *ngFor="let image of images">
+            <ng-container *ngFor="let image of imagesDisplay">
               <div class="wrapper-img-one">
                 <img [src]="rootApiRequest + '/file/get/' + image.fileName" />
                 <button class="btn-del-img" (click)="openConfirmDelete(image)">
@@ -76,7 +76,7 @@
 </div>
 <ng-template #confirmDelete let-modelDelete>
   <app-confirm-delete
-    (clickOkButton)="processDeleteImage()"
+    (clickOkButton)="tmpDeleteImage()"
     (clickCancelButton)="cancelDelete()"
   ></app-confirm-delete>
 </ng-template>

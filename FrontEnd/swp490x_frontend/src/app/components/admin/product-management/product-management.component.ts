@@ -18,7 +18,6 @@ export class ProductManagementComponent implements OnInit {
     | undefined;
   public productList: Product[] = [];
   public listCategories: Category[] = [];
-  private selectedCategoryId: string = '';
   public isEdit: boolean = false;
   public productEdit!: Product;
   public rootApiRequest = rootApi;
@@ -48,12 +47,8 @@ export class ProductManagementComponent implements OnInit {
     this._modalService.open(this.addOrEditProduct, { size: 'xl' });
   }
 
-  public handleSelectedCategory(category: Category) {
-    this.selectedCategoryId = category.id;
-  }
-
-  public getListProductByCategory() {
-    const url = `/product/get-by-category?id=${this.selectedCategoryId}`;
+  public getListProductByCategory(category?: Category) {
+    const url = `/product/get-by-category?id=${category ? category.id : ''}`;
     this._httpService.get<Product[]>(url).subscribe((res) => {
       if (res) {
         this.productList = res;
