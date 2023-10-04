@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.dto.product.NewProductRequest;
-import phucdvfx12504.swp490x_backend.dto.product.ProductUpdateRequest;
+import phucdvfx12504.swp490x_backend.dto.product.UpdateProductRequest;
 import phucdvfx12504.swp490x_backend.entities.Product;
 import phucdvfx12504.swp490x_backend.services.ProductService;
 
@@ -39,8 +39,8 @@ public class ProductController {
   }
 
   @PutMapping("/manage/update")
-  public Product update(@RequestBody ProductUpdateRequest productUpdate) {
-    return productService.update(productUpdate);
+  public Product update(@RequestBody UpdateProductRequest request) {
+    return productService.update(request);
   }
 
   @PostMapping("/manage/add")

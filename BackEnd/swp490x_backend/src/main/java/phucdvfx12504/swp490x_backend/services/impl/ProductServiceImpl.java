@@ -1,6 +1,5 @@
 package phucdvfx12504.swp490x_backend.services.impl;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -8,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.dto.product.NewProductRequest;
-import phucdvfx12504.swp490x_backend.dto.product.ProductUpdateRequest;
+import phucdvfx12504.swp490x_backend.dto.product.UpdateProductRequest;
 import phucdvfx12504.swp490x_backend.entities.Category;
 import phucdvfx12504.swp490x_backend.entities.ImageProduct;
 import phucdvfx12504.swp490x_backend.entities.Product;
@@ -48,9 +47,25 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   @Transactional
-  public Product update(ProductUpdateRequest productUpdate) {
-    Product product = productRepository.findById(productUpdate.getId()).orElseThrow();
-    propertyUtils.copyNonNullProperties(productUpdate, product);
+  public Product update(UpdateProductRequest request) {
+    Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow();
+    Product product = productRepository.findById(request.getId()).orElseThrow();
+    product.setName(request.getName());
+    product.setPrice(request.getPrice());
+    product.setCategory(category);
+    product.setDescription(request.getDescription());
+    for (ImageProduct image : product.getImageProducts()) {
+      // ImageProduct image =
+      // imageProductRepository.findById(image.getId()).orElseThrow();
+      image.setProduct(null);
+      // imageProductRepository.save(image);
+    }
+    // List<ImageProduct> images = new LinkedList<>();
+    for (String imageId : request.getImageIds()) {
+      ImageProduct image = imageProductRepository.findById(imageId).orElseThrow();
+      image.setProduct(product);
+    }
+    // product.setImageProducts(images);
     return productRepository.save(product);
   }
 
