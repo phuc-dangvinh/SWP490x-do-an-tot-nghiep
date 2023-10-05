@@ -32,7 +32,7 @@ export class CategoryComponent {
   @Output() selectCategory: EventEmitter<Category> =
     new EventEmitter<Category>();
   public listCategories: Category[] = [];
-  public selectedCategory!: Category;
+  public selectedCategoryId: string = '';
   public actionCategory!: Category;
   public isEdit: boolean = false;
 
@@ -105,7 +105,7 @@ export class CategoryComponent {
   }
 
   public onSelectCategory(category: Category) {
-    this.selectedCategory = category;
+    this.selectedCategoryId = category.id;
     this.selectCategory.emit(category);
   }
 }

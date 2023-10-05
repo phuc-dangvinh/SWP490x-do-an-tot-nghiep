@@ -11,7 +11,7 @@ import phucdvfx12504.swp490x_backend.dto.image.product.ImageProductDeleteRequest
 import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
 import phucdvfx12504.swp490x_backend.entities.ImageProduct;
 import phucdvfx12504.swp490x_backend.repositories.ImageProductRepository;
-import phucdvfx12504.swp490x_backend.repositories.ProductRepository;
+import phucdvfx12504.swp490x_backend.repositories.ImageProductRepositoryCustom;
 import phucdvfx12504.swp490x_backend.services.FileUploadService;
 import phucdvfx12504.swp490x_backend.services.ImageProductService;
 
@@ -20,7 +20,7 @@ import phucdvfx12504.swp490x_backend.services.ImageProductService;
 public class ImageProductServiceImpl implements ImageProductService {
   private final FileUploadService fileUploadService;
   private final ImageProductRepository imageProductRepository;
-  private final ProductRepository productRepository;
+  private final ImageProductRepositoryCustom imageProductRepositoryCustom;
 
   @Override
   @Transactional
@@ -37,6 +37,15 @@ public class ImageProductServiceImpl implements ImageProductService {
       fileUploadService.delete(image.getFileName());
     }
     return TextMessageResponse.builder().info("Deleted").build();
+  }
+
+  @Override
+  public TextMessageResponse deleteImagesNotSetProduct() {
+    List<ImageProduct> images = imageProductRepositoryCustom.findImagesNotSetProduct();
+    for (ImageProduct image : images) {
+      imageProductRepository.delete(image);
+    }
+    return TextMessageResponse.builder().info("Deleted images not set product").build();
   }
 
 }

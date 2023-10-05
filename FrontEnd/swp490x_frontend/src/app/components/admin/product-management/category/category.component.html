@@ -3,8 +3,7 @@
     <div
       class="wrapper-category"
       [ngClass]="{
-        'category-selected':
-          selectedCategory && category.id == selectedCategory.id
+        'category-selected': category.id == selectedCategoryId
       }"
       (click)="onSelectCategory(category)"
     >

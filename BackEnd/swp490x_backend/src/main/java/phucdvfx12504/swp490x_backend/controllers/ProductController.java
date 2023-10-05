@@ -2,7 +2,6 @@ package phucdvfx12504.swp490x_backend.controllers;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.dto.product.NewProductRequest;
 import phucdvfx12504.swp490x_backend.dto.product.UpdateProductRequest;
+import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
 import phucdvfx12504.swp490x_backend.entities.Product;
 import phucdvfx12504.swp490x_backend.services.ProductService;
 
@@ -33,9 +33,9 @@ public class ProductController {
     return productService.getFilter(keyword);
   }
 
-  @DeleteMapping("/manage/delete")
-  public void delete(@RequestBody List<String> ids) {
-    productService.delete(ids);
+  @PostMapping("/manage/delete")
+  public TextMessageResponse delete(@RequestBody List<String> ids) {
+    return productService.delete(ids);
   }
 
   @PutMapping("/manage/update")

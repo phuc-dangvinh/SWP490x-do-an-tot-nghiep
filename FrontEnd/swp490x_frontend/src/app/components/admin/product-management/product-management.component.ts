@@ -5,6 +5,7 @@ import { Category } from 'src/app/interface/category.interface';
 import { Product } from 'src/app/interface/product.interface';
 import { HttpService } from 'src/app/service/http.service';
 import { ToastService } from 'src/app/service/toast.service';
+import { ConfirmDeleteComponent } from '../../share/pop-up-dialog/confirm-delete/confirm-delete.component';
 import { AddEditProductComponent } from '../pop-up/add-edit-product/add-edit-product.component';
 
 @Component({
@@ -16,11 +17,16 @@ export class ProductManagementComponent implements OnInit {
   @ViewChild('addOrEditProduct') addOrEditProduct:
     | TemplateRef<AddEditProductComponent>
     | undefined;
+  @ViewChild('confirmDeletePopup') confirmDeletePopup:
+    | TemplateRef<ConfirmDeleteComponent>
+    | undefined;
   public productList: Product[] = [];
   public listCategories: Category[] = [];
   public isEdit: boolean = false;
   public productEdit!: Product;
   public rootApiRequest = rootApi;
+  private listProductAction: Product[] = [];
+  private categorySelected!: Category;
 
   constructor(
     private _httpService: HttpService,
@@ -47,11 +53,39 @@ export class ProductManagementComponent implements OnInit {
     this._modalService.open(this.addOrEditProduct, { size: 'xl' });
   }
 
-  public getListProductByCategory(category?: Category) {
-    const url = `/product/get-by-category?id=${category ? category.id : ''}`;
+  public onCategorySelected(category: Category) {
+    this.categorySelected = category;
+    this.getListProductByCategory();
+  }
+
+  public getListProductByCategory() {
+    const url = `/product/get-by-category?id=${
+      this.categorySelected ? this.categorySelected.id : ''
+    }`;
     this._httpService.get<Product[]>(url).subscribe((res) => {
       if (res) {
         this.productList = res;
+      }
+    });
+  }
+
+  public showPopupConfirmDelete(product: Product) {
+    this.listProductAction.push(product);
+    this._modalService.open(this.confirmDeletePopup);
+  }
+
+  public dismissPopup() {
+    this.listProductAction = [];
+    this._modalService.dismissAll();
+  }
+
+  public processsDelete() {
+    const url = '/product/manage/delete';
+    const payload = this.listProductAction.map((item) => item.id);
+    this._httpService.post(url, payload).subscribe((res) => {
+      if (res) {
+        this.getListProductByCategory();
+        this._modalService.dismissAll();
       }
     });
   }

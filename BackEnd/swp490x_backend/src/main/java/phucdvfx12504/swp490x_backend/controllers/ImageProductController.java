@@ -15,6 +15,8 @@ import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
 import phucdvfx12504.swp490x_backend.entities.ImageProduct;
 import phucdvfx12504.swp490x_backend.services.ImageProductService;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/image/product")
@@ -31,4 +33,8 @@ public class ImageProductController {
     return imageProductService.delete(request);
   }
 
+  @DeleteMapping("/manage/delete-images-none-product")
+  public TextMessageResponse deleteImagesNotSetProduct() {
+    return imageProductService.deleteImagesNotSetProduct();
+  }
 }

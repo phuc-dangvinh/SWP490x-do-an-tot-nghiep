@@ -13,4 +13,6 @@ public interface ImageProductService {
 
   TextMessageResponse delete(List<ImageProductDeleteRequest> images);
 
+  TextMessageResponse deleteImagesNotSetProduct();
+
 }

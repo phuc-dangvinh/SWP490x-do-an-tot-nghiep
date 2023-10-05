@@ -10,4 +10,6 @@ export enum EToastMessage {
   FAIL = 'Fail',
   ADD_CATEGORY_SUCCESS = 'Add category successfully',
   UPDATE_CATEGORY_SUCCESS = 'Update category successfully',
+  ADD_PRODUCT_SUCCESS = 'Add product successfully',
+  UPDATE_PRODUCT_SUCCESS = 'Update product successfully',
 }
