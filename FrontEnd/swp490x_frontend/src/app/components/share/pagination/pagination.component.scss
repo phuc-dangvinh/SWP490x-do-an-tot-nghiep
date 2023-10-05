@@ -1,0 +1,13 @@
+.wrapper-outer {
+  display: flex;
+  justify-content: center;
+
+  .wrapper-inner {
+    display: flex;
+    align-items: center;
+
+    .pagination {
+      margin: 0px;
+    }
+  }
+}

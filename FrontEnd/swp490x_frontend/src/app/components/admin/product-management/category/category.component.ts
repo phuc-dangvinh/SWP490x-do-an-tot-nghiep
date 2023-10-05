@@ -29,10 +29,10 @@ export class CategoryComponent {
   @Output() emitListCategories: EventEmitter<Category[]> = new EventEmitter<
     Category[]
   >();
-  @Output() selectCategory: EventEmitter<Category> =
+  @Output() emitSelectedCategory: EventEmitter<Category> =
     new EventEmitter<Category>();
   public listCategories: Category[] = [];
-  public selectedCategoryId: string = '';
+  public selectedCategory!: Category;
   public actionCategory!: Category;
   public isEdit: boolean = false;
 
@@ -96,6 +96,7 @@ export class CategoryComponent {
   public saveAddOrUpdateCategory() {
     this.dismissPopup();
     this.getListCategories();
+    this.emitSelectedCategory.emit(this.selectedCategory);
     this._toastService.showMessage(
       EToastClass.SUCCESS,
       this.isEdit
@@ -105,7 +106,7 @@ export class CategoryComponent {
   }
 
   public onSelectCategory(category: Category) {
-    this.selectedCategoryId = category.id;
-    this.selectCategory.emit(category);
+    this.selectedCategory = category;
+    this.emitSelectedCategory.emit(this.selectedCategory);
   }
 }

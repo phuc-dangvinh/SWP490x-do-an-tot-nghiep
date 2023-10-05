@@ -20,6 +20,8 @@ import { FileUploadComponent } from './file-upload/file-upload.component';
 import { ConfirmDeleteComponent } from './pop-up-dialog/confirm-delete/confirm-delete.component';
 import { NotDeleteAdminComponent } from './pop-up-dialog/not-delete-admin/not-delete-admin.component';
 import { FormControlComponent } from './form-control/form-control.component';
+import { PaginationComponent } from './pagination/pagination.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -41,9 +43,10 @@ import { FormControlComponent } from './form-control/form-control.component';
     FileUploadComponent,
     ConfirmDeleteComponent,
     NotDeleteAdminComponent,
-    FormControlComponent
+    FormControlComponent,
+    PaginationComponent,
   ],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgbModule],
   exports: [
     CommonModule,
     FormsModule,
@@ -66,7 +69,8 @@ import { FormControlComponent } from './form-control/form-control.component';
     FileUploadComponent,
     ConfirmDeleteComponent,
     NotDeleteAdminComponent,
-    FormControlComponent
+    FormControlComponent,
+    PaginationComponent,
   ],
 })
 export class ShareModule {}

@@ -2,26 +2,36 @@
   <div class="wrapper-left-side">
     <app-category
       (emitListCategories)="getListCategories($event)"
-      (selectCategory)="onCategorySelected($event)"
+      (emitSelectedCategory)="onCategorySelected($event)"
     ></app-category>
   </div>
   <div class="wrapper-main ms-5">
     <div class="header-action">
       <div class="wrapper-button">
         <button class="button-new" (click)="showPopupAddProduct()">New</button>
-        <button class="button-delete ms-3">Delete</button>
+        <button
+          class="button-delete ms-3"
+          (click)="showPopupConfirmDeleteMulti()"
+        >
+          Delete
+        </button>
       </div>
       <div class="wrapper-search me-3">
         <input type="text" placeholder="Search product" />
         <i class="bi bi-x-lg"></i>
       </div>
     </div>
-    <div class="wrapper-table mt-4">
+    <div class="wrapper-table mt-4 mb-4">
       <table>
         <thead>
           <tr>
             <td style="width: 5%" class="text-center">
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                [(ngModel)]="isCheckedCheckAll"
+                [checked]="checkedCheckAll"
+                (change)="changeCheckedCheckAll()"
+              />
             </td>
             <td style="width: 8%">Picture</td>
             <td style="width: 17%">Name</td>
@@ -31,10 +41,20 @@
             <td style="width: 10%">Action</td>
           </tr>
         </thead>
-        <tbody *ngFor="let product of productList">
+        <tbody
+          *ngFor="
+            let product of productList
+              | slice : (currentPage - 1) * pageSize : currentPage * pageSize
+          "
+        >
           <tr>
             <td class="text-center">
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                [(ngModel)]="product.checked"
+                [checked]="product.checked"
+                (change)="collectChecked()"
+              />
             </td>
             <td>
               <ng-container *ngIf="product.imageProducts.length > 0">
@@ -62,7 +82,7 @@
               </div>
               <div
                 class="td-button-delete ms-2"
-                (click)="showPopupConfirmDelete(product)"
+                (click)="showPopupConfirmDeleteSingle(product)"
               >
                 <i class="bi bi-trash3"></i>
               </div>
@@ -71,7 +91,11 @@
         </tbody>
       </table>
     </div>
-    <div class="wrapper-paging">Paging 1-2-3</div>
+    <app-pagination
+      [collection]="productList"
+      (selectPage)="onSelectPage($event)"
+      (changeSize)="onChangeSize($event)"
+    ></app-pagination>
   </div>
 </div>
 <ng-template #addOrEditProduct>
@@ -85,7 +109,7 @@
 </ng-template>
 <ng-template #confirmDeletePopup>
   <app-confirm-delete
-    (clickCancelButton)="dismissPopup()"
+    (clickCancelButton)="dismissPopupConfirmDelete()"
     (clickOkButton)="processsDelete()"
   >
     <div>

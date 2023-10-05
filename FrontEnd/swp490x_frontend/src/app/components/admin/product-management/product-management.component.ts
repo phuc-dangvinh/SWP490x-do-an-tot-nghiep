@@ -1,5 +1,7 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { EToastClass } from 'src/app/const/EToastClass';
+import { EToastMessage } from 'src/app/const/EToastMessage';
 import { rootApi } from 'src/app/enviroments/environment';
 import { Category } from 'src/app/interface/category.interface';
 import { Product } from 'src/app/interface/product.interface';
@@ -25,8 +27,14 @@ export class ProductManagementComponent implements OnInit {
   public isEdit: boolean = false;
   public productEdit!: Product;
   public rootApiRequest = rootApi;
-  private listProductAction: Product[] = [];
+  private listProductChecked: Product[] = [];
   private categorySelected!: Category;
+  public currentPage: number = 1;
+  public pageSize: number = 6;
+  public isCheckedCheckAll: boolean = false;
+  private itemsOfPage: Product[] = [];
+  private singleProductPendingDelete!: Product;
+  private isDeleteMulti: boolean = false;
 
   constructor(
     private _httpService: HttpService,
@@ -64,29 +72,74 @@ export class ProductManagementComponent implements OnInit {
     }`;
     this._httpService.get<Product[]>(url).subscribe((res) => {
       if (res) {
-        this.productList = res;
+        this.productList = res.map((item) => ({
+          ...item,
+          checked: false,
+        }));
       }
     });
   }
 
-  public showPopupConfirmDelete(product: Product) {
-    this.listProductAction.push(product);
+  public showPopupConfirmDeleteSingle(product: Product) {
+    this.isDeleteMulti = false;
+    this.singleProductPendingDelete = product;
     this._modalService.open(this.confirmDeletePopup);
   }
 
-  public dismissPopup() {
-    this.listProductAction = [];
+  public showPopupConfirmDeleteMulti() {
+    this.isDeleteMulti = true;
+    this._modalService.open(this.confirmDeletePopup);
+  }
+
+  public dismissPopupConfirmDelete() {
     this._modalService.dismissAll();
   }
 
   public processsDelete() {
     const url = '/product/manage/delete';
-    const payload = this.listProductAction.map((item) => item.id);
+    const payload = this.isDeleteMulti
+      ? this.listProductChecked.map((item) => item.id)
+      : [this.singleProductPendingDelete.id];
     this._httpService.post(url, payload).subscribe((res) => {
       if (res) {
         this.getListProductByCategory();
         this._modalService.dismissAll();
+        this._toastService.showMessage(
+          EToastClass.SUCCESS,
+          EToastMessage.DELETE_SUCCESS
+        );
       }
     });
+  }
+
+  public onSelectPage(page: number) {
+    this.currentPage = page;
+  }
+
+  public onChangeSize(size: number) {
+    this.pageSize = size;
+  }
+
+  private getItemsOfPage() {
+    const start = this.pageSize * this.currentPage - (this.pageSize - 1);
+    const end = this.pageSize * this.currentPage;
+    this.itemsOfPage = this.productList.slice(start - 1, end);
+  }
+
+  get checkedCheckAll(): boolean {
+    this.getItemsOfPage();
+    return !this.itemsOfPage.some((item) => !item.checked);
+  }
+
+  public changeCheckedCheckAll() {
+    this.getItemsOfPage();
+    this.itemsOfPage.forEach((item) => {
+      item.checked = this.isCheckedCheckAll;
+    });
+    this.collectChecked();
+  }
+
+  public collectChecked() {
+    this.listProductChecked = this.productList.filter((item) => item.checked);
   }
 }
