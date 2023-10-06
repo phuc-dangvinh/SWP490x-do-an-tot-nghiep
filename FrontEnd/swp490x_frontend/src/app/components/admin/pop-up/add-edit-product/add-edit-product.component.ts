@@ -92,6 +92,11 @@ export class AddEditProductComponent implements OnInit, AfterContentChecked {
               EToastMessage.UPDATE_PRODUCT_SUCCESS
             );
             this._modalService.dismissAll();
+          } else {
+            this._toastService.showMessage(
+              EToastClass.DANGER,
+              EToastMessage.FAIL
+            );
           }
         });
       } else {
@@ -108,6 +113,11 @@ export class AddEditProductComponent implements OnInit, AfterContentChecked {
               EToastMessage.ADD_PRODUCT_SUCCESS
             );
             this._modalService.dismissAll();
+          } else {
+            this._toastService.showMessage(
+              EToastClass.DANGER,
+              EToastMessage.FAIL
+            );
           }
         });
       }

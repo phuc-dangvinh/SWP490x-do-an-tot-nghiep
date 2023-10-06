@@ -127,6 +127,22 @@ export class FormService {
     });
   }
 
+  public buildFormSearchProduct(): FormGroup {
+    return this._formBuilder.group({
+      categoryId: [''],
+      keyword: [''],
+      price: this._formBuilder.group(
+        {
+          priceFrom: ['', [Validators.min(0)]],
+          priceTo: ['', [Validators.min(0)]],
+        },
+        {
+          validators: this.checkValidPriceTo,
+        }
+      ),
+    });
+  }
+
   public buildFormAddNewCategory(): FormGroup {
     return this._formBuilder.group({
       categoryName: [
@@ -144,6 +160,14 @@ export class FormService {
     return controlValue.confirmNewPassword &&
       controlValue.newPassword !== controlValue.confirmNewPassword
       ? { wrongConfirmNewPassword: true }
+      : null;
+  }
+
+  public checkValidPriceTo(control: AbstractControl): ValidationErrors | null {
+    const priceFrom = control.value.priceFrom;
+    const priceTo = control.value.priceTo;
+    return priceFrom > 0 && priceTo < priceFrom
+      ? { invalidPriceTo: true }
       : null;
   }
 

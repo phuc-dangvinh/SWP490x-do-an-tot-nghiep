@@ -1,10 +1,12 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AbstractControl, FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EToastClass } from 'src/app/const/EToastClass';
 import { EToastMessage } from 'src/app/const/EToastMessage';
 import { rootApi } from 'src/app/enviroments/environment';
 import { Category } from 'src/app/interface/category.interface';
 import { Product } from 'src/app/interface/product.interface';
+import { FormService } from 'src/app/service/form.service';
 import { HttpService } from 'src/app/service/http.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { ConfirmDeleteComponent } from '../../share/pop-up-dialog/confirm-delete/confirm-delete.component';
@@ -35,15 +37,70 @@ export class ProductManagementComponent implements OnInit {
   private itemsOfPage: Product[] = [];
   private singleProductPendingDelete!: Product;
   private isDeleteMulti: boolean = false;
+  public formSearch!: FormGroup;
+  public formFields = {
+    keyword: 'keyword',
+    price: 'price',
+    priceFrom: 'priceFrom',
+    priceTo: 'priceTo',
+  };
 
   constructor(
     private _httpService: HttpService,
     private _modalService: NgbModal,
-    private _toastService: ToastService
+    private _toastService: ToastService,
+    private _formService: FormService
   ) {}
 
   ngOnInit(): void {
+    this.formSearch = this._formService.buildFormSearchProduct();
     this.getListProductByCategory();
+  }
+
+  get keywordFormControl(): AbstractControl {
+    return this._formService.getFormControl(
+      this.formSearch,
+      this.formFields.keyword
+    );
+  }
+
+  get priceFromFormControl(): AbstractControl {
+    return this._formService.getFormControl(
+      this.formSearch,
+      this.formFields.price,
+      this.formFields.priceFrom
+    );
+  }
+
+  get priceToFormControl(): AbstractControl {
+    return this._formService.getFormControl(
+      this.formSearch,
+      this.formFields.price,
+      this.formFields.priceTo
+    );
+  }
+
+  // get keywordErrorMessages() {
+  //   return this._formService.getErrorMessage(
+  //     this.formSearch,
+  //     this.formFields.keyword
+  //   );
+  // }
+
+  get priceFromErrorMessages() {
+    return this._formService.getErrorMessage(
+      this.formSearch,
+      this.formFields.price,
+      this.formFields.priceFrom
+    );
+  }
+
+  get priceToErrorMessages() {
+    return this._formService.getErrorMessage(
+      this.formSearch,
+      this.formFields.price,
+      this.formFields.priceTo
+    );
   }
 
   public getListCategories(list: Category[]) {

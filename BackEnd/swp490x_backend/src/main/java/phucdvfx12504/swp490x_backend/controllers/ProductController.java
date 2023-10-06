@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.dto.product.NewProductRequest;
+import phucdvfx12504.swp490x_backend.dto.product.SearchProductRequest;
 import phucdvfx12504.swp490x_backend.dto.product.UpdateProductRequest;
 import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
 import phucdvfx12504.swp490x_backend.entities.Product;
@@ -28,9 +29,9 @@ public class ProductController {
     return productService.getAll();
   }
 
-  @GetMapping("/search")
-  public List<Product> getFilter(@RequestParam(required = false) String keyword) {
-    return productService.getFilter(keyword);
+  @PostMapping("/search")
+  public List<Product> search(@RequestBody SearchProductRequest request) {
+    return productService.search(request);
   }
 
   @PostMapping("/manage/delete")

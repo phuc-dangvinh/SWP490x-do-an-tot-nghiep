@@ -4,11 +4,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import phucdvfx12504.swp490x_backend.dto.product.SearchProductRequest;
 import phucdvfx12504.swp490x_backend.entities.Product;
 
 @Repository
 public interface ProductRepositoryCustom {
-  List<Product> getFilter(String keyword);
+  List<Product> search(SearchProductRequest request);
 
   List<Product> getByCategory(String categoryId);
 }

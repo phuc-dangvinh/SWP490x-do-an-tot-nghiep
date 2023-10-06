@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.dto.product.NewProductRequest;
+import phucdvfx12504.swp490x_backend.dto.product.SearchProductRequest;
 import phucdvfx12504.swp490x_backend.dto.product.UpdateProductRequest;
 import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
 import phucdvfx12504.swp490x_backend.entities.Category;
@@ -35,8 +36,8 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public List<Product> getFilter(String keyword) {
-    return productRepositoryCustom.getFilter(keyword);
+  public List<Product> search(SearchProductRequest request) {
+    return productRepositoryCustom.search(request);
   }
 
   @Override
