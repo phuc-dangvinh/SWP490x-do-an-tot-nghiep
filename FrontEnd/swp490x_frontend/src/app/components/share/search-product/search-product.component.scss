@@ -1,0 +1,57 @@
+.wrapper-search {
+  display: flex;
+  height: 50px;
+  align-items: center;
+  height: 50px;
+
+  .button-search {
+    background-color: black;
+    color: white;
+    border: none;
+    height: 100%;
+    width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  .button-reset {
+    height: 100%;
+    background-color: white;
+    border: 1px solid #D9D9D9;
+    color: #A6A6A6;
+
+    &:hover {
+      background-color: #F2F2F2;
+    }
+  }
+
+  input {
+    height: 50px;
+    border: 1px solid #D9D9D9;
+    width: 100%;
+
+    &:focus {
+      outline: none;
+      border: 2px solid black;
+    }
+  }
+
+  i {
+    font-size: 25px;
+    cursor: pointer;
+  }
+
+  .keyword {
+    width: 250px;
+  }
+
+  .price {
+    width: 130px;
+  }
+
+}

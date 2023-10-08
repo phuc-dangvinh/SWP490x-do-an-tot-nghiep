@@ -77,7 +77,7 @@ export class CategoryComponent {
 
   public processDeleteCategory() {
     const url = '/category/manage/delete';
-    this._httpService.post(url, this.actionCategory.id).subscribe((res) => {
+    this._httpService.post(url, [this.actionCategory.id]).subscribe((res) => {
       if (res) {
         this._toastService.showMessage(
           EToastClass.SUCCESS,

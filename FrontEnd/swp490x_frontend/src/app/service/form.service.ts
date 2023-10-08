@@ -47,6 +47,14 @@ export class FormService {
       error: 'priceEqualZero',
       message: 'Price must be greater than 0',
     },
+    {
+      error: 'invalidPriceTo',
+      message: 'Price must be greater than or equal to price from',
+    },
+    {
+      error: 'min',
+      message: 'Price > 0',
+    },
   ];
 
   constructor(

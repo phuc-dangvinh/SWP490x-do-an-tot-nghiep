@@ -22,6 +22,7 @@ import { NotDeleteAdminComponent } from './pop-up-dialog/not-delete-admin/not-de
 import { FormControlComponent } from './form-control/form-control.component';
 import { PaginationComponent } from './pagination/pagination.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SearchProductComponent } from './search-product/search-product.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NotDeleteAdminComponent,
     FormControlComponent,
     PaginationComponent,
+    SearchProductComponent,
   ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, NgbModule],
   exports: [
@@ -71,6 +73,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NotDeleteAdminComponent,
     FormControlComponent,
     PaginationComponent,
+    SearchProductComponent
   ],
 })
 export class ShareModule {}

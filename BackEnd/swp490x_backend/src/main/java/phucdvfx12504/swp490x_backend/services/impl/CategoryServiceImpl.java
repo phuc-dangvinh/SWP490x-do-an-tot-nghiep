@@ -29,8 +29,8 @@ public class CategoryServiceImpl implements CategoryService {
 
   @Override
   @Transactional
-  public TextMessageResponse delete(String id) {
-    categoryRepository.deleteById(id);
+  public TextMessageResponse delete(List<String> ids) {
+    categoryRepository.deleteAllById(ids);
     return TextMessageResponse.builder().info("Deleted").build();
   }
 

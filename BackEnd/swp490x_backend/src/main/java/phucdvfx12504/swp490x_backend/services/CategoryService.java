@@ -15,7 +15,7 @@ public interface CategoryService {
 
   List<Category> getAll();
 
-  TextMessageResponse delete(String id);
+  TextMessageResponse delete(List<String> ids);
 
   Category update(CategoryUpdateRequest categoryUpdate);
 

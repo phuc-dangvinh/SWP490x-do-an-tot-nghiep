@@ -33,7 +33,7 @@ public class CategoryController {
   }
 
   @PostMapping("/manage/delete")
-  public TextMessageResponse delete(@RequestBody String id) {
+  public TextMessageResponse delete(@RequestBody List<String> id) {
     return categoryService.delete(id);
   }
 

@@ -35,7 +35,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
     Path<Double> pricePath = product.get("price");
     List<Predicate> predicatesFinal = new ArrayList<>();
     List<Predicate> predicates1 = new ArrayList<>();
-    if (!request.getCategoryId().isEmpty()) {
+    if (!request.getCategoryId().isBlank()) {
       predicates1.add(criteriaBuilder.equal(categoryPath.get("id"), request.getCategoryId()));
     }
     if (request.getPriceFrom() > 0) {

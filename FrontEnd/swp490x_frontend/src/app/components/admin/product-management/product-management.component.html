@@ -16,51 +16,10 @@
           Delete
         </button>
       </div>
-      <form [formGroup]="formSearch">
-        <div class="wrapper-search">
-          <div>
-            <i class="bi bi-bootstrap-reboot"></i>
-          </div>
-          <app-form-control label="">
-            <input
-              [formControlName]="formFields.keyword"
-              type="text"
-              placeholder="Name or description"
-            />
-          </app-form-control>
-          <ng-container [formGroupName]="formFields.price">
-            <app-form-control
-              label=""
-              [touchedOrDirty]="
-                priceFromFormControl.touched || priceFromFormControl.dirty
-              "
-              [errorMessages]="priceFromErrorMessages"
-            >
-              <input
-                [formControlName]="formFields.priceFrom"
-                type="number"
-                placeholder="Price from"
-              />
-            </app-form-control>
-            <app-form-control
-              label=""
-              [touchedOrDirty]="
-                priceToFormControl.touched || priceToFormControl.dirty
-              "
-              [errorMessages]="priceToErrorMessages"
-            >
-              <input
-                [formControlName]="formFields.priceTo"
-                type="number"
-                placeholder="Price to"
-              />
-            </app-form-control>
-          </ng-container>
-          <div>
-            <i class="bi bi-search"></i>
-          </div>
-        </div>
-      </form>
+      <app-search-product
+        (clickReset)="getListProductByCategory()"
+        (clickSearch)="searchProduct($event)"
+      ></app-search-product>
     </div>
     <div class="wrapper-table mt-4 mb-4">
       <table>
