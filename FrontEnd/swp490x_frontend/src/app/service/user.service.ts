@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { LocalStorageService } from './local-storage.service';
-import { ESessionKeyCredentials } from '../interface/session-key-credentials.enum';
+import { EKeyCredentials } from '../interface/key-credentials.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +15,7 @@ export class UserService {
   constructor(private _localStorageService: LocalStorageService) {}
 
   public getIsUserLogin() {
-    if (this._localStorageService.getData(ESessionKeyCredentials.USER)) {
+    if (this._localStorageService.getData(EKeyCredentials.USER)) {
       this.setIsUserLogin(true);
     }
     return this.isUserLogin$;
@@ -29,7 +29,7 @@ export class UserService {
   private loadCurrentUserFromLocal(isLogin: boolean) {
     if (isLogin) {
       this.currentUser$.next(
-        this._localStorageService.getData(ESessionKeyCredentials.USER)
+        this._localStorageService.getData(EKeyCredentials.USER)
       );
     } else {
       this.currentUser$.next(null);

@@ -1,0 +1,23 @@
+<div class="wrapper-outer">
+  <div class="wrapper-inner">
+    <ngb-pagination
+      [collectionSize]="collection.length"
+      [maxSize]="maxSize"
+      [boundaryLinks]="true"
+      [pageSize]="pageSize"
+      (pageChange)="onPageChange($event)"
+    >
+    </ngb-pagination>
+    <select
+      class="form-select ms-4"
+      style="width: auto"
+      [(ngModel)]="pageSize"
+      (ngModelChange)="onPageSizeChange()"
+    >
+      <option *ngFor="let option of pageSizeOption" [ngValue]="option">
+        <span>{{ option }}</span>
+        <span> items per page</span>
+      </option>
+    </select>
+  </div>
+</div>

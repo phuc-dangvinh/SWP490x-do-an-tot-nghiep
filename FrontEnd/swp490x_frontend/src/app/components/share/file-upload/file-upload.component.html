@@ -6,6 +6,6 @@
     #fileUpload
   />
 </div>
-<button type="button" class="btn btn-light" (click)="fileUpload.click()">
-  <i class="bi bi-paperclip"></i> Select file
-</button>
+<span (click)="fileUpload.click()">
+  <ng-content></ng-content>
+</span>

@@ -31,6 +31,7 @@ import { ToastComponent } from './components/share/toast-global/toast.component'
     HomeModule,
     NgbModule,
     HttpClientModule,
+    // ToastModule
   ],
   providers: [],
   bootstrap: [AppComponent],

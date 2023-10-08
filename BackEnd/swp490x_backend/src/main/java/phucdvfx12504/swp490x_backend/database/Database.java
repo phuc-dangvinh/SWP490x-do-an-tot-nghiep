@@ -27,13 +27,13 @@ public class Database {
 
             @Override
             public void run(String... args) throws Exception {
-                if (!roleRepository.findByName(ERoleName.USER).isPresent()) {
+                if (roleRepository.findByName(ERoleName.USER).isEmpty()) {
                     roleRepository.save(new Role(ERoleName.USER));
                 }
-                if (!roleRepository.findByName(ERoleName.ADMIN).isPresent()) {
+                if (roleRepository.findByName(ERoleName.ADMIN).isEmpty()) {
                     roleRepository.save(new Role(ERoleName.ADMIN));
                 }
-                if (!userRepository.findByEmail("admin@admin.com").isPresent()) {
+                if (userRepository.findByEmail("admin@admin.com").isEmpty()) {
                     User user = User.builder()
                             .fullname("admin")
                             .email("admin@admin.com")

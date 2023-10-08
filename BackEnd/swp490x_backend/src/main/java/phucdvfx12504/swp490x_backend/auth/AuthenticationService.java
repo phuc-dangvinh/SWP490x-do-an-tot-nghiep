@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.constant.ERoleName;
-import phucdvfx12504.swp490x_backend.dto.share.TextMessageResponse;
 import phucdvfx12504.swp490x_backend.dto.user.AuthenticationResponse;
 import phucdvfx12504.swp490x_backend.dto.user.UserLoginRequest;
 import phucdvfx12504.swp490x_backend.dto.user.UserRegisterRequest;

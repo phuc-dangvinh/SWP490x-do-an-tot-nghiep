@@ -85,7 +85,9 @@ public class FileUploadServiceImpl implements FileUploadService {
       Path file = storageFolder.resolve(fileName);
       Resource resource = new UrlResource(file.toUri());
       if (resource.exists() || resource.isReadable()) {
-        byte[] bytes = StreamUtils.copyToByteArray(resource.getInputStream());
+        InputStream inputStream = resource.getInputStream();
+        byte[] bytes = StreamUtils.copyToByteArray(inputStream);
+        inputStream.close();
         return bytes;
       } else {
         throw new RuntimeException("Could not read file: " + fileName);

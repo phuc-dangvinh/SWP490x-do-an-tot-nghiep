@@ -1,0 +1,46 @@
+<div>
+  <form [formGroup]="formSearch" class="wrapper-search">
+    <button class="button-reset" (click)="onReset()">
+      <i class="bi bi-bootstrap-reboot"></i>
+    </button>
+    <app-form-control label="" class="keyword ms-2">
+      <input
+        [formControlName]="formFields.keyword"
+        type="text"
+        placeholder="Name or description..."
+      />
+    </app-form-control>
+    <ng-container [formGroupName]="formFields.price">
+      <app-form-control
+        class="price ms-2"
+        label=""
+        [touchedOrDirty]="
+          priceFromFormControl.touched || priceFromFormControl.dirty
+        "
+      >
+        <input
+          [formControlName]="formFields.priceFrom"
+          type="number"
+          placeholder="Price from..."
+        />
+      </app-form-control>
+      <app-form-control
+        class="price ms-2"
+        label=""
+        [touchedOrDirty]="
+          priceToFormControl.touched || priceToFormControl.dirty
+        "
+      >
+        <input
+          [formControlName]="formFields.priceTo"
+          type="number"
+          placeholder="Price to..."
+        />
+      </app-form-control>
+    </ng-container>
+    <button class="button-search ms-2" (click)="onSearch()">
+      <i class="bi bi-search"></i>
+      <span class="ms-2"> Search</span>
+    </button>
+  </form>
+</div>

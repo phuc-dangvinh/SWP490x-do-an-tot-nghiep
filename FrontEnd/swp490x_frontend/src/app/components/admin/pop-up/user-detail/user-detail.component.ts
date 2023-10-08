@@ -150,7 +150,6 @@ export class UserDetailComponent implements OnInit {
     this.formUser.controls['isAdmin'].setValue(
       user.authorities.some((item) => item.authority == ROLE.ADMIN)
     );
-    const test = this.formUser.controls['isAdmin'].value;
     if (this.formUser.controls['isAdmin'].value == true) {
       this.formUser.controls['isAdmin'].disable();
     }
@@ -163,7 +162,7 @@ export class UserDetailComponent implements OnInit {
       const url = '/file/upload';
       this.httpService.uploadFile<TextMessage>(url, file).subscribe((res) => {
         if (res) {
-          this.srcFile = `${rootApi}/file/${res.info}`;
+          this.srcFile = `${rootApi}/file/get/${res.info}`;
           this.formUser.controls['avatar'].setValue(res.info);
         }
       });

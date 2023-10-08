@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TextMessage } from 'src/app/interface/text-message';
 import { HttpService } from 'src/app/service/http.service';
 
@@ -8,7 +8,8 @@ import { HttpService } from 'src/app/service/http.service';
   styleUrls: ['./file-upload.component.scss'],
 })
 export class FileUploadComponent {
-  @Output() hasSrcFile: EventEmitter<string> = new EventEmitter<string>();
+  @Input() urlUpload: string = '/file/upload';
+  @Output() hasResultUpload = new EventEmitter();
   @Output() hasFileName: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(private _httpService: HttpService) {}
@@ -17,12 +18,13 @@ export class FileUploadComponent {
     const file: File = event.target.files[0];
     if (file) {
       this.hasFileName.emit(file.name);
-      const url = '/file/upload';
-      this._httpService.uploadFile<TextMessage>(url, file).subscribe((res) => {
-        if (res) {
-          this.hasSrcFile.emit(res.info);
-        }
-      });
+      this._httpService
+        .uploadFile<TextMessage>(this.urlUpload, file)
+        .subscribe((res) => {
+          if (res) {
+            this.hasResultUpload.emit(res);
+          }
+        });
     }
   }
 }

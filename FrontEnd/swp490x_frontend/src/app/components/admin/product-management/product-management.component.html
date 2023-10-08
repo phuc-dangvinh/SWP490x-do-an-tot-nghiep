@@ -1,1 +1,123 @@
-<p>product-management works!</p>
+<div class="wrapper">
+  <div class="wrapper-left-side">
+    <app-category
+      (emitListCategories)="getListCategories($event)"
+      (emitSelectedCategory)="onCategorySelected($event)"
+    ></app-category>
+  </div>
+  <div class="wrapper-main ms-5">
+    <div class="header-action">
+      <div class="wrapper-button">
+        <button class="button-new" (click)="showPopupAddProduct()">New</button>
+        <button
+          class="button-delete ms-3"
+          (click)="showPopupConfirmDeleteMulti()"
+        >
+          Delete
+        </button>
+      </div>
+      <app-search-product
+        (clickReset)="getListProductByCategory()"
+        (clickSearch)="searchProduct($event)"
+      ></app-search-product>
+    </div>
+    <div class="wrapper-table mt-4 mb-4">
+      <table>
+        <thead>
+          <tr>
+            <td style="width: 5%" class="text-center">
+              <input
+                type="checkbox"
+                [(ngModel)]="isCheckedCheckAll"
+                [checked]="checkedCheckAll"
+                (change)="changeCheckedCheckAll()"
+              />
+            </td>
+            <td style="width: 8%">Picture</td>
+            <td style="width: 17%">Name</td>
+            <td style="width: 13%">Price</td>
+            <td style="width: 30%">Description</td>
+            <td style="width: 17%">Category</td>
+            <td style="width: 10%">Action</td>
+          </tr>
+        </thead>
+        <tbody
+          *ngFor="
+            let product of productList
+              | slice : (currentPage - 1) * pageSize : currentPage * pageSize
+          "
+        >
+          <tr>
+            <td class="text-center">
+              <input
+                type="checkbox"
+                [(ngModel)]="product.checked"
+                [checked]="product.checked"
+                (change)="collectChecked()"
+              />
+            </td>
+            <td>
+              <ng-container *ngIf="product.imageProducts.length > 0">
+                <img
+                  [src]="
+                    rootApiRequest +
+                    '/file/get/' +
+                    product.imageProducts[0].fileName
+                  "
+                />
+              </ng-container>
+            </td>
+            <td class="product-name">{{ product.name }}</td>
+            <td class="product-price">{{ product.price | number }} VND</td>
+            <td>{{ product.description }}</td>
+            <td>
+              <span class="category">{{ product.category.name }}</span>
+            </td>
+            <td class="td-action">
+              <div
+                class="td-button-edit"
+                (click)="showPopupEditProduct(product)"
+              >
+                <i class="bi bi-pencil"></i>
+              </div>
+              <div
+                class="td-button-delete ms-2"
+                (click)="showPopupConfirmDeleteSingle(product)"
+              >
+                <i class="bi bi-trash3"></i>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <app-pagination
+      [collection]="productList"
+      (selectPage)="onSelectPage($event)"
+      (changeSize)="onChangeSize($event)"
+    ></app-pagination>
+  </div>
+</div>
+<ng-template #addOrEditProduct>
+  <app-add-edit-product
+    [listCategories]="listCategories"
+    [isEdit]="isEdit"
+    [productEdit]="productEdit"
+    (clickSave)="getListProductByCategory()"
+  >
+  </app-add-edit-product>
+</ng-template>
+<ng-template #confirmDeletePopup>
+  <app-confirm-delete
+    (clickCancelButton)="dismissPopupConfirmDelete()"
+    (clickOkButton)="processsDelete()"
+  >
+    <div>
+      <p>
+        All information will be permanently deleted.
+        <br />
+        <span class="text-danger">This operation can not be undone.</span>
+      </p>
+    </div>
+  </app-confirm-delete>
+</ng-template>

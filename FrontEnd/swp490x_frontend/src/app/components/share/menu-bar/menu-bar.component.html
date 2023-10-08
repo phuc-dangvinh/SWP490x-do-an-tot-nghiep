@@ -1,4 +1,4 @@
-<div class="outter-wrapper bg-dark">
+<div class="outter-wrapper">
   <div class="inner-wrapper">
     <span class="logo">
       <img src="../../../../assets/images/we-re-growing.jpg" />
@@ -41,7 +41,10 @@
             style="font-size: 22px"
           ></i>
           <img
-            *ngIf="currentUser?.avatar && mainItem.displayName == currentUser.fullname"
+            *ngIf="
+              currentUser?.avatar &&
+              mainItem.displayName == currentUser.fullname
+            "
             [src]="currentUser.avatar"
           />
           <span class="item-name">{{ mainItem.displayName }}</span>

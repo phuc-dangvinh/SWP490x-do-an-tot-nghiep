@@ -3,9 +3,6 @@ package phucdvfx12504.swp490x_backend.controllers;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -49,7 +46,6 @@ public class UserController {
     }
 
     @PutMapping("/manage")
-    @CrossOrigin
     public TextMessageResponse update(@RequestBody UserUpdateRequest userUpdate) {
         return userService.update(userUpdate);
     }
@@ -71,7 +67,6 @@ public class UserController {
     }
 
     @PutMapping("/manage/change-role")
-    @CrossOrigin
     public TextMessageResponse changeRole(@RequestBody UserChangeRoleRequest changeRoleRequest) {
         return userService.changeRole(changeRoleRequest);
     }

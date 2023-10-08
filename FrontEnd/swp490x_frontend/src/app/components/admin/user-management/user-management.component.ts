@@ -257,7 +257,7 @@ export class UserManagementComponent implements OnInit {
       ...user,
       checked: false,
       isAdmin: user.authorities.some((item) => item.authority == ROLE.ADMIN),
-      avatar: user.avatar ? `${rootApi}/file/${user.avatar}` : '',
+      avatar: user.avatar ? `${rootApi}/file/get/${user.avatar}` : '',
     }));
   }
 }

@@ -8,4 +8,8 @@ export enum EToastMessage {
   CHANGE_ROLE_SUCCESS = 'Change successfully',
   CHANGE_PASSWORD_SUCCESS = 'Change password successfully',
   FAIL = 'Fail',
+  ADD_CATEGORY_SUCCESS = 'Add category successfully',
+  UPDATE_CATEGORY_SUCCESS = 'Update category successfully',
+  ADD_PRODUCT_SUCCESS = 'Add product successfully',
+  UPDATE_PRODUCT_SUCCESS = 'Update product successfully',
 }

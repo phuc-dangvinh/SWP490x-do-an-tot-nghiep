@@ -1,5 +1,7 @@
 package phucdvfx12504.swp490x_backend.config;
 
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -9,7 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
+import org.springframework.web.cors.CorsConfiguration;
 import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.auth.AuthEntryPoint;
 import phucdvfx12504.swp490x_backend.auth.JwtAuthenticationFilter;
@@ -24,48 +26,54 @@ public class SecurityConfig {
 	private final AuthenticationProvider authenticationProvider;
 	private final AuthEntryPoint authEntryPoint;
 
-	private final AntPathRequestMatcher H2_DATABASE_URL = new AntPathRequestMatcher("/h2-console/**");
-	private final String[] PUBLIC_LIST_URL = {
-			"/api/auth/login/**",
-			"/api/auth/register/**",
-			"/home/**",
-			"**/reset-password"
+	private final AntPathRequestMatcher[] PUBLIC_LIST_URL = {
+			new AntPathRequestMatcher("/h2-console/**"),
+			new AntPathRequestMatcher("/**/login/**"),
+			new AntPathRequestMatcher("/**/register/**"),
+			new AntPathRequestMatcher("/**/user/reset-password/**"),
+			new AntPathRequestMatcher("/**/category/get-all/**"),
+			new AntPathRequestMatcher("/**/file/get/**"),
+			new AntPathRequestMatcher("/**/product/get-all/**"),
+			new AntPathRequestMatcher("/**/product/get-by-category/**"),
+			new AntPathRequestMatcher("/**/product/search/**")
+	};
+	private final AntPathRequestMatcher[] ADMIN_ROLE_URL = {
+			new AntPathRequestMatcher("/**/manage/**")
 	};
 
-	private final String[] ADMIN_ROLE_URL = {
-			"/api/user/manage/**"
+	private final AntPathRequestMatcher[] USER_ROLE_URL = {
+			new AntPathRequestMatcher("/**/user/change-password/**"),
+			new AntPathRequestMatcher("/**/user/check-exist/**"),
+			new AntPathRequestMatcher("/**/user/check-current-password/**"),
+			new AntPathRequestMatcher("/**/file/upload/**"),
 	};
-
-	private final String[] USER_ROLE_URL = {
-			"/api/user/change-password/**"
-	};
-
-	// @Bean
-	// public WebSecurityCustomizer webSecurityCustomizer() {
-	// return (web) -> web.ignoring().requestMatchers(new
-	// AntPathRequestMatcher("/home/**"));
-	// }
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		// https://reflectoring.io/spring-cors/
 		return http
 				.csrf(csrf -> csrf.disable())
-				.cors(cors -> cors.disable())
-				.headers(headers -> headers.frameOptions().disable())
+				.cors(cors -> cors.configurationSource(request -> {
+					CorsConfiguration configuration = new CorsConfiguration();
+					configuration.setAllowedOrigins(Arrays.asList("*"));
+					configuration.setAllowedMethods(Arrays.asList("*"));
+					configuration.setAllowedHeaders(Arrays.asList("*"));
+					configuration.setExposedHeaders(Arrays.asList("*"));
+					// configuration.setAllowCredentials(true);
+					return configuration;
+				}))
+				.headers(headers -> headers.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(
 						requests -> requests
-								// .requestMatchers(H2_DATABASE_URL).permitAll()
-								// .requestMatchers(PUBLIC_LIST_URL).permitAll()
-								// .requestMatchers(ADMIN_ROLE_URL).hasAuthority(ERoleName.ADMIN.toString())
-								// .requestMatchers(USER_ROLE_URL)
-								// .hasAnyAuthority(ERoleName.USER.toString(), ERoleName.ADMIN.toString())
-								// .anyRequest().authenticated())
-				.anyRequest().permitAll())
+								.requestMatchers(PUBLIC_LIST_URL).permitAll()
+								.requestMatchers(ADMIN_ROLE_URL).hasAuthority(ERoleName.ADMIN.toString())
+								.requestMatchers(USER_ROLE_URL).hasAnyAuthority(ERoleName.USER.toString(), ERoleName.ADMIN.toString())
+								.anyRequest().authenticated())
+				// .anyRequest().permitAll())
 				.authenticationProvider(authenticationProvider)
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 				.exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
 				.build();
 	}
-
 }

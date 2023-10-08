@@ -1,7 +1,6 @@
 package phucdvfx12504.swp490x_backend.services.impl;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -83,6 +82,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User changePassword(UserChangePasswordRequest userChangePasswordRequest) {
         User user = userRepository.findByEmail(userChangePasswordRequest.getEmail()).orElseThrow();
         String oldRawPassword = userChangePasswordRequest.getOldPassword();
@@ -95,13 +95,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public TextMessageResponse resetPassword(ResetPasswordRequest request)
             throws UnsupportedEncodingException, MessagingException {
         List<User> users = userRepositoryCustom.findByIdOrEmail(request.getIdOrEmail());
-        if (users.size() > 0) {
+        if (!users.isEmpty()) {
             User user = users.get(0);
             String newPassword = commonLangPasswordUtils.generateCommonLangPassword();
-            user.setPassword(passwordEncoder.encode(passwordEncoder.encode(newPassword)));
+            user.setPassword(passwordEncoder.encode(newPassword));
             // send email
             String to = user.getEmail();
             String subject = "Reset password successfully";

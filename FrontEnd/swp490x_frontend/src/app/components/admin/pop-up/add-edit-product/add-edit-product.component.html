@@ -1,0 +1,82 @@
+<div class="wrapper">
+  <h3 class="text-center">{{ isEdit ? "Edit product" : "Add product" }}</h3>
+  <hr />
+  <form [formGroup]="formAddOrEditProduct">
+    <div class="wrapper-content">
+      <div class="wrapper-content-left">
+        <app-form-control label="Image">
+          <div class="wrapper-img-all">
+            <ng-container *ngFor="let image of imagesDisplay">
+              <div class="wrapper-img-one">
+                <img [src]="rootApiRequest + '/file/get/' + image.fileName" />
+                <button class="btn-del-img" (click)="openConfirmDelete(image)">
+                  Delete
+                </button>
+              </div>
+            </ng-container>
+            <app-file-upload
+              [urlUpload]="urlUploadImage"
+              (hasResultUpload)="onHasResultUploadFile($event)"
+            >
+              <button class="btn-add-img">Add</button>
+            </app-file-upload>
+          </div>
+        </app-form-control>
+      </div>
+      <div class="wrapper-content-right">
+        <app-form-control
+          label="Name"
+          [touchedOrDirty]="nameFormControl.touched || nameFormControl.dirty"
+          [errorMessages]="nameErrorMessages"
+        >
+          <input type="text" [formControlName]="formFields.name" />
+        </app-form-control>
+        <app-form-control
+          label="Price"
+          [touchedOrDirty]="priceFormControl.touched || priceFormControl.dirty"
+          [errorMessages]="priceErrorMessages"
+        >
+          <input type="number" [formControlName]="formFields.price" />
+        </app-form-control>
+        <app-form-control
+          label="Category"
+          [touchedOrDirty]="
+            categoryIdFormControl.touched || categoryIdFormControl.dirty
+          "
+          [errorMessages]="categoryIdErrorMessages"
+        >
+          <ng-select
+            class="ng-select-category"
+            [formControlName]="formFields.categoryId"
+            [items]="listCategories"
+            bindLabel="name"
+            bindValue="id"
+            [clearable]="false"
+            notFoundText="No category found"
+            dropdownPosition="bottom"
+          >
+          </ng-select>
+        </app-form-control>
+        <app-form-control
+          label="Description"
+          [touchedOrDirty]="
+            descriptionFormControl.touched || descriptionFormControl.dirty
+          "
+          [errorMessages]="descriptionErrorMessages"
+        >
+          <textarea [formControlName]="formFields.description"></textarea>
+        </app-form-control>
+      </div>
+    </div>
+  </form>
+  <div class="wrapper-footer mt-4">
+    <button class="button-save" (click)="onSave()">Save</button>
+    <button class="button-cancel ms-3" (click)="onCancel()">Cancel</button>
+  </div>
+</div>
+<ng-template #confirmDelete let-modelDelete>
+  <app-confirm-delete
+    (clickOkButton)="tmpDeleteImage()"
+    (clickCancelButton)="cancelDelete()"
+  ></app-confirm-delete>
+</ng-template>

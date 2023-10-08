@@ -26,7 +26,7 @@ public class FileUploadController {
   private final FileUploadService fileUploadService;
 
   @PostMapping("/upload")
-  public TextMessageResponse uploadFile(@RequestParam("file") MultipartFile file) {
+  public TextMessageResponse uploadFile(@RequestParam MultipartFile file) {
     try {
       return fileUploadService.storeFile(file);
     } catch (Exception e) {
@@ -34,7 +34,7 @@ public class FileUploadController {
     }
   }
 
-  @GetMapping("/{fileName:.+}")
+  @GetMapping("/get/{fileName:.+}")
   public ResponseEntity<byte[]> readDetailFile(@PathVariable String fileName) {
     try {
       return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(fileUploadService.readFileContent(fileName));
@@ -43,7 +43,7 @@ public class FileUploadController {
     }
   }
 
-  @GetMapping("get-all")
+  @GetMapping("/manage/get-all")
   public List<String> getUploadedFiles() {
     try {
       return fileUploadService.loadAll().map(path -> {
@@ -57,12 +57,12 @@ public class FileUploadController {
     }
   }
 
-  @DeleteMapping("/{fileName:.+}")
+  @DeleteMapping("/manage/delete/{fileName:.+}")
   public boolean deleteFile(@PathVariable String fileName) {
     return fileUploadService.delete(fileName);
   }
 
-  @DeleteMapping("/delete-all")
+  @DeleteMapping("/manage/delete-all")
   public void deleteAllFile() {
     fileUploadService.deleteAll();
   }

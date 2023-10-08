@@ -6,7 +6,12 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { checkCurrentPassword, checkExistEmail } from './async-validator-fn';
+import {
+  checkCurrentPassword,
+  checkExistCategoryName,
+  checkExistEmail,
+  checkExistProductName,
+} from './async-validator-fn';
 import { HttpService } from './http.service';
 import { FormControlError } from '../interface/form-control-error';
 import { IPasswordStrengthMeterService } from 'angular-password-strength-meter';
@@ -33,6 +38,22 @@ export class FormService {
     {
       error: 'wrongPassword',
       message: 'Wrong password',
+    },
+    {
+      error: 'existNameCategory',
+      message: 'Name is already exits',
+    },
+    {
+      error: 'priceEqualZero',
+      message: 'Price must be greater than 0',
+    },
+    {
+      error: 'invalidPriceTo',
+      message: 'Price must be greater than or equal to price from',
+    },
+    {
+      error: 'min',
+      message: 'Price > 0',
     },
   ];
 
@@ -101,6 +122,45 @@ export class FormService {
     });
   }
 
+  public buildFormAddOrEditProduct(): FormGroup {
+    return this._formBuilder.group({
+      name: [
+        '',
+        [Validators.required],
+        checkExistProductName(this._httpService),
+      ],
+      price: ['', [Validators.required, this.checkPriceGreaterThanZero]],
+      description: ['', [Validators.required]],
+      categoryId: ['', [Validators.required]],
+    });
+  }
+
+  public buildFormSearchProduct(): FormGroup {
+    return this._formBuilder.group({
+      categoryId: [''],
+      keyword: [''],
+      price: this._formBuilder.group(
+        {
+          priceFrom: ['', [Validators.min(0)]],
+          priceTo: ['', [Validators.min(0)]],
+        },
+        {
+          validators: this.checkValidPriceTo,
+        }
+      ),
+    });
+  }
+
+  public buildFormAddNewCategory(): FormGroup {
+    return this._formBuilder.group({
+      categoryName: [
+        '',
+        [Validators.required],
+        checkExistCategoryName(this._httpService),
+      ],
+    });
+  }
+
   public checkConfirmNewPassword(
     control: AbstractControl
   ): ValidationErrors | null {
@@ -109,6 +169,20 @@ export class FormService {
       controlValue.newPassword !== controlValue.confirmNewPassword
       ? { wrongConfirmNewPassword: true }
       : null;
+  }
+
+  public checkValidPriceTo(control: AbstractControl): ValidationErrors | null {
+    const priceFrom = control.value.priceFrom;
+    const priceTo = control.value.priceTo;
+    return priceFrom > 0 && priceTo < priceFrom
+      ? { invalidPriceTo: true }
+      : null;
+  }
+
+  public checkPriceGreaterThanZero(
+    control: AbstractControl
+  ): ValidationErrors | null {
+    return (control.value as number) > 0 ? null : { priceEqualZero: true };
   }
 
   public getFormControl(
