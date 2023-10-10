@@ -93,6 +93,14 @@ export class CategoryComponent {
   public saveAddOrUpdateCategory() {
     this.dismissPopup();
     this.getListCategories();
+    if (this.selectedCategory) {
+      const selectedCategoryUpdate = this.listCategories.find(
+        (item) => item.id === this.selectedCategory.id
+      );
+      if (selectedCategoryUpdate) {
+        this._categoryService.setCategorySelected = selectedCategoryUpdate;
+      }
+    }
     this._toastService.showMessage(
       EToastClass.SUCCESS,
       this.isEdit

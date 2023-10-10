@@ -74,8 +74,8 @@ export class ProductManagementComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         if (res) {
           this.categorySelected = res;
-          this.getListProductByCategory();
         }
+        this.getListProductByCategory();
       });
   }
 
@@ -157,7 +157,10 @@ export class ProductManagementComponent implements OnInit, OnDestroy {
 
   get checkedCheckAll(): boolean {
     this.getItemsOfPage();
-    return !this.itemsOfPage.some((item) => !item.checked);
+    return (
+      !this.itemsOfPage.some((item) => !item.checked) &&
+      this.itemsOfPage.length > 0
+    );
   }
 
   public changeCheckedCheckAll() {
