@@ -27,11 +27,6 @@ export class CategoryComponent {
   @ViewChild('confirmDelete') confirmDelete:
     | TemplateRef<ConfirmDeleteComponent>
     | undefined;
-  // @Output() emitListCategories: EventEmitter<Category[]> = new EventEmitter<
-  //   Category[]
-  // >();
-  // @Output() emitSelectedCategory: EventEmitter<Category> =
-  //   new EventEmitter<Category>();
   public listCategories: Category[] = [];
   public selectedCategory!: Category;
   public actionCategory!: Category;
@@ -52,7 +47,6 @@ export class CategoryComponent {
     const url = '/category/get-all';
     this._httpService.get<Category[]>(url).subscribe((res) => {
       if (res) {
-        // this.emitListCategories.emit(res);
         this._categoryService.setCategoriesList = res;
         this.listCategories =
           res.length > 0 ? [{ id: '', name: 'ALL' }, ...res] : res;
@@ -99,7 +93,6 @@ export class CategoryComponent {
   public saveAddOrUpdateCategory() {
     this.dismissPopup();
     this.getListCategories();
-    // this.emitSelectedCategory.emit(this.selectedCategory);
     this._toastService.showMessage(
       EToastClass.SUCCESS,
       this.isEdit
@@ -109,9 +102,7 @@ export class CategoryComponent {
   }
 
   public onSelectCategory(category: Category) {
-    console.log('onSelectCategory', category);
     this.selectedCategory = category;
-    // this.emitSelectedCategory.emit(this.selectedCategory);
     this._categoryService.setCategorySelected = category;
   }
 }

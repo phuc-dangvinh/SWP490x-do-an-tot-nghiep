@@ -34,7 +34,6 @@ export class AddEditProductComponent
 {
   @Input() isEdit: boolean = false;
   @Input() productEdit!: Product;
-  // @Input() listCategories: Category[] = [];
   @Output() clickSave = new EventEmitter<void>();
   @ViewChild('confirmDelete') confirmDelete:
     | TemplateRef<ConfirmDeleteComponent>

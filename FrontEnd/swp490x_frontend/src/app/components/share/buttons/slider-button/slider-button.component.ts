@@ -19,7 +19,6 @@ export class SliderButtonComponent implements ControlValueAccessor {
   private onChange = (checked: boolean) => {};
   private onTouched = () => {};
   private touched = false;
-  // public disabled = false;
   @Input() disabled = false;
 
   //implements

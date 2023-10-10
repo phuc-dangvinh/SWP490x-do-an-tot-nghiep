@@ -68,11 +68,6 @@ export class ProductManagementComponent implements OnInit, OnDestroy {
     this._modalService.open(this.addOrEditProduct, { size: 'xl' });
   }
 
-  // public onCategorySelected(category: Category) {
-  //   this.categorySelected = category;
-  //   this.getListProductByCategory();
-  // }
-
   private getCategorySelected() {
     this._categoryService.getCategorySelected
       .pipe(takeUntil(this.unSubcribe$))
