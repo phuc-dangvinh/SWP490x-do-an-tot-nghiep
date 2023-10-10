@@ -23,6 +23,8 @@ import { FormControlComponent } from './form-control/form-control.component';
 import { PaginationComponent } from './pagination/pagination.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SearchProductComponent } from './search-product/search-product.component';
+import { CategoryComponent } from './category/category.component';
+import { AddEditCategoryComponent } from './category/add-edit-category/add-edit-category.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +49,8 @@ import { SearchProductComponent } from './search-product/search-product.componen
     FormControlComponent,
     PaginationComponent,
     SearchProductComponent,
+    CategoryComponent,
+    AddEditCategoryComponent,
   ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, NgbModule],
   exports: [
@@ -73,7 +77,9 @@ import { SearchProductComponent } from './search-product/search-product.componen
     NotDeleteAdminComponent,
     FormControlComponent,
     PaginationComponent,
-    SearchProductComponent
+    SearchProductComponent,
+    CategoryComponent,
+    AddEditCategoryComponent,
   ],
 })
 export class ShareModule {}

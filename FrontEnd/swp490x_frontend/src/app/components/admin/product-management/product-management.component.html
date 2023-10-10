@@ -1,9 +1,6 @@
 <div class="wrapper">
   <div class="wrapper-left-side">
-    <app-category
-      (emitListCategories)="getListCategories($event)"
-      (emitSelectedCategory)="onCategorySelected($event)"
-    ></app-category>
+    <app-category></app-category>
   </div>
   <div class="wrapper-main ms-5">
     <div class="header-action">
@@ -100,7 +97,6 @@
 </div>
 <ng-template #addOrEditProduct>
   <app-add-edit-product
-    [listCategories]="listCategories"
     [isEdit]="isEdit"
     [productEdit]="productEdit"
     (clickSave)="getListProductByCategory()"

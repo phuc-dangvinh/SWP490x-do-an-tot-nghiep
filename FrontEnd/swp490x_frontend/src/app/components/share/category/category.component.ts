@@ -7,12 +7,13 @@ import {
 } from '@angular/core';
 import { Category } from 'src/app/interface/category.interface';
 import { HttpService } from 'src/app/service/http.service';
-import { AddEditCategoryComponent } from '../../pop-up/add-edit-category/add-edit-category.component';
+import { AddEditCategoryComponent } from './add-edit-category/add-edit-category.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastService } from 'src/app/service/toast.service';
 import { EToastMessage } from 'src/app/const/EToastMessage';
 import { EToastClass } from 'src/app/const/EToastClass';
 import { ConfirmDeleteComponent } from 'src/app/components/share/pop-up-dialog/confirm-delete/confirm-delete.component';
+import { CategoryService } from 'src/app/service/category.service';
 
 @Component({
   selector: 'app-category',
@@ -26,11 +27,11 @@ export class CategoryComponent {
   @ViewChild('confirmDelete') confirmDelete:
     | TemplateRef<ConfirmDeleteComponent>
     | undefined;
-  @Output() emitListCategories: EventEmitter<Category[]> = new EventEmitter<
-    Category[]
-  >();
-  @Output() emitSelectedCategory: EventEmitter<Category> =
-    new EventEmitter<Category>();
+  // @Output() emitListCategories: EventEmitter<Category[]> = new EventEmitter<
+  //   Category[]
+  // >();
+  // @Output() emitSelectedCategory: EventEmitter<Category> =
+  //   new EventEmitter<Category>();
   public listCategories: Category[] = [];
   public selectedCategory!: Category;
   public actionCategory!: Category;
@@ -39,7 +40,8 @@ export class CategoryComponent {
   constructor(
     private _httpService: HttpService,
     private _modalService: NgbModal,
-    private _toastService: ToastService
+    private _toastService: ToastService,
+    private _categoryService: CategoryService
   ) {}
 
   ngOnInit(): void {
@@ -50,7 +52,8 @@ export class CategoryComponent {
     const url = '/category/get-all';
     this._httpService.get<Category[]>(url).subscribe((res) => {
       if (res) {
-        this.emitListCategories.emit(res);
+        // this.emitListCategories.emit(res);
+        this._categoryService.setCategoriesList = res;
         this.listCategories =
           res.length > 0 ? [{ id: '', name: 'ALL' }, ...res] : res;
       }
@@ -96,7 +99,7 @@ export class CategoryComponent {
   public saveAddOrUpdateCategory() {
     this.dismissPopup();
     this.getListCategories();
-    this.emitSelectedCategory.emit(this.selectedCategory);
+    // this.emitSelectedCategory.emit(this.selectedCategory);
     this._toastService.showMessage(
       EToastClass.SUCCESS,
       this.isEdit
@@ -106,7 +109,9 @@ export class CategoryComponent {
   }
 
   public onSelectCategory(category: Category) {
+    console.log('onSelectCategory', category);
     this.selectedCategory = category;
-    this.emitSelectedCategory.emit(this.selectedCategory);
+    // this.emitSelectedCategory.emit(this.selectedCategory);
+    this._categoryService.setCategorySelected = category;
   }
 }
