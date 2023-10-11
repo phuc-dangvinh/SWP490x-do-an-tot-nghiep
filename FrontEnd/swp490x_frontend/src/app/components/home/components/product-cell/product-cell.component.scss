@@ -1,0 +1,36 @@
+.product-cell {
+  width: 240px;
+  height: 384px;
+  padding: 20px 10px 10px;
+  margin: 10px;
+
+  &:hover {
+    box-shadow: 0px 0px 10px 5px #D9D9D9;
+  }
+
+  .image {
+    width: 100%;
+    height: 200px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    img {
+      height: 100%;
+    }
+  }
+
+  .name {
+    height: 70px;
+    margin-top: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .price {
+    height: 30px;
+    color: red;
+    margin-top: 20px;
+  }
+}

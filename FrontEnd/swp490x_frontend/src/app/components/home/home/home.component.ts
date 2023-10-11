@@ -1,10 +1,57 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
+import { Category } from 'src/app/interface/category.interface';
+import { Product } from 'src/app/interface/product.interface';
+import { CategoryService } from 'src/app/service/category.service';
+import { HttpService } from 'src/app/service/http.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit, OnDestroy {
+  private unSubcribe$: Subject<void> = new Subject<void>();
+  public productList: Product[] = [];
+  private categorySelected!: Category;
 
+  constructor(
+    private _categoryService: CategoryService,
+    private _httpService: HttpService
+  ) {}
+
+  ngOnInit(): void {
+    this._categoryService.setCategorySelected = null;
+    this.getListProductsByCategorySelected();
+  }
+
+  private getListProductsByCategorySelected() {
+    this._categoryService.getCategorySelected
+      .pipe(takeUntil(this.unSubcribe$))
+      .subscribe((res) => {
+        if (res) {
+          this.categorySelected = res;
+        }
+        this.refreshListProducts();
+      });
+  }
+
+  public refreshListProducts() {
+    const url = `/product/get-by-category?id=${
+      this.categorySelected ? this.categorySelected.id : ''
+    }`;
+    this._httpService.get<Product[]>(url).subscribe((res) => {
+      if (res) {
+        this.productList = res.map((item) => ({
+          ...item,
+          checked: false,
+        }));
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.unSubcribe$.next();
+    this.unSubcribe$.complete();
+  }
 }

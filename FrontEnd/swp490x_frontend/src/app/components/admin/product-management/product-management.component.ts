@@ -53,8 +53,8 @@ export class ProductManagementComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.getListProductByCategory();
-    this.getCategorySelected();
+    this._categoryService.setCategorySelected = null;
+    this.getListProductsByCategorySelected();
   }
 
   public showPopupAddProduct() {
@@ -68,18 +68,18 @@ export class ProductManagementComponent implements OnInit, OnDestroy {
     this._modalService.open(this.addOrEditProduct, { size: 'xl' });
   }
 
-  private getCategorySelected() {
+  private getListProductsByCategorySelected() {
     this._categoryService.getCategorySelected
       .pipe(takeUntil(this.unSubcribe$))
       .subscribe((res) => {
         if (res) {
           this.categorySelected = res;
         }
-        this.getListProductByCategory();
+        this.refreshListProducts();
       });
   }
 
-  public getListProductByCategory() {
+  public refreshListProducts() {
     const url = `/product/get-by-category?id=${
       this.categorySelected ? this.categorySelected.id : ''
     }`;
@@ -131,7 +131,7 @@ export class ProductManagementComponent implements OnInit, OnDestroy {
       : [this.singleProductPendingDelete.id];
     this._httpService.post(url, payload).subscribe((res) => {
       if (res) {
-        this.getListProductByCategory();
+        this.refreshListProducts();
         this._modalService.dismissAll();
         this._toastService.showMessage(
           EToastClass.SUCCESS,

@@ -6,6 +6,13 @@
     <div class="header-action">
       <app-search-product></app-search-product>
     </div>
-    <div class="main"></div>
+    <div class="grid-product mt-4">
+      <ng-container *ngFor="let product of productList">
+        <app-product-cell
+          [product]="product"
+          [routerLink]="['/product/detail', product.id]"
+        ></app-product-cell>
+      </ng-container>
+    </div>
   </div>
 </div>

@@ -1,1 +1,13 @@
-<p>product-cell works!</p>
+<div class="product-cell">
+  <div class="image">
+    <ng-container *ngIf="product.imageProducts.length > 0">
+      <img
+        [src]="
+          rootApiRequest + '/file/get/' + product.imageProducts[0].fileName
+        "
+      />
+    </ng-container>
+  </div>
+  <div class="name">{{ product.name }}</div>
+  <div class="price">{{ product.price | number }}đ</div>
+</div>

@@ -35,6 +35,7 @@ public class SecurityConfig {
 			new AntPathRequestMatcher("/**/file/get/**"),
 			new AntPathRequestMatcher("/**/product/get-all/**"),
 			new AntPathRequestMatcher("/**/product/get-by-category/**"),
+			new AntPathRequestMatcher("/**/product/get-by-id/**"),
 			new AntPathRequestMatcher("/**/product/search/**")
 	};
 	private final AntPathRequestMatcher[] ADMIN_ROLE_URL = {

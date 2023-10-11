@@ -25,7 +25,7 @@ export class CategoryService {
     return this.categorySelected$;
   }
 
-  set setCategorySelected(category: Category) {
+  set setCategorySelected(category: Category | null) {
     this.categorySelected$.next(category);
   }
 }

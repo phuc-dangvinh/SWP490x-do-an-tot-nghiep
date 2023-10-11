@@ -1,1 +1,23 @@
-<p>product-detail works!</p>
+<div class="product-detail mt-4">
+  <div class="carousel">
+    <ngb-carousel
+      *ngIf="product.imageProducts.length > 0"
+      [interval]="2000"
+      [pauseOnHover]="true"
+      [pauseOnFocus]="true"
+    >
+      <ng-container *ngFor="let img of product.imageProducts">
+        <ng-template ngbSlide>
+          <img [src]="rootApiRequest + '/file/get/' + img.fileName" />
+        </ng-template>
+      </ng-container>
+    </ngb-carousel>
+  </div>
+  <div class="main-body">
+    <div class="name">{{ product.name }}</div>
+    <div class="description">{{ product.description }}</div>
+    <div class="price">{{ product.price }}</div>
+    <div class="quantity">+ -</div>
+    <div class="action">Button</div>
+  </div>
+</div>
