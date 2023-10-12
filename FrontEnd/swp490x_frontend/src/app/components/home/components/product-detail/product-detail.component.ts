@@ -13,6 +13,7 @@ export class ProductDetailComponent implements OnInit {
   private idProduct: string = '';
   public product!: Product;
   public rootApiRequest = rootApi;
+  public quantity: number = 1;
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -31,5 +32,15 @@ export class ProductDetailComponent implements OnInit {
         this.product = res;
       }
     });
+  }
+
+  public increaseQuantity() {
+    this.quantity++;
+  }
+
+  public reduceQuantity() {
+    if (this.quantity > 1) {
+      this.quantity--;
+    }
   }
 }

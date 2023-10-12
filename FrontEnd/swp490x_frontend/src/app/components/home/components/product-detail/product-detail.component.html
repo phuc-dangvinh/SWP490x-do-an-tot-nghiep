@@ -1,8 +1,7 @@
-<div class="product-detail mt-4">
+<div *ngIf="product" class="product-detail mt-4">
   <div class="carousel">
     <ngb-carousel
       *ngIf="product.imageProducts.length > 0"
-      [interval]="2000"
       [pauseOnHover]="true"
       [pauseOnFocus]="true"
     >
@@ -14,10 +13,26 @@
     </ngb-carousel>
   </div>
   <div class="main-body">
-    <div class="name">{{ product.name }}</div>
+    <div class="name">{{ product.name | uppercase }}</div>
+    <hr />
     <div class="description">{{ product.description }}</div>
-    <div class="price">{{ product.price }}</div>
-    <div class="quantity">+ -</div>
-    <div class="action">Button</div>
+    <div class="price">
+      <div>{{ product.price | number }} đ</div>
+      <div class="include-vat">Price includes VAT</div>
+    </div>
+    <div class="quantity">
+      <span class="quantity-label">Quantity</span>
+      <button (click)="reduceQuantity()">
+        <i class="bi bi-chevron-down"></i>
+      </button>
+      <div class="quantity-value">{{ quantity }}</div>
+      <button (click)="increaseQuantity()">
+        <i class="bi bi-chevron-up"></i>
+      </button>
+    </div>
+    <div class="action">
+      <button class="buy-now">BUY NOW</button>
+      <button class="add-to-cart">ADD TO CART</button>
+    </div>
   </div>
 </div>
