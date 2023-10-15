@@ -39,7 +39,7 @@ export const menuItems: MenuItem[] = [
     itemName: ItemMenuName.CART,
     displayName: ItemMenuName.CART,
     icon: 'bi-cart',
-    routerLink: '',
+    routerLink: '/cart',
     isMainItem: true,
     isActive: true,
   },
