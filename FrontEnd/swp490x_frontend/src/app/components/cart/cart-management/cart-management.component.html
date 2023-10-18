@@ -47,7 +47,29 @@
         </tbody>
       </table>
     </div>
-    <div class="title">SHIPMENT</div>
+    <div class="title">
+      <div>SHIPMENT INFO</div>
+      <form>
+        <app-form-control>
+          <ng-container>
+            <input
+              type="radio"
+              [formControlName]="formFields.sex"
+              [value]="sex.MALE"
+              [checked]="sexFormControl.value === sex.MALE"
+            />
+            Male
+            <input
+              type="radio"
+              [formControlName]="formFields.sex"
+              [value]="sex.FEMALE"
+              [checked]="sexFormControl.value === sex.FEMALE"
+            />
+            Female
+          </ng-container>
+        </app-form-control>
+      </form>
+    </div>
     <div class="title">PAYMENT METHOD</div>
   </div>
   <div class="right">

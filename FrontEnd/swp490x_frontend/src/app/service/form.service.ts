@@ -17,6 +17,7 @@ import { FormControlError } from '../interface/form-control-error';
 import { IPasswordStrengthMeterService } from 'angular-password-strength-meter';
 import { checkStrengthPassword } from './sync-validator-fn';
 import { UserService } from './user.service';
+import { MethodShipment, Sex } from '../const/shipment-const';
 
 @Injectable({
   providedIn: 'root',
@@ -158,6 +159,18 @@ export class FormService {
         [Validators.required],
         checkExistCategoryName(this._httpService),
       ],
+    });
+  }
+
+  public buildFormShipment(): FormGroup {
+    return this._formBuilder.group({
+      sex: [Sex.MALE, [Validators.required]],
+      fullname: ['', [Validators.required]],
+      phone: ['', [Validators.required]],
+      email: ['', [Validators.required]],
+      methodShipment: [MethodShipment.DELIVERY, [Validators.required]],
+      address: [''],
+      otherRequire: [''],
     });
   }
 
