@@ -35,13 +35,13 @@ public class Product {
   private String name;
   @Column(nullable = false)
   private double price;
-  @Column(nullable = false)
+  @Column(nullable = false, columnDefinition = "text")
   private String description;
   @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   List<ImageProduct> imageProducts;
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "category_id")
   private Category category;
-  @ManyToMany(mappedBy = "products")
+  @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private List<Cart> carts;
 }

@@ -2,17 +2,13 @@ package phucdvfx12504.swp490x_backend.entities;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,11 +23,12 @@ public class Cart {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   private String id;
-  @OneToOne(mappedBy = "cart")
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "user_id")
   private User user;
-  @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(name = "cart_product", joinColumns = @JoinColumn(name = "cart_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
-  @JsonIgnore
-  private List<Product> products;
-
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "product_id")
+  private Product product;
+  @Column(nullable = false)
+  private int quantity;
 }

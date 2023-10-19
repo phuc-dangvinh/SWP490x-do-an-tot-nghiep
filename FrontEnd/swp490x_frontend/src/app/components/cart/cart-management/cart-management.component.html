@@ -2,6 +2,7 @@
   <div class="left">
     <div>
       <div class="title">CART</div>
+      <hr />
       <table>
         <thead>
           <tr>
@@ -47,32 +48,147 @@
         </tbody>
       </table>
     </div>
-    <div class="title">
-      <div>SHIPMENT INFO</div>
-      <form>
+    <div class="mt-4">
+      <div class="title">SHIPMENT INFO</div>
+      <hr />
+      <form [formGroup]="formShipment">
         <app-form-control>
           <ng-container>
             <input
               type="radio"
-              [formControlName]="formFields.sex"
-              [value]="sex.MALE"
-              [checked]="sexFormControl.value === sex.MALE"
+              name="gender"
+              [formControlName]="formFields.gender"
+              [value]="gender.MALE"
+              [checked]="genderFormControl.value === gender.MALE"
             />
             Male
             <input
+              class="ms-4"
               type="radio"
-              [formControlName]="formFields.sex"
-              [value]="sex.FEMALE"
-              [checked]="sexFormControl.value === sex.FEMALE"
+              name="gender"
+              [formControlName]="formFields.gender"
+              [value]="gender.FEMALE"
+              [checked]="genderFormControl.value === gender.FEMALE"
             />
             Female
           </ng-container>
         </app-form-control>
+        <div class="mt-2">
+          <app-form-control
+            [touchedOrDirty]="
+              fullnameFormControl.touched || fullnameFormControl.dirty
+            "
+            [errorMessages]="fullnameErrorMessages"
+          >
+            <input
+              class="width-100"
+              type="text"
+              placeholder="Fullname"
+              [formControlName]="formFields.fullname"
+            />
+          </app-form-control>
+        </div>
+
+        <div class="phone-email mt-3">
+          <app-form-control
+            class="width-100"
+            [touchedOrDirty]="
+              phoneFormControl.touched || phoneFormControl.dirty
+            "
+            [errorMessages]="phoneErrorMessages"
+          >
+            <input
+              class="width-100"
+              type="text"
+              placeholder="Phone"
+              [formControlName]="formFields.phone"
+            />
+          </app-form-control>
+          <app-form-control
+            class="width-100"
+            [touchedOrDirty]="
+              emailFormControl.touched || emailFormControl.dirty
+            "
+            [errorMessages]="emailErrorMessages"
+          >
+            <input
+              class="width-100"
+              type="text"
+              placeholder="Email"
+              [formControlName]="formFields.email"
+            />
+          </app-form-control>
+        </div>
+        <div class="mt-2">
+          <app-form-control>
+            <ng-container>
+              <input
+                type="radio"
+                name="methodShipment"
+                [formControlName]="formFields.methodShipment"
+                [value]="methodShipment.DELIVERY"
+                [checked]="
+                  methodShipmentFormControl.value === methodShipment.DELIVERY
+                "
+              />
+              Delivery
+              <input
+                class="ms-4"
+                type="radio"
+                name="methodShipment"
+                [formControlName]="formFields.methodShipment"
+                [value]="methodShipment.STORE"
+                [checked]="
+                  methodShipmentFormControl.value === methodShipment.STORE
+                "
+              />
+              Pick up in store
+            </ng-container>
+          </app-form-control>
+        </div>
+        <div class="mt-2">
+          <app-form-control>
+            <input
+              class="width-100"
+              type="text"
+              placeholder="Address"
+              [formControlName]="formFields.address"
+            />
+          </app-form-control>
+        </div>
+        <div class="mt-3">
+          <app-form-control>
+            <input
+              class="width-100"
+              type="text"
+              placeholder="Other require"
+              [formControlName]="formFields.otherRequire"
+            />
+          </app-form-control>
+        </div>
       </form>
     </div>
-    <div class="title">PAYMENT METHOD</div>
   </div>
   <div class="right">
     <div class="title">ORDER SUMMARY</div>
+    <hr />
+    <div class="info-payment">
+      <span>Provisional amount:</span>
+      <span class="fw-bold">19.570.000 đ</span>
+    </div>
+    <div class="info-payment mt-3">
+      <span>Delivery charges:</span>
+      <span class="fw-bold">0 đ</span>
+    </div>
+    <div class="info-payment mt-3">
+      <span>Discount:</span>
+      <span class="fw-bold">0 đ</span>
+    </div>
+    <hr />
+    <div class="info-payment">
+      <span>Total amount:</span>
+      <span class="total-amount">19.570.000 đ</span>
+    </div>
+    <button class="order-btn mt-4">ORDER</button>
   </div>
 </div>

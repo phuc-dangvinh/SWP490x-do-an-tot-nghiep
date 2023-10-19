@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
-import { MethodShipment, Sex } from 'src/app/const/shipment-const';
+import { Gender, MethodShipment } from 'src/app/const/shipment-const';
 import { FormService } from 'src/app/service/form.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { FormService } from 'src/app/service/form.service';
 export class CartManagementComponent implements OnInit {
   public formShipment!: FormGroup;
   public formFields = {
-    sex: 'sex',
+    gender: 'gender',
     fullname: 'fullname',
     phone: 'phone',
     email: 'email',
@@ -19,7 +19,7 @@ export class CartManagementComponent implements OnInit {
     address: 'address',
     otherRequire: 'otherRequire',
   };
-  public readonly sex = Sex;
+  public readonly gender = Gender;
   public readonly methodShipment = MethodShipment;
 
   constructor(private _formService: FormService) {}
@@ -28,10 +28,10 @@ export class CartManagementComponent implements OnInit {
     this.formShipment = this._formService.buildFormShipment();
   }
 
-  get sexFormControl(): AbstractControl {
+  get genderFormControl(): AbstractControl {
     return this._formService.getFormControl(
       this.formShipment,
-      this.formFields.sex
+      this.formFields.gender
     );
   }
 

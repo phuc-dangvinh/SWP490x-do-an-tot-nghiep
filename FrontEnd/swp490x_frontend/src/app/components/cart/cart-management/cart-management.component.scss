@@ -1,5 +1,6 @@
 .cart-management {
   display: flex;
+  column-gap: 50px;
 
   .title {
     font-size: 26px;
@@ -7,8 +8,13 @@
     font-weight: 500;
   }
 
+  .total-amount {
+    color: rgb(189, 0, 0);
+    font-weight: bold;
+  }
+
   .left {
-    width: 70%;
+    width: 80%;
 
     table {
       width: 100%;
@@ -101,11 +107,6 @@
           font-weight: bold;
         }
 
-        .total-amount {
-          color: rgb(189, 0, 0);
-          font-weight: bold;
-        }
-
         .delete {
           button {
             color: rgb(119, 119, 119);
@@ -118,9 +119,51 @@
         }
       }
     }
+
+    form {
+      .width-100 {
+        width: 100%;
+      }
+
+      .width-45 {
+        width: 45%;
+      }
+
+      .phone-email {
+        display: flex;
+        align-items: flex-end;
+        column-gap: 20px;
+      }
+
+      input[type="text"] {
+        height: 40px;
+      }
+
+      input[type="radio"] {
+        cursor: pointer;
+      }
+    }
   }
 
   .right {
-    width: 30%;
+    width: 20%;
+
+    .info-payment {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .order-btn {
+      width: 100%;
+      height: 50px;
+      background-color: rgb(189, 0, 0);
+      color: white;
+      border: none;
+
+      &:hover {
+        background-color: red;
+        transition: 0.4s;
+      }
+    }
   }
 }
