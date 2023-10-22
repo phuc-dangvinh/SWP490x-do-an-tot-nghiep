@@ -2,7 +2,6 @@ package phucdvfx12504.swp490x_backend.services.impl;
 
 import java.io.UnsupportedEncodingException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -11,12 +10,13 @@ import org.springframework.stereotype.Component;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
 import phucdvfx12504.swp490x_backend.services.EmailService;
 
 @Component
+@RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
-    @Autowired
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
 
     @Override
     public void sendSimpleEmail(String mailTo) {

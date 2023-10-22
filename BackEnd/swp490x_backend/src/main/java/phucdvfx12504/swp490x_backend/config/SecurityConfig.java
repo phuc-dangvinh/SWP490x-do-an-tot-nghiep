@@ -39,7 +39,7 @@ public class SecurityConfig {
 			new AntPathRequestMatcher("/**/product/search/**")
 	};
 	private final AntPathRequestMatcher[] ADMIN_ROLE_URL = {
-			new AntPathRequestMatcher("/**/manage/**")
+			new AntPathRequestMatcher("/**/manage/**"),
 	};
 
 	private final AntPathRequestMatcher[] USER_ROLE_URL = {
@@ -47,6 +47,7 @@ public class SecurityConfig {
 			new AntPathRequestMatcher("/**/user/check-exist/**"),
 			new AntPathRequestMatcher("/**/user/check-current-password/**"),
 			new AntPathRequestMatcher("/**/file/upload/**"),
+			new AntPathRequestMatcher("/**/cart/**"),
 	};
 
 	@Bean

@@ -1,6 +1,7 @@
 package phucdvfx12504.swp490x_backend.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,14 +13,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class ImageProduct {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -28,6 +32,5 @@ public class ImageProduct {
   private String fileName;
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "product_id")
-  @JsonIgnore
   private Product product;
 }
