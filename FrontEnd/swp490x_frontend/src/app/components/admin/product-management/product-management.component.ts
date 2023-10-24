@@ -80,9 +80,9 @@ export class ProductManagementComponent implements OnInit, OnDestroy {
   }
 
   public refreshListProducts() {
-    const url = `/product/get-by-category?id=${
-      this.categorySelected ? this.categorySelected.id : ''
-    }`;
+    const url = this.categorySelected
+      ? `/product/get-by-category?id=${this.categorySelected.id}`
+      : '/product/get-all';
     this._httpService.get<Product[]>(url).subscribe((res) => {
       if (res) {
         this.productList = res.map((item) => ({
