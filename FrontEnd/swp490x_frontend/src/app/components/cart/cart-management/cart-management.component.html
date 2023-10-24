@@ -7,7 +7,12 @@
         <thead>
           <tr>
             <td class="checkbox">
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                [(ngModel)]="checkedAll"
+                [checked]="isCheckedAll"
+                (change)="changeCheckedAll()"
+              />
             </td>
             <td class="product-name">Product</td>
             <td class="unit-price">Unit price</td>
@@ -16,31 +21,45 @@
             <td class="delete">Delete</td>
           </tr>
         </thead>
-        <tbody>
+        <tbody *ngFor="let item of cart">
           <tr>
             <td class="checkbox">
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                [(ngModel)]="item.product.checked"
+                [checked]="item.product.checked"
+                (change)="collectChecked()"
+              />
             </td>
             <td class="product-name">
               <img />
               <div>
-                Bơm hơi không dây đa năng Daison Portable Electric Air Pump
-                Wireless 74W DS-AP07 - Tibet - Grey
+                {{ item.product.name }}
               </div>
             </td>
-            <td class="unit-price">1.590.000 đ</td>
+            <td class="unit-price">{{ item.product.price | number }} đ</td>
             <td class="quantity">
-              <button>
+              <button
+                (click)="
+                  changeQuantity(item.product.id, quantityAction.DECREASE)
+                "
+              >
                 <i class="bi bi-chevron-down"></i>
               </button>
-              <div class="quantity-value">1</div>
-              <button>
+              <div class="quantity-value">{{ item.quantity }}</div>
+              <button
+                (click)="
+                  changeQuantity(item.product.id, quantityAction.INCREASE)
+                "
+              >
                 <i class="bi bi-chevron-up"></i>
               </button>
             </td>
-            <td class="total-amount">1.590.000 đ</td>
+            <td class="total-amount">
+              {{ item.product.price * item.quantity | number }} đ
+            </td>
             <td class="delete">
-              <button>
+              <button (click)="deleteCartItems(item.id)">
                 <i class="bi bi-trash3"></i>
               </button>
             </td>
@@ -174,7 +193,7 @@
     <hr />
     <div class="info-payment">
       <span>Provisional amount:</span>
-      <span class="fw-bold">19.570.000 đ</span>
+      <span class="fw-bold">{{ totalAmount | number }} đ</span>
     </div>
     <div class="info-payment mt-3">
       <span>Delivery charges:</span>
@@ -187,8 +206,8 @@
     <hr />
     <div class="info-payment">
       <span>Total amount:</span>
-      <span class="total-amount">19.570.000 đ</span>
+      <span class="total-amount">{{ totalAmount | number }} đ</span>
     </div>
-    <button class="order-btn mt-4">ORDER</button>
+    <button (click)="processOrder()" class="order-btn mt-4">ORDER</button>
   </div>
 </div>

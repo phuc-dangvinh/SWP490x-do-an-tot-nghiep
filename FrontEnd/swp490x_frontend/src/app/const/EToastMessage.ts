@@ -12,4 +12,6 @@ export enum EToastMessage {
   UPDATE_CATEGORY_SUCCESS = 'Update category successfully',
   ADD_PRODUCT_SUCCESS = 'Add product successfully',
   UPDATE_PRODUCT_SUCCESS = 'Update product successfully',
+  ADD_CART_SUCCESS = 'Add to cart successfully',
+  ORDER_SUCCESS = 'Order successfully',
 }

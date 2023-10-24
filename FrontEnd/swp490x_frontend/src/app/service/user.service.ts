@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { LocalStorageService } from './local-storage.service';
 import { EKeyCredentials } from '../interface/key-credentials.enum';
+import { User } from '../interface/user';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private currentUser$ = new BehaviorSubject(null);
+  private currentUser$: BehaviorSubject<User | null> =
+    new BehaviorSubject<User | null>(null);
   private isUserLogin$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false
   );

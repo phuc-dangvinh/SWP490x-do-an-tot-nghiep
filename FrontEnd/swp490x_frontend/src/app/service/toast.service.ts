@@ -18,7 +18,7 @@ export class ToastService {
 
   public showMessage(
     type: EToastClass,
-    content: EToastMessage,
+    content: EToastMessage | string,
     delay: number = 3000
   ) {
     this.toasts.push({

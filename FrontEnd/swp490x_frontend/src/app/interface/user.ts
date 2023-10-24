@@ -1,3 +1,4 @@
+import { Gender } from '../const/shipment-const';
 import { Authority } from './authority';
 
 export interface User {
@@ -9,4 +10,6 @@ export interface User {
   avatar: string;
   checked: boolean;
   isAdmin: boolean;
+  gender: Gender;
+  address: string;
 }
