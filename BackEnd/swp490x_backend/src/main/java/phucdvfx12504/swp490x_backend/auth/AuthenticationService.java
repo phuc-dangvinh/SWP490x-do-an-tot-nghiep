@@ -2,6 +2,7 @@ package phucdvfx12504.swp490x_backend.auth;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Set;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +31,8 @@ public class AuthenticationService {
   private final AuthenticationManager athenticationManager;
   private final CommonLangPasswordUtils commonLangPasswordUtils;
   private final EmailService emailService;
+  // private final UserDetailsService userDetailsService;
+  // private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationService.class);
 
   @Transactional
   public User register(UserRegisterRequest request)
@@ -61,6 +64,24 @@ public class AuthenticationService {
     String jwtToken = jwtService.generateToken(user);
     return AuthenticationResponse.builder().user(user).token(jwtToken).build();
   }
+
+  // public boolean checkValidToken(String token) {
+  //   if (token == null || !token.startsWith("Bearer")) {
+  //     return false;
+  //   } else {
+  //     try {
+  //       final String jwt = token.substring(7);
+  //       final String email = jwtService.extractEmail(jwt);
+  //       if (email != null) {
+  //         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+  //         return jwtService.isTokenValid(jwt, userDetails);
+  //       }
+  //     } catch (Exception e) {
+  //       LOGGER.error("Cannot check valid token: {}", e.getMessage());
+  //     }
+  //     return false;
+  //   }
+  // }
 
   private String replaceEmailContent(String fullname, String email, String password) {
     String content = "<html>\r\n" + //
