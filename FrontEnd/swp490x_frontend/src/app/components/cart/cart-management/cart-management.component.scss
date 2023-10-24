@@ -1,6 +1,8 @@
 .cart-management {
   display: flex;
   column-gap: 50px;
+  max-height: calc(100vh - 100px);
+  overflow: auto;
 
   .title {
     font-size: 26px;

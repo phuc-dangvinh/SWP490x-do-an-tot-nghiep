@@ -13,6 +13,7 @@ import { ToastService } from 'src/app/service/toast.service';
 import { EToastClass } from 'src/app/const/EToastClass';
 import { DeleteResponse } from 'src/app/interface/delete-response';
 import { EToastMessage } from 'src/app/const/EToastMessage';
+import { Gender } from 'src/app/const/shipment-const';
 
 @Component({
   selector: 'app-user-management',
@@ -21,6 +22,7 @@ import { EToastMessage } from 'src/app/const/EToastMessage';
 })
 export class UserManagementComponent implements OnInit {
   public readonly BUTTON = BUTTON;
+  public readonly gender = Gender;
   public users: User[] = [];
   public userEdit!: User;
   public isEdit: boolean = false;
