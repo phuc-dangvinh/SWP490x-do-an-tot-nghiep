@@ -76,7 +76,7 @@
         tbody {
           tr {
             border-bottom: solid 1px #D9D9D9;
-            height: 80px;
+            min-height: 80px;
 
             img {
               width: 70px;
@@ -98,41 +98,41 @@
             }
 
             .td-action {
-              height: 80px;
-              display: flex;
-              align-items: center;
-
               i {
                 font-size: 20px;
               }
 
-              .td-button-edit {
-                width: 40px;
-                height: 40px;
+              .buttons-action {
                 display: flex;
-                align-items: center;
-                justify-content: center;
-                background-color: black;
-                color: white;
-                cursor: pointer;
 
-                &:hover {
-                  opacity: 0.8;
+                .td-button-edit {
+                  width: 40px;
+                  height: 40px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  background-color: black;
+                  color: white;
+                  cursor: pointer;
+
+                  &:hover {
+                    opacity: 0.8;
+                  }
                 }
-              }
 
-              .td-button-delete {
-                width: 40px;
-                height: 40px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background-color: red;
-                color: white;
-                cursor: pointer;
+                .td-button-delete {
+                  width: 40px;
+                  height: 40px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  background-color: red;
+                  color: white;
+                  cursor: pointer;
 
-                &:hover {
-                  opacity: 0.8;
+                  &:hover {
+                    opacity: 0.8;
+                  }
                 }
               }
             }

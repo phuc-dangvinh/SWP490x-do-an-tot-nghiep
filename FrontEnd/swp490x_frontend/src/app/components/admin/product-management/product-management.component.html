@@ -54,7 +54,11 @@
               />
             </td>
             <td>
-              <ng-container *ngIf="product.imageProducts && product.imageProducts.length > 0">
+              <ng-container
+                *ngIf="
+                  product.imageProducts && product.imageProducts.length > 0
+                "
+              >
                 <img
                   [src]="
                     rootApiRequest +
@@ -68,20 +72,24 @@
             <td class="product-price">{{ product.price | number }} VND</td>
             <td>{{ product.description }}</td>
             <td>
-              <span *ngIf="product.category" class="category">{{ product.category.name }}</span>
+              <span *ngIf="product.category" class="category">{{
+                product.category.name
+              }}</span>
             </td>
             <td class="td-action">
-              <div
-                class="td-button-edit"
-                (click)="showPopupEditProduct(product)"
-              >
-                <i class="bi bi-pencil"></i>
-              </div>
-              <div
-                class="td-button-delete ms-2"
-                (click)="showPopupConfirmDeleteSingle(product)"
-              >
-                <i class="bi bi-trash3"></i>
+              <div class="buttons-action">
+                <div
+                  class="td-button-edit"
+                  (click)="showPopupEditProduct(product)"
+                >
+                  <i class="bi bi-pencil"></i>
+                </div>
+                <div
+                  class="td-button-delete ms-2"
+                  (click)="showPopupConfirmDeleteSingle(product)"
+                >
+                  <i class="bi bi-trash3"></i>
+                </div>
               </div>
             </td>
           </tr>
