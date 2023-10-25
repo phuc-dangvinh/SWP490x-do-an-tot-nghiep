@@ -1,114 +1,124 @@
-<div class="container-fluid">
+<div class="wrapper-user-detail">
   <form [formGroup]="formUser">
-    <h4 class="pt-3 text-center sticky-top bg-white">
+    <h4 class="text-center sticky-top bg-white">
       {{ isEdit ? "Update user" : "New user" }}
     </h4>
     <hr />
     <div>
-      <div class="mb-3 avatar">
-        <div class="file-input">
+      <app-file-upload (hasResultUpload)="onHasResultUploadFile($event)">
+        <div class="avatar">
+          <div *ngIf="avatarFormControl.value" class="wrapper-avatar">
+            <img
+              [src]="rootApiRequest + '/file/get/' + avatarFormControl.value"
+            />
+          </div>
+          <svg
+            *ngIf="!avatarFormControl.value"
+            xmlns="http://www.w3.org/2000/svg"
+            width="120"
+            height="120"
+            fill="#D9D9D9"
+            class="bi bi-person-circle"
+            viewBox="0 0 16 16"
+          >
+            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+            <path
+              fill-rule="evenodd"
+              d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
+            />
+          </svg>
+        </div>
+      </app-file-upload>
+      <div class="gender-admin mt-3">
+        <app-form-control label="Gender">
+          <ng-container>
+            <input
+              class="ms-3 form-check-input"
+              type="radio"
+              name="gender"
+              [formControlName]="formFields.gender"
+              [value]="gender.MALE"
+              [checked]="genderFormControl.value === gender.MALE"
+            />
+            Male
+            <input
+              class="ms-4 form-check-input"
+              type="radio"
+              name="gender"
+              [formControlName]="formFields.gender"
+              [value]="gender.FEMALE"
+              [checked]="genderFormControl.value === gender.FEMALE"
+            />
+            Female
+          </ng-container>
+        </app-form-control>
+        <app-form-control label="Admin">
+          <app-slider-button
+            [formControlName]="formFields.isAdmin"
+            class="ms-3"
+          ></app-slider-button>
+        </app-form-control>
+      </div>
+
+      <div class="mt-3">
+        <app-form-control
+          label="Full name"
+          [touchedOrDirty]="
+            fullnameFormControl.touched || fullnameFormControl.dirty
+          "
+          [errorMessages]="fullnameErrorMessages"
+        >
           <input
-            type="file"
-            accept="image/*"
-            (change)="onFileSelected($event)"
-            #fileUpload
+            [formControlName]="formFields.fullname"
+            type="text"
+            class="form-control"
           />
-        </div>
-        <div>
-          <label class="form-label text-primary avatar-label">Avatar:</label>
-          <div>
-            <div class="text-center" *ngIf="srcFile">
-              <img [src]="srcFile" class="display-avatar" />
-            </div>
-            <div class="text-center" *ngIf="fileName && srcFile">
-              {{ fileName }}
-            </div>
-            <div class="text-center mt-3">
-              <app-select-file (onClick)="fileUpload.click()"></app-select-file>
-            </div>
-          </div>
-        </div>
+        </app-form-control>
       </div>
-      <div class="mb-3">
-        <label for="fullname" class="form-label text-primary">Full name:</label>
-        <input
-          formControlName="fullname"
-          type="text"
-          class="form-control"
-          id="fullname"
-        />
-        <ng-container
-          *ngIf="
-            getErrorMessage('fullname') &&
-            (getFormControl('fullname').dirty ||
-              getFormControl('fullname').touched)
-          "
+
+      <div class="mt-3">
+        <app-form-control
+          label="Email"
+          [touchedOrDirty]="emailFormControl.touched || emailFormControl.dirty"
+          [errorMessages]="emailErrorMessages"
         >
-          <div
-            class="error-control left-center mt-1"
-            *ngFor="let message of getErrorMessage('fullname')"
-          >
-            <div class="center-center"><i class="bi bi-exclamation"></i></div>
-            <span class="ms-1">{{ message }}</span>
-          </div>
-        </ng-container>
+          <input
+            [formControlName]="formFields.email"
+            type="text"
+            class="form-control"
+          />
+        </app-form-control>
       </div>
-      <div class="mb-3">
-        <label for="email" class="form-label text-primary">Email:</label>
-        <input
-          formControlName="email"
-          type="email"
-          class="form-control"
-          id="email"
-        />
-        <ng-container
-          *ngIf="
-            getErrorMessage('email') &&
-            (getFormControl('email').dirty || getFormControl('email').touched)
+      <div class="mt-3">
+        <app-form-control
+          label="Address"
+          [touchedOrDirty]="
+            addressFormControl.touched || addressFormControl.dirty
           "
+          [errorMessages]="addressErrorMessages"
         >
-          <div
-            class="error-control left-center mt-1"
-            *ngFor="let message of getErrorMessage('email')"
-          >
-            <div class="center-center"><i class="bi bi-exclamation"></i></div>
-            <span class="ms-1">{{ message }}</span>
-          </div>
-        </ng-container>
+          <input
+            [formControlName]="formFields.address"
+            type="text"
+            class="form-control"
+          />
+        </app-form-control>
       </div>
-      <div class="mb-3">
-        <label for="phone" class="form-label text-primary">Phone:</label>
-        <input
-          formControlName="phone"
-          type="text"
-          class="form-control"
-          id="phone"
-        />
-        <ng-container
-          *ngIf="
-            getErrorMessage('phone') &&
-            (getFormControl('phone').dirty || getFormControl('phone').touched)
-          "
+      <div class="mt-3">
+        <app-form-control
+          label="Phone"
+          [touchedOrDirty]="phoneFormControl.touched || phoneFormControl.dirty"
+          [errorMessages]="phoneErrorMessages"
         >
-          <div
-            class="error-control left-center mt-1"
-            *ngFor="let message of getErrorMessage('phone')"
-          >
-            <div class="center-center"><i class="bi bi-exclamation"></i></div>
-            <span class="ms-1">{{ message }}</span>
-          </div>
-        </ng-container>
-      </div>
-      <div>
-        <label class="form-label text-primary">Admin</label>
-        <app-slider-button
-          class="ms-3"
-          formControlName="isAdmin"
-        ></app-slider-button>
+          <input
+            [formControlName]="formFields.phone"
+            type="text"
+            class="form-control"
+          />
+        </app-form-control>
       </div>
     </div>
-    <hr />
-    <div class="text-center bg-white mb-3">
+    <div class="text-center bg-white mt-3">
       <app-save-button (clickButton)="onClick(BUTTON.SAVE)"></app-save-button>
       <app-cancel-button
         (clickButton)="onClick(BUTTON.CANCEL)"

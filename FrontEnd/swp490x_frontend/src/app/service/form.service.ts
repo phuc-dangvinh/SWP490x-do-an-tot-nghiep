@@ -85,6 +85,22 @@ export class FormService {
     });
   }
 
+  public buildFormUser(): FormGroup {
+    return this._formBuilder.group({
+      avatar: [''],
+      gender: [Gender.MALE, [Validators.required]],
+      fullname: ['', [Validators.required]],
+      email: [
+        '',
+        [Validators.required, Validators.email],
+        checkExistEmail(this._httpService),
+      ],
+      phone: ['', [Validators.required]],
+      address: ['', [Validators.required]],
+      isAdmin: [false, [Validators.required]],
+    });
+  }
+
   public buildForgotPasswordForm(): FormGroup {
     return this._formBuilder.group({
       email: [

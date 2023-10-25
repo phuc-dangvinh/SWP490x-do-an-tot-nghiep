@@ -150,10 +150,10 @@ export class UserManagementComponent implements OnInit {
         if (user) {
           this.userEdit = user;
         }
-        this._modalService.open(this.userDetailPopup, { size: 'md' });
+        this._modalService.open(this.userDetailPopup, { size: 'lg' });
         break;
       case BUTTON.NEW:
-        this._modalService.open(this.userDetailPopup, { size: 'md' });
+        this._modalService.open(this.userDetailPopup, { size: 'lg' });
         break;
       case BUTTON.DELETE:
         if (user) {

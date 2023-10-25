@@ -1,20 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { BUTTON } from 'src/app/const/EButton';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  ValidationErrors,
-  Validators,
-} from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 import { HttpService } from 'src/app/service/http.service';
 import { TextMessage } from 'src/app/interface/text-message';
-import { FormControlError } from 'src/app/interface/form-control-error';
-import { checkExistEmail } from 'src/app/service/async-validator-fn';
 import { User } from 'src/app/interface/user';
 import { ROLE } from 'src/app/const/ERole';
 import { rootApi } from 'src/app/enviroments/environment';
 import { EToastMessage } from 'src/app/const/EToastMessage';
+import { FormService } from 'src/app/service/form.service';
+import { Gender } from 'src/app/const/shipment-const';
 
 @Component({
   selector: 'app-user-detail',
@@ -27,23 +21,29 @@ export class UserDetailComponent implements OnInit {
   @Output() clickSaveButton = new EventEmitter<EToastMessage>();
   @Input() userEdit!: User;
   public readonly BUTTON = BUTTON;
+  public readonly gender = Gender;
+  public rootApiRequest = rootApi;
   public formUser!: FormGroup;
-  private controlErrors: FormControlError[] = [
-    { error: 'required', message: 'Required field' },
-    { error: 'email', message: 'Email is not valid' },
-    { error: 'passwordNotMatch', message: 'Repeat password is incorrect' },
-    { error: 'emailExist', message: 'This email is taken' },
-  ];
   public fileName: string = '';
   public srcFile: string = '';
+  public formFields = {
+    avatar: 'avatar',
+    gender: 'gender',
+    fullname: 'fullname',
+    email: 'email',
+    phone: 'phone',
+    address: 'address',
+    isAdmin: 'isAdmin',
+  };
 
   constructor(
-    private formBuilder: FormBuilder,
-    private httpService: HttpService
+    // private formBuilder: FormBuilder,
+    private httpService: HttpService,
+    private _formService: FormService
   ) {}
 
   ngOnInit(): void {
-    this.createForm();
+    this.formUser = this._formService.buildFormUser();
     if (this.isEdit && this.userEdit) {
       this.srcFile = this.userEdit.avatar;
       this.fillEditForm(this.userEdit);
@@ -61,20 +61,6 @@ export class UserDetailComponent implements OnInit {
       default:
     }
     this.formUser.reset();
-  }
-
-  private createForm() {
-    this.formUser = this.formBuilder.group({
-      avatar: [''],
-      fullname: ['', [Validators.required]],
-      email: [
-        '',
-        [Validators.required, Validators.email],
-        checkExistEmail(this.httpService),
-      ],
-      phone: ['', [Validators.required]],
-      isAdmin: [false, [Validators.required]],
-    });
   }
 
   private submitForm() {
@@ -102,70 +88,108 @@ export class UserDetailComponent implements OnInit {
     }
   }
 
-  public getErrorMessage(parentControlName: string, subControlName?: string) {
-    const parentErrors: ValidationErrors | null =
-      this.formUser.controls[parentControlName].errors;
-    let subErrors: ValidationErrors | null = null;
-    if (subControlName) {
-      subErrors = (this.formUser.controls[parentControlName] as FormGroup)
-        .controls[subControlName].errors;
-    }
-    let errors: ValidationErrors | null = null;
-    if (subControlName == 'repeatPassword') {
-      errors = { ...parentErrors, ...subErrors };
-    } else {
-      subControlName ? (errors = subErrors) : (errors = parentErrors);
-    }
-    if (errors) {
-      return Object.keys(errors)
-        .map((errorKey) =>
-          this.controlErrors.find(
-            (controlError) => controlError.error == errorKey
-          )
-        )
-        .map((errorObj) => errorObj?.message);
-    } else {
-      return null;
-    }
-  }
-
-  public getFormControl(
-    parentControlName: string,
-    subControlName?: string
-  ): AbstractControl {
-    if (subControlName) {
-      return (this.formUser.controls[parentControlName] as FormGroup).controls[
-        subControlName
-      ];
-    } else {
-      return this.formUser.controls[parentControlName];
-    }
-  }
-
   private fillEditForm(user: User) {
-    this.formUser.controls['fullname'].setValue(user.fullname);
-    this.formUser.controls['email'].setValue(user.email);
-    this.formUser.controls['email'].disable();
-    this.formUser.controls['phone'].setValue(user.phone);
-    this.formUser.controls['isAdmin'].setValue(
+    this.fullnameFormControl.setValue(user.fullname);
+    this.emailFormControl.setValue(user.email);
+    this.emailFormControl.disable();
+    this.phoneFormControl.setValue(user.phone);
+    this.isAdminFormControl.setValue(
       user.authorities.some((item) => item.authority == ROLE.ADMIN)
     );
-    if (this.formUser.controls['isAdmin'].value == true) {
-      this.formUser.controls['isAdmin'].disable();
+    if (this.isAdminFormControl.value == true) {
+      this.isAdminFormControl.disable();
     }
   }
 
-  public onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-    if (file) {
-      this.fileName = file.name;
-      const url = '/file/upload';
-      this.httpService.uploadFile<TextMessage>(url, file).subscribe((res) => {
-        if (res) {
-          this.srcFile = `${rootApi}/file/get/${res.info}`;
-          this.formUser.controls['avatar'].setValue(res.info);
-        }
-      });
-    }
+  public onHasResultUploadFile(file: TextMessage) {
+    this.avatarFormControl.setValue(file.info);
+    console.log('avatarFormControl.value', this.avatarFormControl.value);
+    let test =
+      this.rootApiRequest + '/file/get/' + this.avatarFormControl.value;
+    console.log('call img', test);
+  }
+
+  get avatarFormControl(): AbstractControl {
+    return this._formService.getFormControl(
+      this.formUser,
+      this.formFields.avatar
+    );
+  }
+
+  get genderFormControl(): AbstractControl {
+    return this._formService.getFormControl(
+      this.formUser,
+      this.formFields.gender
+    );
+  }
+
+  get genderErrorMessages() {
+    return this._formService.getErrorMessage(
+      this.formUser,
+      this.formFields.gender
+    );
+  }
+
+  get fullnameFormControl(): AbstractControl {
+    return this._formService.getFormControl(
+      this.formUser,
+      this.formFields.fullname
+    );
+  }
+
+  get fullnameErrorMessages() {
+    return this._formService.getErrorMessage(
+      this.formUser,
+      this.formFields.fullname
+    );
+  }
+
+  get emailFormControl(): AbstractControl {
+    return this._formService.getFormControl(
+      this.formUser,
+      this.formFields.email
+    );
+  }
+
+  get emailErrorMessages() {
+    return this._formService.getErrorMessage(
+      this.formUser,
+      this.formFields.email
+    );
+  }
+
+  get phoneFormControl(): AbstractControl {
+    return this._formService.getFormControl(
+      this.formUser,
+      this.formFields.phone
+    );
+  }
+
+  get phoneErrorMessages() {
+    return this._formService.getErrorMessage(
+      this.formUser,
+      this.formFields.phone
+    );
+  }
+
+  get addressFormControl(): AbstractControl {
+    return this._formService.getFormControl(
+      this.formUser,
+      this.formFields.address
+    );
+  }
+
+  get addressErrorMessages() {
+    return this._formService.getErrorMessage(
+      this.formUser,
+      this.formFields.address
+    );
+  }
+
+  get isAdminFormControl(): AbstractControl {
+    return this._formService.getFormControl(
+      this.formUser,
+      this.formFields.isAdmin
+    );
   }
 }
