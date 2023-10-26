@@ -54,11 +54,7 @@ export class SignInComponent implements OnInit {
               EKeyCredentials.TOKEN,
               res.token
             );
-            this._localStorageService.saveData(
-              EKeyCredentials.USER,
-              res.user
-            );
-            this._userService.setIsUserLogin(true);
+            this._userService.setCurrentUser(res.user);
             this._router.navigate(
               res.user.authorities.some((item) => item.authority == ROLE.ADMIN)
                 ? ['/admin/user-management']

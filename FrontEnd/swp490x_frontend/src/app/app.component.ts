@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
+import { LocalStorageService } from './service/local-storage.service';
+import { UserService } from './service/user.service';
+import { HttpService } from './service/http.service';
 
 @Component({
   selector: 'app-root',
@@ -9,9 +12,16 @@ import { PrimeNGConfig } from 'primeng/api';
 export class AppComponent implements OnInit {
   title = 'swp490x_frontend';
 
-  constructor(private primengConfig: PrimeNGConfig) {}
+  // constructor(
+  //   private _localStorageService: LocalStorageService,
+  //   private _userService: UserService,
+  //   private _httpService: HttpService
+  // ) {}
 
   ngOnInit(): void {
-    this.primengConfig.ripple = true;
+    // this._httpService.get<boolean>('/auth/check-valid-token').subscribe({
+    //   next: (res) => {},
+    //   error: (err) => {},
+    // });
   }
 }

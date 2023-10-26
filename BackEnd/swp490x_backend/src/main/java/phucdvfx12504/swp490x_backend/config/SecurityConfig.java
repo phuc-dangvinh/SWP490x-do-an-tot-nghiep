@@ -48,6 +48,7 @@ public class SecurityConfig {
 			new AntPathRequestMatcher("/**/user/check-current-password/**"),
 			new AntPathRequestMatcher("/**/file/upload/**"),
 			new AntPathRequestMatcher("/**/cart/**"),
+			new AntPathRequestMatcher("/**/check-valid-token/**"),
 	};
 
 	@Bean

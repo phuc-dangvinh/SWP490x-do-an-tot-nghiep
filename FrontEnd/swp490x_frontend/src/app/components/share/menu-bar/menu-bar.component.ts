@@ -8,9 +8,7 @@ import {
   ItemMenuName,
   MenuItem,
 } from 'src/app/interface/menu-item.interface';
-import { EKeyCredentials } from 'src/app/interface/key-credentials.enum';
 import { User } from 'src/app/interface/user';
-import { LocalStorageService } from 'src/app/service/local-storage.service';
 import { UserService } from 'src/app/service/user.service';
 
 @Component({
@@ -19,26 +17,19 @@ import { UserService } from 'src/app/service/user.service';
   styleUrls: ['./menu-bar.component.scss'],
 })
 export class MenuBarComponent implements OnInit, OnDestroy {
-  private isAdminUser: boolean = false;
-  public currentUser!: User;
+  public currentUser: User | undefined;
   private unsubscribe$: Subject<void> = new Subject<void>();
   private menuItems: MenuItem[] = menuItems;
-  private isLogin: boolean = false;
+  public rootApiRequest = rootApi;
 
-  constructor(
-    private _localStorageService: LocalStorageService,
-    private _userService: UserService
-  ) {}
+  constructor(private _userService: UserService) {}
 
   ngOnInit(): void {
     this._userService
-      .getIsUserLogin()
+      .getCurrentUser()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {
-        this.isLogin = res;
-        if (this.isLogin) {
-          this.getInfoFromLocal();
-        }
+        this.currentUser = res ?? undefined;
         this.changeMenu();
       });
   }
@@ -54,17 +45,27 @@ export class MenuBarComponent implements OnInit, OnDestroy {
   }
 
   private changeMenu() {
-    if (this.isAdminUser) {
-      this.toggleItem(ItemMenuName.MANAGEMENT, this.isLogin);
+    let isAdmin = false;
+    let isLogin = false;
+    let displayName = '';
+    if (this.currentUser) {
+      isAdmin = this.currentUser.authorities.some(
+        (item) => item.authority == ROLE.ADMIN
+      );
+      isLogin = true;
+      displayName = this.currentUser.fullname;
     }
-    this.toggleItem(ItemMenuName.ACCOUNT, !this.isLogin);
-    this.toggleItem(ItemMenuName.SIGN_IN, !this.isLogin);
-    this.toggleItem(ItemMenuName.SIGN_UP, !this.isLogin);
-    this.setDisplayName(this.isLogin ? this.currentUser.fullname : '');
-    this.toggleItem(ItemMenuName.LOGIN_NAME, this.isLogin);
-    this.toggleItem(ItemMenuName.MY_PROFILE, this.isLogin);
-    this.toggleItem(ItemMenuName.CHANGE_PASSWORD, this.isLogin);
-    this.toggleItem(ItemMenuName.SIGN_OUT, this.isLogin);
+    if (isAdmin) {
+      this.toggleItem(ItemMenuName.MANAGEMENT, isLogin);
+    }
+    this.toggleItem(ItemMenuName.ACCOUNT, !isLogin);
+    this.toggleItem(ItemMenuName.SIGN_IN, !isLogin);
+    this.toggleItem(ItemMenuName.SIGN_UP, !isLogin);
+    this.setDisplayName(displayName);
+    this.toggleItem(ItemMenuName.LOGIN_NAME, isLogin);
+    this.toggleItem(ItemMenuName.MY_PROFILE, isLogin);
+    this.toggleItem(ItemMenuName.CHANGE_PASSWORD, isLogin);
+    this.toggleItem(ItemMenuName.SIGN_OUT, isLogin);
   }
 
   private toggleItem(itemName: ItemMenuName, state: boolean) {
@@ -83,33 +84,15 @@ export class MenuBarComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getInfoFromLocal() {
-    const sessionUser: User = this._localStorageService.getData(
-      EKeyCredentials.USER
-    );
-    if (sessionUser) {
-      this.currentUser = {
-        ...sessionUser,
-        avatar: sessionUser.avatar
-          ? `${rootApi}/file/get/${sessionUser.avatar}`
-          : '',
-      };
-      this.isAdminUser = sessionUser.authorities.some(
-        (item) => item.authority == ROLE.ADMIN
-      );
-    }
-  }
-
-  private handleLogout() {
-    this._localStorageService.clearAllData();
-    this._userService.setIsUserLogin(false);
-  }
-
   public clickSubItem(menuItem: MenuItem) {
     switch (menuItem.itemName) {
       case ItemMenuName.SIGN_OUT:
         this.handleLogout();
     }
+  }
+
+  private handleLogout() {
+    this._userService.setCurrentUser(null);
   }
 
   ngOnDestroy(): void {

@@ -42,10 +42,11 @@
           ></i>
           <img
             *ngIf="
-              currentUser?.avatar &&
-              mainItem.displayName == currentUser.fullname
+              currentUser &&
+              mainItem.displayName == currentUser.fullname &&
+              currentUser.avatar
             "
-            [src]="currentUser.avatar"
+            [src]="rootApiRequest + '/file/get/' + currentUser.avatar"
           />
           <span class="item-name">{{ mainItem.displayName }}</span>
         </ng-template>
