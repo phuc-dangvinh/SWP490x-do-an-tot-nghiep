@@ -50,7 +50,7 @@
               <span>
                 <img
                   *ngIf="user.avatar"
-                  [src]="user.avatar"
+                  [src]="rootApiRequest + '/file/get/' + user.avatar"
                   class="mx-auto avatar"
                 />
                 <svg

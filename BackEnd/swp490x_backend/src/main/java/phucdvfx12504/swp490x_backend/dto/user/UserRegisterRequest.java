@@ -1,6 +1,7 @@
 package phucdvfx12504.swp490x_backend.dto.user;
 
 import lombok.Getter;
+import phucdvfx12504.swp490x_backend.constant.Gender;
 
 @Getter
 public class UserRegisterRequest {
@@ -9,4 +10,6 @@ public class UserRegisterRequest {
     private String email;
     private String phone;
     private Boolean isAdmin;
+    private Gender gender;
+    private String address;
 }

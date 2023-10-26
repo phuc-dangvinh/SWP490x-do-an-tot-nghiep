@@ -4,7 +4,6 @@ import { AbstractControl, FormGroup } from '@angular/forms';
 import { HttpService } from 'src/app/service/http.service';
 import { TextMessage } from 'src/app/interface/text-message';
 import { User } from 'src/app/interface/user';
-import { ROLE } from 'src/app/const/ERole';
 import { rootApi } from 'src/app/enviroments/environment';
 import { EToastMessage } from 'src/app/const/EToastMessage';
 import { FormService } from 'src/app/service/form.service';
@@ -17,15 +16,13 @@ import { Gender } from 'src/app/const/shipment-const';
 })
 export class UserDetailComponent implements OnInit {
   @Input() isEdit: boolean = false;
-  @Output() clickCancelButton = new EventEmitter<boolean>();
+  @Output() clickCancelButton = new EventEmitter<void>();
   @Output() clickSaveButton = new EventEmitter<EToastMessage>();
   @Input() userEdit!: User;
   public readonly BUTTON = BUTTON;
   public readonly gender = Gender;
   public rootApiRequest = rootApi;
   public formUser!: FormGroup;
-  public fileName: string = '';
-  public srcFile: string = '';
   public formFields = {
     avatar: 'avatar',
     gender: 'gender',
@@ -37,23 +34,19 @@ export class UserDetailComponent implements OnInit {
   };
 
   constructor(
-    // private formBuilder: FormBuilder,
     private httpService: HttpService,
     private _formService: FormService
   ) {}
 
   ngOnInit(): void {
     this.formUser = this._formService.buildFormUser();
-    if (this.isEdit && this.userEdit) {
-      this.srcFile = this.userEdit.avatar;
-      this.fillEditForm(this.userEdit);
-    }
+    this.fillEditForm();
   }
 
   public onClick(button: BUTTON) {
     switch (button) {
       case BUTTON.CANCEL:
-        this.clickCancelButton.emit(true);
+        this.clickCancelButton.emit();
         break;
       case BUTTON.SAVE:
         this.submitForm();
@@ -82,31 +75,31 @@ export class UserDetailComponent implements OnInit {
         this.httpService.post<TextMessage>(url, payload).subscribe((res) => {
           if (res) {
             this.clickSaveButton.emit(EToastMessage.ADD_USER_SUCCESS);
+            this.formUser.reset();
           }
         });
       }
     }
   }
 
-  private fillEditForm(user: User) {
-    this.fullnameFormControl.setValue(user.fullname);
-    this.emailFormControl.setValue(user.email);
-    this.emailFormControl.disable();
-    this.phoneFormControl.setValue(user.phone);
-    this.isAdminFormControl.setValue(
-      user.authorities.some((item) => item.authority == ROLE.ADMIN)
-    );
-    if (this.isAdminFormControl.value == true) {
-      this.isAdminFormControl.disable();
+  private fillEditForm() {
+    if (this.isEdit && this.userEdit) {
+      this.avatarFormControl.setValue(this.userEdit.avatar);
+      this.fullnameFormControl.setValue(this.userEdit.fullname);
+      this.genderFormControl.setValue(this.userEdit.gender);
+      this.addressFormControl.setValue(this.userEdit.address);
+      this.emailFormControl.setValue(this.userEdit.email);
+      this.emailFormControl.disable();
+      this.phoneFormControl.setValue(this.userEdit.phone);
+      this.isAdminFormControl.setValue(this.userEdit.isAdmin);
+      if (this.isAdminFormControl.value == true) {
+        this.isAdminFormControl.disable();
+      }
     }
   }
 
   public onHasResultUploadFile(file: TextMessage) {
     this.avatarFormControl.setValue(file.info);
-    console.log('avatarFormControl.value', this.avatarFormControl.value);
-    let test =
-      this.rootApiRequest + '/file/get/' + this.avatarFormControl.value;
-    console.log('call img', test);
   }
 
   get avatarFormControl(): AbstractControl {

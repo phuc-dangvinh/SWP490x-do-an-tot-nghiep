@@ -31,8 +31,6 @@ public class AuthenticationService {
   private final AuthenticationManager athenticationManager;
   private final CommonLangPasswordUtils commonLangPasswordUtils;
   private final EmailService emailService;
-  // private final UserDetailsService userDetailsService;
-  // private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationService.class);
 
   @Transactional
   public User register(UserRegisterRequest request)
@@ -45,6 +43,8 @@ public class AuthenticationService {
         .phone(request.getPhone().trim())
         .password(passwordEncoder.encode(rawPasswordGenerate))
         .roles(Set.of(roleRepository.findByName(request.getIsAdmin() ? ERoleName.ADMIN : ERoleName.USER).get()))
+        .gender(request.getGender())
+        .address(request.getAddress())
         .build();
     User userSaveSuccess = userRepository.save(userRequest);
     // send email
@@ -64,24 +64,6 @@ public class AuthenticationService {
     String jwtToken = jwtService.generateToken(user);
     return AuthenticationResponse.builder().user(user).token(jwtToken).build();
   }
-
-  // public boolean checkValidToken(String token) {
-  //   if (token == null || !token.startsWith("Bearer")) {
-  //     return false;
-  //   } else {
-  //     try {
-  //       final String jwt = token.substring(7);
-  //       final String email = jwtService.extractEmail(jwt);
-  //       if (email != null) {
-  //         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-  //         return jwtService.isTokenValid(jwt, userDetails);
-  //       }
-  //     } catch (Exception e) {
-  //       LOGGER.error("Cannot check valid token: {}", e.getMessage());
-  //     }
-  //     return false;
-  //   }
-  // }
 
   private String replaceEmailContent(String fullname, String email, String password) {
     String content = "<html>\r\n" + //

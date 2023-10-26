@@ -23,6 +23,7 @@ import { Gender } from 'src/app/const/shipment-const';
 export class UserManagementComponent implements OnInit {
   public readonly BUTTON = BUTTON;
   public readonly gender = Gender;
+  public rootApiRequest = rootApi;
   public users: User[] = [];
   public userEdit!: User;
   public isEdit: boolean = false;
@@ -259,7 +260,6 @@ export class UserManagementComponent implements OnInit {
       ...user,
       checked: false,
       isAdmin: user.authorities.some((item) => item.authority == ROLE.ADMIN),
-      avatar: user.avatar ? `${rootApi}/file/get/${user.avatar}` : '',
     }));
   }
 }
