@@ -10,3 +10,9 @@ export enum QuantityAction {
   INCREASE,
   DECREASE,
 }
+
+export interface ItemAddToCart {
+  userId: string;
+  productId: string;
+  quantity: number;
+}

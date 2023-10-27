@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SignInResponse } from 'src/app/interface/sign-in-response';
@@ -11,19 +11,24 @@ import { UserService } from 'src/app/service/user.service';
 import { EKeyCredentials } from 'src/app/interface/key-credentials.enum';
 import { ROLE } from 'src/app/const/ERole';
 import { LocalStorageService } from 'src/app/service/local-storage.service';
+import { Subject, takeUntil } from 'rxjs';
+import { CartService } from 'src/app/service/cart.service';
+import { ItemAddToCart } from 'src/app/interface/cart';
 
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.scss'],
 })
-export class SignInComponent implements OnInit {
+export class SignInComponent implements OnInit, OnDestroy {
+  private destroy$: Subject<void> = new Subject<void>();
   public signInForm!: FormGroup;
   public isInvalid: boolean = false;
   private formFields = {
     email: 'email',
     password: 'password',
   };
+  private itemPedingAddCart!: ItemAddToCart;
 
   constructor(
     private _formService: FormService,
@@ -31,11 +36,20 @@ export class SignInComponent implements OnInit {
     private _router: Router,
     private _toastService: ToastService,
     private _userService: UserService,
-    private _localStorageService: LocalStorageService
+    private _localStorageService: LocalStorageService,
+    private _cartService: CartService
   ) {}
 
   ngOnInit(): void {
     this.signInForm = this._formService.buildSignInForm();
+    this._cartService
+      .getItemPedingAddCart()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        if (res) {
+          this.itemPedingAddCart = res;
+        }
+      });
   }
 
   public submitForm() {
@@ -45,21 +59,29 @@ export class SignInComponent implements OnInit {
         .post<SignInResponse>(url, this.signInForm.value)
         .subscribe((res) => {
           if (res) {
-            this._toastService.show({
-              content: EToastMessage.SIGN_IN_SUCCES,
-              classname: EToastClass.SUCCESS,
-              delay: 3000,
-            });
             this._localStorageService.saveData(
               EKeyCredentials.TOKEN,
               res.token
             );
             this._userService.setCurrentUser(res.user);
-            this._router.navigate(
-              res.user.authorities.some((item) => item.authority == ROLE.ADMIN)
-                ? ['/admin/user-management']
-                : ['/home']
-            );
+            this._toastService.show({
+              content: EToastMessage.SIGN_IN_SUCCES,
+              classname: EToastClass.SUCCESS,
+              delay: 3000,
+            });
+            if (this.itemPedingAddCart) {
+              this.itemPedingAddCart.userId = res.user.id;
+              this._cartService.addItemToCart(this.itemPedingAddCart);
+              this._router.navigate(['cart']);
+            } else {
+              this._router.navigate(
+                res.user.authorities.some(
+                  (item) => item.authority == ROLE.ADMIN
+                )
+                  ? ['/admin/user-management']
+                  : ['/home']
+              );
+            }
           } else {
             this.isInvalid = true;
           }
@@ -97,5 +119,10 @@ export class SignInComponent implements OnInit {
       this.signInForm,
       this.formFields.password
     );
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -84,7 +84,7 @@ export class UserManagementComponent implements OnInit {
       ? [this.selectedTmpUserId]
       : this.selectedUserIds;
     this.httpService
-      .deleteByPost<DeleteResponse>(url, payload)
+      .post<DeleteResponse>(url, payload)
       .subscribe((res) => {
         if (res) {
           let toastContent = '';

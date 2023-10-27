@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { EToastClass } from 'src/app/const/EToastClass';
 import { rootApi } from 'src/app/enviroments/environment';
+import { ItemAddToCart } from 'src/app/interface/cart';
 import { Product } from 'src/app/interface/product.interface';
+import { CartService } from 'src/app/service/cart.service';
 import { HttpService } from 'src/app/service/http.service';
-import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 
 @Component({
@@ -25,7 +25,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     private _activatedRoute: ActivatedRoute,
     private _httpService: HttpService,
     private _userService: UserService,
-    private _toastService: ToastService
+    private _router: Router,
+    private _cartService: CartService
   ) {}
 
   ngOnInit(): void {
@@ -61,20 +62,17 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   }
 
   public addToCart() {
-    this._httpService
-      .post('/cart/add-to-cart', {
-        userId: this.userId,
-        productId: this.product.id,
-        quantity: this.quantity,
-      })
-      .subscribe((res) => {
-        if (res) {
-          this._toastService.showMessage(
-            EToastClass.SUCCESS,
-            `You added ${this.quantity} products to cart`
-          );
-        }
-      });
+    const item: ItemAddToCart = {
+      userId: this.userId,
+      productId: this.product.id,
+      quantity: this.quantity,
+    };
+    if (item.userId) {
+      this._cartService.addItemToCart(item);
+    } else {
+      this._cartService.setItemPedingAddCart(item);
+      this._router.navigate(['account/sign-in']);
+    }
   }
 
   ngOnDestroy(): void {

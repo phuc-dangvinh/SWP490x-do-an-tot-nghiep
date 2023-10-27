@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { ROLE } from 'src/app/const/ERole';
 import { menuItems } from 'src/app/const/menu-items';
@@ -21,8 +22,12 @@ export class MenuBarComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject<void>();
   private menuItems: MenuItem[] = menuItems;
   public rootApiRequest = rootApi;
+  public selectedMainItem!: MenuItem;
 
-  constructor(private _userService: UserService) {}
+  constructor(
+    private _userService: UserService,
+    private _activatedRoute: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this._userService
@@ -55,9 +60,7 @@ export class MenuBarComponent implements OnInit, OnDestroy {
       isLogin = true;
       displayName = this.currentUser.fullname;
     }
-    if (isAdmin) {
-      this.toggleItem(ItemMenuName.MANAGEMENT, isLogin);
-    }
+    this.toggleItem(ItemMenuName.MANAGEMENT, isAdmin);
     this.toggleItem(ItemMenuName.ACCOUNT, !isLogin);
     this.toggleItem(ItemMenuName.SIGN_IN, !isLogin);
     this.toggleItem(ItemMenuName.SIGN_UP, !isLogin);
@@ -84,8 +87,9 @@ export class MenuBarComponent implements OnInit, OnDestroy {
     }
   }
 
-  public clickSubItem(menuItem: MenuItem) {
-    switch (menuItem.itemName) {
+  public onSelectSubItem(subItem: MenuItem, mainItem: MenuItem) {
+    this.selectedMainItem = mainItem;
+    switch (subItem.itemName) {
       case ItemMenuName.SIGN_OUT:
         this.handleLogout();
     }
@@ -93,6 +97,10 @@ export class MenuBarComponent implements OnInit, OnDestroy {
 
   private handleLogout() {
     this._userService.setCurrentUser(null);
+  }
+
+  public onSelectMainItem(item: MenuItem) {
+    this.selectedMainItem = item;
   }
 
   ngOnDestroy(): void {
