@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { ROLE } from 'src/app/const/ERole';
 import { menuItems } from 'src/app/const/menu-items';
@@ -10,6 +9,7 @@ import {
   MenuItem,
 } from 'src/app/interface/menu-item.interface';
 import { User } from 'src/app/interface/user';
+import { MenuService } from 'src/app/service/menu.service';
 import { UserService } from 'src/app/service/user.service';
 
 @Component({
@@ -18,24 +18,33 @@ import { UserService } from 'src/app/service/user.service';
   styleUrls: ['./menu-bar.component.scss'],
 })
 export class MenuBarComponent implements OnInit, OnDestroy {
+  private destroy$: Subject<void> = new Subject<void>();
   public currentUser: User | undefined;
-  private unsubscribe$: Subject<void> = new Subject<void>();
   private menuItems: MenuItem[] = menuItems;
   public rootApiRequest = rootApi;
-  public selectedMainItem!: MenuItem;
+  public selectedToggleItem: string = '';
+  public activeItem: string = '';
 
   constructor(
     private _userService: UserService,
-    private _activatedRoute: ActivatedRoute
+    private _menuService: MenuService
   ) {}
 
   ngOnInit(): void {
     this._userService
       .getCurrentUser()
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(takeUntil(this.destroy$))
       .subscribe((res) => {
         this.currentUser = res ?? undefined;
         this.changeMenu();
+      });
+    this._menuService
+      .getActiveMenu()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        if (res) {
+          this.activeItem = res;
+        }
       });
   }
 
@@ -66,7 +75,7 @@ export class MenuBarComponent implements OnInit, OnDestroy {
     this.toggleItem(ItemMenuName.SIGN_UP, !isLogin);
     this.setDisplayName(displayName);
     this.toggleItem(ItemMenuName.LOGIN_NAME, isLogin);
-    this.toggleItem(ItemMenuName.MY_PROFILE, isLogin);
+    // this.toggleItem(ItemMenuName.MY_PROFILE, isLogin);
     this.toggleItem(ItemMenuName.CHANGE_PASSWORD, isLogin);
     this.toggleItem(ItemMenuName.SIGN_OUT, isLogin);
   }
@@ -87,8 +96,7 @@ export class MenuBarComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onSelectSubItem(subItem: MenuItem, mainItem: MenuItem) {
-    this.selectedMainItem = mainItem;
+  public onSelectSubItem(subItem: MenuItem) {
     switch (subItem.itemName) {
       case ItemMenuName.SIGN_OUT:
         this.handleLogout();
@@ -100,11 +108,17 @@ export class MenuBarComponent implements OnInit, OnDestroy {
   }
 
   public onSelectMainItem(item: MenuItem) {
-    this.selectedMainItem = item;
+    this.selectedToggleItem = item.itemName;
+  }
+
+  public toggleMainItem(state: boolean) {
+    if (!state) {
+      this.selectedToggleItem = '';
+    }
   }
 
   ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -5,9 +5,11 @@ import { EToastClass } from 'src/app/const/EToastClass';
 import { EToastMessage } from 'src/app/const/EToastMessage';
 import { Gender, MethodShipment } from 'src/app/const/shipment-const';
 import { CartItem, QuantityAction } from 'src/app/interface/cart';
+import { ItemMenuName } from 'src/app/interface/menu-item.interface';
 import { User } from 'src/app/interface/user';
 import { FormService } from 'src/app/service/form.service';
 import { HttpService } from 'src/app/service/http.service';
+import { MenuService } from 'src/app/service/menu.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 
@@ -40,10 +42,12 @@ export class CartManagementComponent implements OnInit, OnDestroy {
     private _formService: FormService,
     private _httpService: HttpService,
     private _userService: UserService,
-    private _toastService: ToastService
+    private _toastService: ToastService,
+    private _menuService: MenuService
   ) {}
 
   ngOnInit(): void {
+    this._menuService.setActiveMenu(ItemMenuName.CART);
     this.formShipment = this._formService.buildFormShipment();
     this.getUserAndCart();
     this.fillForm();

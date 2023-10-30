@@ -1,9 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { Category } from 'src/app/interface/category.interface';
+import { ItemMenuName } from 'src/app/interface/menu-item.interface';
 import { Product } from 'src/app/interface/product.interface';
 import { CategoryService } from 'src/app/service/category.service';
 import { HttpService } from 'src/app/service/http.service';
+import { MenuService } from 'src/app/service/menu.service';
 
 @Component({
   selector: 'app-home',
@@ -17,10 +19,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private _categoryService: CategoryService,
-    private _httpService: HttpService
+    private _httpService: HttpService,
+    private _menuService: MenuService
   ) {}
 
   ngOnInit(): void {
+    this._menuService.setActiveMenu(ItemMenuName.HOME);
     this._categoryService.setCategorySelected = null;
     this.getListProductsByCategorySelected();
   }

@@ -14,6 +14,8 @@ import { EToastClass } from 'src/app/const/EToastClass';
 import { DeleteResponse } from 'src/app/interface/delete-response';
 import { EToastMessage } from 'src/app/const/EToastMessage';
 import { Gender } from 'src/app/const/shipment-const';
+import { MenuService } from 'src/app/service/menu.service';
+import { ItemMenuName } from 'src/app/interface/menu-item.interface';
 
 @Component({
   selector: 'app-user-management',
@@ -51,10 +53,12 @@ export class UserManagementComponent implements OnInit {
   constructor(
     private httpService: HttpService,
     private _modalService: NgbModal,
-    private _toastService: ToastService
+    private _toastService: ToastService,
+    private _menuService: MenuService
   ) {}
 
   ngOnInit(): void {
+    this._menuService.setActiveMenu(ItemMenuName.MANAGEMENT);
     this.getUser();
   }
 

@@ -17,25 +17,27 @@
         <div
           class="main-item"
           [ngClass]="{
-            selected:
-              selectedMainItem &&
-              mainItem.displayName == selectedMainItem.displayName
+            selected: mainItem.itemName == activeItem
           }"
           [routerLink]="mainItem.routerLink"
-          (click)="onSelectMainItem(mainItem)"
         >
           <ng-container *ngTemplateOutlet="mainMenuDisplay"></ng-container>
         </div>
       </li>
-      <li *ngIf="getSubItems(mainItem.group).length > 0" ngbDropdown>
+      <li
+        *ngIf="getSubItems(mainItem.group).length > 0"
+        ngbDropdown
+        (openChange)="toggleMainItem($event)"
+      >
         <div
           ngbDropdownToggle
           class="main-item"
           [ngClass]="{
             selected:
-              selectedMainItem &&
-              mainItem.displayName == selectedMainItem.displayName
+              mainItem.itemName == selectedToggleItem ||
+              mainItem.itemName == activeItem
           }"
+          (click)="onSelectMainItem(mainItem)"
         >
           <ng-container *ngTemplateOutlet="mainMenuDisplay"></ng-container>
         </div>
@@ -44,7 +46,7 @@
             ngbDropdownItem
             *ngFor="let subItem of getSubItems(mainItem.group)"
             [routerLink]="subItem.routerLink"
-            (click)="onSelectSubItem(subItem, mainItem)"
+            (click)="onSelectSubItem(subItem)"
           >
             {{ subItem.displayName }}
           </button>

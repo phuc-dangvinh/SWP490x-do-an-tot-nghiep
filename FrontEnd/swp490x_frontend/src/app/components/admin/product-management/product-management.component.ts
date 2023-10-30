@@ -17,6 +17,8 @@ import { HttpService } from 'src/app/service/http.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { ConfirmDeleteComponent } from '../../share/pop-up-dialog/confirm-delete/confirm-delete.component';
 import { AddEditProductComponent } from '../pop-up/add-edit-product/add-edit-product.component';
+import { MenuService } from 'src/app/service/menu.service';
+import { ItemMenuName } from 'src/app/interface/menu-item.interface';
 
 @Component({
   selector: 'app-product-management',
@@ -49,10 +51,12 @@ export class ProductManagementComponent implements OnInit, OnDestroy {
     private _httpService: HttpService,
     private _modalService: NgbModal,
     private _toastService: ToastService,
-    private _categoryService: CategoryService
+    private _categoryService: CategoryService,
+    private _menuService: MenuService
   ) {}
 
   ngOnInit(): void {
+    this._menuService.setActiveMenu(ItemMenuName.MANAGEMENT);
     this._categoryService.setCategorySelected = null;
     this.getListProductsByCategorySelected();
   }

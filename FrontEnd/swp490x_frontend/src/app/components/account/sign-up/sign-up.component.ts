@@ -8,6 +8,8 @@ import { HttpService } from 'src/app/service/http.service';
 import { SignUpSuccessComponent } from '../sign-up-success/sign-up-success.component';
 import { Router } from '@angular/router';
 import { TextMessage } from 'src/app/interface/text-message';
+import { MenuService } from 'src/app/service/menu.service';
+import { ItemMenuName } from 'src/app/interface/menu-item.interface';
 
 @Component({
   selector: 'app-sign-up',
@@ -31,10 +33,12 @@ export class SignUpComponent implements OnInit {
     private _formService: FormService,
     private _httpService: HttpService,
     private _modalService: NgbModal,
-    private _router: Router
+    private _router: Router,
+    private _menuService: MenuService
   ) {}
 
   ngOnInit(): void {
+    this._menuService.setActiveMenu(ItemMenuName.ACCOUNT);
     this.signUpForm = this._formService.buildSignUpForm();
   }
 

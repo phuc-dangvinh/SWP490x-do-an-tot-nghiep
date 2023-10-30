@@ -14,6 +14,8 @@ import { LocalStorageService } from 'src/app/service/local-storage.service';
 import { Subject, takeUntil } from 'rxjs';
 import { CartService } from 'src/app/service/cart.service';
 import { ItemAddToCart } from 'src/app/interface/cart';
+import { MenuService } from 'src/app/service/menu.service';
+import { ItemMenuName } from 'src/app/interface/menu-item.interface';
 
 @Component({
   selector: 'app-sign-in',
@@ -37,10 +39,12 @@ export class SignInComponent implements OnInit, OnDestroy {
     private _toastService: ToastService,
     private _userService: UserService,
     private _localStorageService: LocalStorageService,
-    private _cartService: CartService
+    private _cartService: CartService,
+    private _menuService: MenuService
   ) {}
 
   ngOnInit(): void {
+    this._menuService.setActiveMenu(ItemMenuName.ACCOUNT);
     this.signInForm = this._formService.buildSignInForm();
     this._cartService
       .getItemPedingAddCart()
