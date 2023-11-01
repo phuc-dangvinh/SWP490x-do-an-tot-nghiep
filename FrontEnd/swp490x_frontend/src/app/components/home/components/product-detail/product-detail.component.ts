@@ -1,11 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { EToastClass } from 'src/app/const/EToastClass';
 import { rootApi } from 'src/app/enviroments/environment';
-import { ItemAddToCart } from 'src/app/interface/cart';
+import { ItemBuyNow, ItemAddToCart } from 'src/app/interface/cart';
 import { Product } from 'src/app/interface/product.interface';
 import { CartService } from 'src/app/service/cart.service';
 import { HttpService } from 'src/app/service/http.service';
+import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 
 @Component({
@@ -26,7 +28,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     private _httpService: HttpService,
     private _userService: UserService,
     private _router: Router,
-    private _cartService: CartService
+    private _cartService: CartService,
+    private _toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -68,11 +71,39 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       quantity: this.quantity,
     };
     if (item.userId) {
-      this._cartService.addItemToCart(item);
+      this._cartService.addItemToCart(item).subscribe((res) => {
+        if (res) {
+          this._toastService.showMessage(
+            EToastClass.SUCCESS,
+            `You added ${item.quantity} products to cart`
+          );
+          this._cartService.refreshTotalItems(item.userId);
+        }
+      });
     } else {
       this._cartService.setItemPedingAddCart(item);
       this._router.navigate(['account/sign-in']);
     }
+  }
+
+  public buyNow() {
+    if (this.userId) {
+      const item: ItemAddToCart = {
+        userId: this.userId,
+        productId: this.product.id,
+        quantity: this.quantity,
+      };
+      this._cartService.addItemToCart(item).subscribe((res) => {
+        this._cartService.refreshTotalItems(item.userId);
+      });
+    } else {
+      const item: ItemBuyNow = {
+        product: this.product,
+        quantity: this.quantity,
+      };
+      this._cartService.setItemBuyNow(item);
+    }
+    this._router.navigate(['cart']);
   }
 
   ngOnDestroy(): void {

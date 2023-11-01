@@ -13,6 +13,7 @@ import { AdminModule } from './components/admin/admin.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastComponent } from './components/share/toast-global/toast.component';
+import { AboutComponent } from './components/about/about.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ToastComponent } from './components/share/toast-global/toast.component'
     MenuBarComponent,
     PageNotFoundComponent,
     ToastComponent,
+    AboutComponent,
   ],
   imports: [
     BrowserModule,

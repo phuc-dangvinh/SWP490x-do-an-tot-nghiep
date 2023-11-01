@@ -82,6 +82,11 @@
         .product-name {
           display: flex;
           align-items: center;
+
+          img {
+            width: 50px;
+            margin-right: 10px;
+          }
         }
 
         .quantity {
@@ -149,6 +154,7 @@
 
   .right {
     width: 20%;
+    padding-right: 20px;
 
     .info-payment {
       display: flex;

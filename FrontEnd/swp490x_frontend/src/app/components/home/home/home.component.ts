@@ -46,10 +46,20 @@ export class HomeComponent implements OnInit, OnDestroy {
     }`;
     this._httpService.get<Product[]>(url).subscribe((res) => {
       if (res) {
-        this.productList = res.map((item) => ({
-          ...item,
-          checked: false,
-        }));
+        this.productList = res;
+      }
+    });
+  }
+
+  public searchProduct(searchInfo: {}) {
+    const payload = {
+      ...searchInfo,
+      categoryId: this.categorySelected ? this.categorySelected.id : '',
+    };
+    const url = '/product/search';
+    this._httpService.post<Product[]>(url, payload).subscribe((res) => {
+      if (res) {
+        this.productList = res;
       }
     });
   }

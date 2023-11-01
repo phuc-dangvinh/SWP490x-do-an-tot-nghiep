@@ -63,6 +63,7 @@ export class SignInComponent implements OnInit, OnDestroy {
         .post<SignInResponse>(url, this.signInForm.value)
         .subscribe((res) => {
           if (res) {
+            const userId = res.user.id;
             this._localStorageService.saveData(
               EKeyCredentials.TOKEN,
               res.token
@@ -73,9 +74,21 @@ export class SignInComponent implements OnInit, OnDestroy {
               classname: EToastClass.SUCCESS,
               delay: 3000,
             });
+            this._cartService.setItemBuyNow(null);
             if (this.itemPedingAddCart) {
               this.itemPedingAddCart.userId = res.user.id;
-              this._cartService.addItemToCart(this.itemPedingAddCart);
+              this._cartService
+                .addItemToCart(this.itemPedingAddCart)
+                .subscribe((res) => {
+                  if (res) {
+                    this._toastService.showMessage(
+                      EToastClass.SUCCESS,
+                      `You added ${this.itemPedingAddCart.quantity} products to cart`
+                    );
+                    this._cartService.refreshTotalItems(userId);
+                    this._cartService.setItemPedingAddCart(null);
+                  }
+                });
               this._router.navigate(['cart']);
             } else {
               this._router.navigate(

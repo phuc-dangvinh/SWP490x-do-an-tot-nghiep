@@ -70,7 +70,11 @@
             </td>
             <td class="product-name">{{ product.name }}</td>
             <td class="product-price">{{ product.price | number }} VND</td>
-            <td>{{ product.description }}</td>
+            <td>
+              <div class="product-description">
+                {{ product.description }}
+              </div>
+            </td>
             <td>
               <span *ngIf="product.category" class="category">{{
                 product.category.name

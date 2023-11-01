@@ -4,9 +4,11 @@ import { Subject, takeUntil } from 'rxjs';
 import { EToastClass } from 'src/app/const/EToastClass';
 import { EToastMessage } from 'src/app/const/EToastMessage';
 import { Gender, MethodShipment } from 'src/app/const/shipment-const';
+import { rootApi } from 'src/app/enviroments/environment';
 import { CartItem, QuantityAction } from 'src/app/interface/cart';
 import { ItemMenuName } from 'src/app/interface/menu-item.interface';
 import { User } from 'src/app/interface/user';
+import { CartService } from 'src/app/service/cart.service';
 import { FormService } from 'src/app/service/form.service';
 import { HttpService } from 'src/app/service/http.service';
 import { MenuService } from 'src/app/service/menu.service';
@@ -33,17 +35,19 @@ export class CartManagementComponent implements OnInit, OnDestroy {
     address: 'address',
     otherRequire: 'otherRequire',
   };
-  public cart: CartItem[] = [];
+  public listCartItems: CartItem[] = [];
   public itemChecked: CartItem[] = [];
   private user!: User;
   public checkedAll: boolean = false;
+  public rootApiRequest = rootApi;
 
   constructor(
     private _formService: FormService,
     private _httpService: HttpService,
     private _userService: UserService,
     private _toastService: ToastService,
-    private _menuService: MenuService
+    private _menuService: MenuService,
+    private _cartService: CartService
   ) {}
 
   ngOnInit(): void {
@@ -61,23 +65,39 @@ export class CartManagementComponent implements OnInit, OnDestroy {
         if (res) {
           this.user = res;
           this.refreshCart();
+        } else {
+          this.getItemsBuyNow();
         }
       });
   }
 
   private refreshCart() {
-    this._httpService
-      .get<CartItem[]>(`/cart/${this.user.id}`)
+    this._cartService.getListItems(this.user.id).subscribe((res) => {
+      if (res) {
+        this.listCartItems = res;
+        this.listCartItems.forEach((item) => (item.product.checked = true));
+        this._cartService.setTotalItems(
+          this._cartService.calTotalItems(this.listCartItems)
+        );
+      }
+    });
+  }
+
+  private getItemsBuyNow() {
+    this._cartService
+      .getItemBuyNow()
+      .pipe(takeUntil(this.destroy$))
       .subscribe((res) => {
         if (res) {
-          this.cart = res;
+          this.listCartItems = res.map((item) => ({ ...item, id: '' }));
+          this.listCartItems.forEach((item) => (item.product.checked = true));
         }
       });
   }
 
   get totalAmount(): number {
     let amount = 0;
-    this.cart
+    this.listCartItems
       .filter((item) => item.product.checked)
       .forEach((item) => {
         amount += item.product.price * item.quantity;
@@ -86,20 +106,37 @@ export class CartManagementComponent implements OnInit, OnDestroy {
   }
 
   public changeQuantity(productId: string, action: QuantityAction) {
-    this._httpService
-      .post<number>('/cart/change-quantity', {
-        userId: this.user.id,
-        productId: productId,
-        action: action,
-      })
-      .subscribe((res) => {
-        if (res) {
-          let item = this.cart.find((item) => item.product.id == productId);
-          if (item) {
-            item.quantity = res;
+    if (this.user) {
+      this._httpService
+        .post<number>('/cart/change-quantity', {
+          userId: this.user.id,
+          productId: productId,
+          action: action,
+        })
+        .subscribe((res) => {
+          if (res) {
+            let item = this.listCartItems.find(
+              (item) => item.product.id == productId
+            );
+            if (item) {
+              item.quantity = res;
+              this._cartService.setTotalItems(
+                this._cartService.calTotalItems(this.listCartItems)
+              );
+            }
           }
-        }
-      });
+        });
+    } else {
+      let foundItem = this.listCartItems.find(
+        (item) => item.product.id == productId
+      );
+      if (foundItem) {
+        foundItem.quantity = Math.max(
+          1,
+          foundItem.quantity + (action == QuantityAction.INCREASE ? 1 : -1)
+        );
+      }
+    }
   }
 
   public deleteCartItems(id: string) {
@@ -111,17 +148,20 @@ export class CartManagementComponent implements OnInit, OnDestroy {
   }
 
   public collectChecked() {
-    this.itemChecked = this.cart.filter((item) => item.product.checked);
+    this.itemChecked = this.listCartItems.filter(
+      (item) => item.product.checked
+    );
   }
 
   public get isCheckedAll(): boolean {
     return (
-      !this.cart.some((item) => !item.product.checked) && this.cart.length > 0
+      !this.listCartItems.some((item) => !item.product.checked) &&
+      this.listCartItems.length > 0
     );
   }
 
   public changeCheckedAll() {
-    this.cart.forEach((item) => {
+    this.listCartItems.forEach((item) => {
       item.product.checked = this.checkedAll;
     });
   }

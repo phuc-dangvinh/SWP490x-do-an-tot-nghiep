@@ -18,7 +18,7 @@
       justify-content: space-between;
 
       button {
-        height: 50px;
+        height: 40px;
         width: 100px;
       }
 
@@ -35,7 +35,7 @@
 
         .button-delete {
           border: none;
-          background-color: red;
+          background-color: rgb(189, 0, 0);
           color: white;
 
           &:hover {
@@ -88,7 +88,13 @@
             }
 
             .product-price {
-              color: red;
+              color: rgb(189, 0, 0);
+            }
+
+            .product-description {
+              max-height: 200px;
+              overflow: hidden;
+              text-overflow: ellipsis;
             }
 
             .category {
@@ -126,7 +132,7 @@
                   display: flex;
                   align-items: center;
                   justify-content: center;
-                  background-color: red;
+                  background-color: rgb(189, 0, 0);
                   color: white;
                   cursor: pointer;
 

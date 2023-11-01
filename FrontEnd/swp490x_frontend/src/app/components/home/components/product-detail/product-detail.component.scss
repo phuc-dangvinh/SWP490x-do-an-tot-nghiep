@@ -1,6 +1,8 @@
 .product-detail {
   display: flex;
   justify-content: center;
+  height: calc(100vh - 140px);
+  overflow: auto;
 
   .carousel {
     width: 600px;

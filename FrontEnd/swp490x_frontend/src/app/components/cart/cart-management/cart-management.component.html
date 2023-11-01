@@ -21,7 +21,7 @@
             <td class="delete">Delete</td>
           </tr>
         </thead>
-        <tbody *ngFor="let item of cart">
+        <tbody *ngFor="let item of listCartItems">
           <tr>
             <td class="checkbox">
               <input
@@ -32,7 +32,15 @@
               />
             </td>
             <td class="product-name">
-              <img />
+              <ng-container *ngIf="item.product.imageProducts.length > 0">
+                <img
+                  [src]="
+                    rootApiRequest +
+                    '/file/get/' +
+                    item.product.imageProducts[0].fileName
+                  "
+                />
+              </ng-container>
               <div>
                 {{ item.product.name }}
               </div>

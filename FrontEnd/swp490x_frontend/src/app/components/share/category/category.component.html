@@ -14,7 +14,10 @@
       >
         {{ category.name }}
       </div>
-      <div class="wrapper-category-action" *ngIf="category.id">
+      <div
+        class="wrapper-category-action"
+        *ngIf="category.id && activeMenu == itemMenuName.MANAGEMENT"
+      >
         <i
           class="bi bi-pencil action-button"
           (click)="showPopupEditCategory(category, $event)"
@@ -27,7 +30,12 @@
       </div>
     </div>
   </ng-container>
-  <button type="button" (click)="showPopupAddNewCategory()" class="mt-2">
+  <button
+    *ngIf="activeMenu == itemMenuName.MANAGEMENT"
+    type="button"
+    (click)="showPopupAddNewCategory()"
+    class="mt-2"
+  >
     <i class="bi bi-plus-lg"></i>
     <span class="ms-2">New category</span>
   </button>

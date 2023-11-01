@@ -1,7 +1,7 @@
 import {
   Component,
-  EventEmitter,
-  Output,
+  OnDestroy,
+  OnInit,
   TemplateRef,
   ViewChild,
 } from '@angular/core';
@@ -14,32 +14,47 @@ import { EToastMessage } from 'src/app/const/EToastMessage';
 import { EToastClass } from 'src/app/const/EToastClass';
 import { ConfirmDeleteComponent } from 'src/app/components/share/pop-up-dialog/confirm-delete/confirm-delete.component';
 import { CategoryService } from 'src/app/service/category.service';
+import { Subject, takeUntil } from 'rxjs';
+import { MenuService } from 'src/app/service/menu.service';
+import { ItemMenuName } from 'src/app/interface/menu-item.interface';
 
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.scss'],
 })
-export class CategoryComponent {
+export class CategoryComponent implements OnInit, OnDestroy {
   @ViewChild('addNewCategory') addNewCategory:
     | TemplateRef<AddEditCategoryComponent>
     | undefined;
   @ViewChild('confirmDelete') confirmDelete:
     | TemplateRef<ConfirmDeleteComponent>
     | undefined;
+  private destroy$: Subject<void> = new Subject<void>();
+  public readonly itemMenuName = ItemMenuName;
   public listCategories: Category[] = [];
   public selectedCategory!: Category;
   public actionCategory!: Category;
   public isEdit: boolean = false;
+  public activeMenu: string = '';
 
   constructor(
     private _httpService: HttpService,
     private _modalService: NgbModal,
     private _toastService: ToastService,
-    private _categoryService: CategoryService
+    private _categoryService: CategoryService,
+    private _menuService: MenuService
   ) {}
 
   ngOnInit(): void {
+    this._menuService
+      .getActiveMenu()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        if (res) {
+          this.activeMenu = res;
+        }
+      });
     this.getListCategories();
   }
 
@@ -112,5 +127,10 @@ export class CategoryComponent {
   public onSelectCategory(category: Category) {
     this.selectedCategory = category;
     this._categoryService.setCategorySelected = category;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

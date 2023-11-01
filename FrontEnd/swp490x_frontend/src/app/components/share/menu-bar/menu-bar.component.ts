@@ -9,6 +9,7 @@ import {
   MenuItem,
 } from 'src/app/interface/menu-item.interface';
 import { User } from 'src/app/interface/user';
+import { CartService } from 'src/app/service/cart.service';
 import { MenuService } from 'src/app/service/menu.service';
 import { UserService } from 'src/app/service/user.service';
 
@@ -19,15 +20,19 @@ import { UserService } from 'src/app/service/user.service';
 })
 export class MenuBarComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
+  public readonly itemName = ItemMenuName;
   public currentUser: User | undefined;
   private menuItems: MenuItem[] = menuItems;
   public rootApiRequest = rootApi;
   public selectedToggleItem: string = '';
   public activeItem: string = '';
+  public totalCartItems: number = 0;
+  private stateOpen: boolean = false;
 
   constructor(
     private _userService: UserService,
-    private _menuService: MenuService
+    private _menuService: MenuService,
+    private _cartService: CartService
   ) {}
 
   ngOnInit(): void {
@@ -45,6 +50,12 @@ export class MenuBarComponent implements OnInit, OnDestroy {
         if (res) {
           this.activeItem = res;
         }
+      });
+    this._cartService
+      .getTotalItems()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        this.totalCartItems = res;
       });
   }
 
@@ -99,20 +110,22 @@ export class MenuBarComponent implements OnInit, OnDestroy {
   public onSelectSubItem(subItem: MenuItem) {
     switch (subItem.itemName) {
       case ItemMenuName.SIGN_OUT:
-        this.handleLogout();
+        this._userService.setCurrentUser(null);
+        break;
+      default:
+        break;
     }
   }
 
-  private handleLogout() {
-    this._userService.setCurrentUser(null);
-  }
-
   public onSelectMainItem(item: MenuItem) {
-    this.selectedToggleItem = item.itemName;
+    if (this.stateOpen) {
+      this.selectedToggleItem = item.itemName;
+    }
   }
 
   public toggleMainItem(state: boolean) {
-    if (!state) {
+    this.stateOpen = state;
+    if (!this.stateOpen) {
       this.selectedToggleItem = '';
     }
   }

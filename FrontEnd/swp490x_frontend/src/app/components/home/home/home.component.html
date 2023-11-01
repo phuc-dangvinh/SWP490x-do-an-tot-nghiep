@@ -4,7 +4,10 @@
   </div>
   <div class="wrapper-main ms-5">
     <div class="header-action">
-      <app-search-product></app-search-product>
+      <app-search-product
+        (clickReset)="refreshListProducts()"
+        (clickSearch)="searchProduct($event)"
+      ></app-search-product>
     </div>
     <div class="grid-product mt-4">
       <ng-container *ngFor="let product of productList">

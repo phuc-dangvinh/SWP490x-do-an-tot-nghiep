@@ -16,3 +16,8 @@ export interface ItemAddToCart {
   productId: string;
   quantity: number;
 }
+
+export interface ItemBuyNow {
+  product: Product;
+  quantity: number;
+}

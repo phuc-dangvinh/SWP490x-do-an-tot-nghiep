@@ -1,24 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LocalStorageService } from './service/local-storage.service';
 import { UserService } from './service/user.service';
 import { HttpService } from './service/http.service';
 import { User } from './interface/user';
 import { EKeyCredentials } from './interface/key-credentials.enum';
-import { catchError, of } from 'rxjs';
+import { Subject, catchError, of, switchMap, takeUntil } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { CartService } from './service/cart.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
+  private destroy$: Subject<void> = new Subject<void>();
   title = 'swp490x_frontend';
 
   constructor(
     private _localStorageService: LocalStorageService,
     private _userService: UserService,
-    private _httpService: HttpService
+    private _httpService: HttpService,
+    private _cartService: CartService
   ) {}
 
   ngOnInit(): void {
@@ -54,5 +57,20 @@ export class AppComponent implements OnInit {
           }
         });
     }
+    this._userService
+      .getCurrentUser()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        if (res) {
+          this._cartService.refreshTotalItems(res.id);
+        } else {
+          this._cartService.setTotalItems(0);
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

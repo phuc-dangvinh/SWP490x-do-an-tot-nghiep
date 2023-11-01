@@ -22,6 +22,11 @@
           [routerLink]="mainItem.routerLink"
         >
           <ng-container *ngTemplateOutlet="mainMenuDisplay"></ng-container>
+          <span
+            *ngIf="mainItem.itemName == itemName.CART && totalCartItems > 0"
+            class="cart"
+            >{{ totalCartItems }}</span
+          >
         </div>
       </li>
       <li
@@ -67,7 +72,7 @@
           "
           [src]="rootApiRequest + '/file/get/' + currentUser.avatar"
         />
-        <span class="item-name">{{ mainItem.displayName }}</span>
+        <span class="item-name">{{ mainItem.displayName | uppercase }}</span>
       </ng-template>
     </ng-container>
   </ul>
