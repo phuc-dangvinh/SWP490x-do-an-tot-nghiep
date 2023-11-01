@@ -1,6 +1,8 @@
 .wrapper {
   display: flex;
   justify-content: center;
+  max-height: calc(100vh - 70px);
+  overflow: auto;
 
   form {
     margin-top: 50px;
@@ -15,21 +17,28 @@
       margin-top: 30px;
     }
 
+
     .avatar {
-      .avatar-prevỉew {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-      }
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
 
-      .file-name {
-        font-style: italic;
-      }
+      .wrapper-avatar {
+        width: 120px;
+        height: 120px;
+        box-sizing: border-box;
 
-      .select-file-warning {
-        text-align: center;
-        font-size: 14px;
-        font-style: italic;
+        img {
+          border-radius: 50%;
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+
+    .gender {
+      input {
+        cursor: pointer;
       }
     }
 

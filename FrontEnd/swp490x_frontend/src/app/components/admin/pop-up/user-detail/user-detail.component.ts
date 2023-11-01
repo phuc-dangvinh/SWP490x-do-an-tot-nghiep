@@ -57,6 +57,7 @@ export class UserDetailComponent implements OnInit {
   }
 
   private submitForm() {
+    this.formUser.markAllAsTouched();
     if (this.formUser.valid) {
       if (this.isEdit) {
         //update

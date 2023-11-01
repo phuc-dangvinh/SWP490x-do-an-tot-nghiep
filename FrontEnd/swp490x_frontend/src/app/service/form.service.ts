@@ -46,7 +46,7 @@ export class FormService {
     },
     {
       error: 'priceEqualZero',
-      message: 'Price must be greater than 0',
+      message: 'Price > 0',
     },
     {
       error: 'invalidPriceTo',
@@ -68,6 +68,7 @@ export class FormService {
   public buildSignUpForm(): FormGroup {
     return this._formBuilder.group({
       avatar: [''],
+      gender: [Gender.MALE, [Validators.required]],
       fullname: ['', [Validators.required]],
       email: [
         '',
@@ -75,6 +76,7 @@ export class FormService {
         checkExistEmail(this._httpService),
       ],
       phone: ['', [Validators.required]],
+      address: ['', [Validators.required]],
     });
   }
 

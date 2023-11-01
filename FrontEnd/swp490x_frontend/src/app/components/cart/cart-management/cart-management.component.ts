@@ -167,6 +167,7 @@ export class CartManagementComponent implements OnInit, OnDestroy {
   }
 
   public processOrder() {
+    this.formShipment.markAllAsTouched();
     let idChecked = this.itemChecked.map((item) => item.id);
     this._httpService.post('/cart/delete', idChecked).subscribe((res) => {
       if (res) {

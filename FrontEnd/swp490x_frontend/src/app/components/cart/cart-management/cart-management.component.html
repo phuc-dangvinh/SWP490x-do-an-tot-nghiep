@@ -102,6 +102,7 @@
         </app-form-control>
         <div class="mt-2">
           <app-form-control
+            label="Fullname"
             [touchedOrDirty]="
               fullnameFormControl.touched || fullnameFormControl.dirty
             "
@@ -110,14 +111,13 @@
             <input
               class="width-100"
               type="text"
-              placeholder="Fullname"
               [formControlName]="formFields.fullname"
             />
           </app-form-control>
         </div>
-
         <div class="phone-email mt-3">
           <app-form-control
+            label="Phone"
             class="width-100"
             [touchedOrDirty]="
               phoneFormControl.touched || phoneFormControl.dirty
@@ -127,11 +127,11 @@
             <input
               class="width-100"
               type="text"
-              placeholder="Phone"
               [formControlName]="formFields.phone"
             />
           </app-form-control>
           <app-form-control
+            label="Email"
             class="width-100"
             [touchedOrDirty]="
               emailFormControl.touched || emailFormControl.dirty
@@ -141,12 +141,11 @@
             <input
               class="width-100"
               type="text"
-              placeholder="Email"
               [formControlName]="formFields.email"
             />
           </app-form-control>
         </div>
-        <div class="mt-2">
+        <div class="mt-3">
           <app-form-control>
             <ng-container>
               <input
@@ -173,22 +172,20 @@
             </ng-container>
           </app-form-control>
         </div>
-        <div class="mt-2">
-          <app-form-control>
+        <div class="mt-3">
+          <app-form-control label="Address">
             <input
               class="width-100"
               type="text"
-              placeholder="Address"
               [formControlName]="formFields.address"
             />
           </app-form-control>
         </div>
         <div class="mt-3">
-          <app-form-control>
+          <app-form-control label="Other require">
             <input
               class="width-100"
               type="text"
-              placeholder="Other require"
               [formControlName]="formFields.otherRequire"
             />
           </app-form-control>

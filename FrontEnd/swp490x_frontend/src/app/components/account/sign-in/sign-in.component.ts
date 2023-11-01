@@ -57,6 +57,7 @@ export class SignInComponent implements OnInit, OnDestroy {
   }
 
   public submitForm() {
+    this.signInForm.markAllAsTouched();
     if (this.signInForm.valid) {
       const url = '/auth/login';
       this._httpService

@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { TextMessage } from 'src/app/interface/text-message';
 import { MenuService } from 'src/app/service/menu.service';
 import { ItemMenuName } from 'src/app/interface/menu-item.interface';
+import { Gender } from 'src/app/const/shipment-const';
 
 @Component({
   selector: 'app-sign-up',
@@ -19,12 +20,16 @@ import { ItemMenuName } from 'src/app/interface/menu-item.interface';
 export class SignUpComponent implements OnInit {
   @ViewChild('signUpSuccesPopup')
   signUpSuccesPopup!: TemplateRef<SignUpSuccessComponent>;
+  public readonly gender = Gender;
+  public rootApiRequest = rootApi;
   public signUpForm!: FormGroup;
-  private formFields = {
+  public formFields = {
     avatar: 'avatar',
     fullname: 'fullname',
     email: 'email',
     phone: 'phone',
+    gender: 'gender',
+    address: 'address',
   };
   public avatarFileName: string = '';
   public avatarSrc: string = '';
@@ -47,11 +52,11 @@ export class SignUpComponent implements OnInit {
   }
 
   public onHasSrcFile(event: TextMessage) {
-    this.avatarSrc = `${rootApi}/file/get/${event.info}`;
     this.signUpForm.controls['avatar'].setValue(event.info);
   }
 
   public submitForm() {
+    this.signUpForm.markAllAsTouched();
     if (this.signUpForm.valid) {
       const url = '/auth/register';
       const payload = { ...this.signUpForm.value, isAdmin: false };
@@ -116,6 +121,34 @@ export class SignUpComponent implements OnInit {
     return this._formService.getErrorMessage(
       this.signUpForm,
       this.formFields.phone
+    );
+  }
+
+  get genderFormControl(): AbstractControl {
+    return this._formService.getFormControl(
+      this.signUpForm,
+      this.formFields.gender
+    );
+  }
+
+  get genderErrorMessages() {
+    return this._formService.getErrorMessage(
+      this.signUpForm,
+      this.formFields.gender
+    );
+  }
+
+  get addressFormControl(): AbstractControl {
+    return this._formService.getFormControl(
+      this.signUpForm,
+      this.formFields.address
+    );
+  }
+
+  get addressErrorMessages() {
+    return this._formService.getErrorMessage(
+      this.signUpForm,
+      this.formFields.address
     );
   }
 }

@@ -94,6 +94,7 @@ export class AddEditProductComponent
   }
 
   public onSave() {
+    this.formAddOrEditProduct.markAllAsTouched();
     if (this.formAddOrEditProduct.valid) {
       if (this.isEdit) {
         const url = '/product/manage/update';

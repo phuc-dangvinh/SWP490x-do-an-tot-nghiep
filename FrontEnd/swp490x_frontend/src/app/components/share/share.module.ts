@@ -25,7 +25,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SearchProductComponent } from './search-product/search-product.component';
 import { CategoryComponent } from './category/category.component';
 import { AddEditCategoryComponent } from './category/add-edit-category/add-edit-category.component';
-import { OrderSuccessComponent } from './order-success/order-success.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +51,6 @@ import { OrderSuccessComponent } from './order-success/order-success.component';
     SearchProductComponent,
     CategoryComponent,
     AddEditCategoryComponent,
-    OrderSuccessComponent,
   ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, NgbModule],
   exports: [
@@ -82,7 +80,6 @@ import { OrderSuccessComponent } from './order-success/order-success.component';
     SearchProductComponent,
     CategoryComponent,
     AddEditCategoryComponent,
-    OrderSuccessComponent,
   ],
 })
 export class ShareModule {}

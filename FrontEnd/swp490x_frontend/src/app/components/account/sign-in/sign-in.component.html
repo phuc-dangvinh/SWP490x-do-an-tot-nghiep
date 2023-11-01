@@ -5,36 +5,40 @@
       <div class="invalid-title">Wrong credentials</div>
       <div>Invalid email or password</div>
     </div>
-    <app-form-control
-      [label]="'Email'"
-      [touchedOrDirty]="emailFormControl.touched || emailFormControl.dirty"
-      [errorMessages]="emailErrorMessages"
-    >
-      <ng-container>
-        <input
-          formControlName="email"
-          type="email"
-          class="form-control"
-          (click)="touchForm()"
-        />
-      </ng-container>
-    </app-form-control>
-    <app-form-control
-      [label]="'Password'"
-      [touchedOrDirty]="
-        passwordFormControl.touched || passwordFormControl.dirty
-      "
-      [errorMessages]="passwordErrorMessages"
-    >
-      <ng-container>
-        <input
-          formControlName="password"
-          type="password"
-          class="form-control"
-          (click)="touchForm()"
-        />
-      </ng-container>
-    </app-form-control>
+    <div class="mt-3">
+      <app-form-control
+        [label]="'Email'"
+        [touchedOrDirty]="emailFormControl.touched || emailFormControl.dirty"
+        [errorMessages]="emailErrorMessages"
+      >
+        <ng-container>
+          <input
+            formControlName="email"
+            type="email"
+            class="form-control"
+            (click)="touchForm()"
+          />
+        </ng-container>
+      </app-form-control>
+    </div>
+    <div class="mt-3">
+      <app-form-control
+        [label]="'Password'"
+        [touchedOrDirty]="
+          passwordFormControl.touched || passwordFormControl.dirty
+        "
+        [errorMessages]="passwordErrorMessages"
+      >
+        <ng-container>
+          <input
+            formControlName="password"
+            type="password"
+            class="form-control"
+            (click)="touchForm()"
+          />
+        </ng-container>
+      </app-form-control>
+    </div>
     <div class="text-primary forgot-password">
       <a routerLink="/account/forgot-password">Forgot password?</a>
     </div>

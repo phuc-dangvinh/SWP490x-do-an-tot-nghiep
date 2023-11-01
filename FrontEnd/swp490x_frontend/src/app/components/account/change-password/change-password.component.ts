@@ -97,6 +97,7 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   public submitForm() {
+    this.formChangePassword.markAllAsTouched();
     if (this.formChangePassword.valid) {
       const url = '/user/change-password';
       const payload: ChangePasswordRequest = {
