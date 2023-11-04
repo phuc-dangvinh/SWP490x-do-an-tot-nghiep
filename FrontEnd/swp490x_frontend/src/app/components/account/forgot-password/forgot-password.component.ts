@@ -1,12 +1,12 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { FormService } from 'src/app/service/form.service';
-import { SignUpSuccessComponent } from '../sign-up-success/sign-up-success.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpService } from 'src/app/service/http.service';
 import { Router } from '@angular/router';
 import { EContentPopupSuccess } from 'src/app/interface/content-popup-success.enum';
 import { FormControlError } from 'src/app/interface/form-control-error';
+import { PopUpSuccessComponent } from '../../share/pop-up-success/pop-up-success.component';
 
 @Component({
   selector: 'app-forgot-password',
@@ -15,7 +15,7 @@ import { FormControlError } from 'src/app/interface/form-control-error';
 })
 export class ForgotPasswordComponent implements OnInit {
   @ViewChild('resetSuccesPopup')
-  resetSuccesPopup!: TemplateRef<SignUpSuccessComponent>;
+  resetSuccesPopup!: TemplateRef<PopUpSuccessComponent>;
   public forgotPasswordForm!: FormGroup;
   private formFields = {
     email: 'email',

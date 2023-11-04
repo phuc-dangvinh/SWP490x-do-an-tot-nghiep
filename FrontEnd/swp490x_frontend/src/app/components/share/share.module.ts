@@ -25,6 +25,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SearchProductComponent } from './search-product/search-product.component';
 import { CategoryComponent } from './category/category.component';
 import { AddEditCategoryComponent } from './category/add-edit-category/add-edit-category.component';
+import { PopUpSuccessComponent } from './pop-up-success/pop-up-success.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { AddEditCategoryComponent } from './category/add-edit-category/add-edit-
     SearchProductComponent,
     CategoryComponent,
     AddEditCategoryComponent,
+    PopUpSuccessComponent,
   ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, NgbModule],
   exports: [
@@ -80,6 +82,7 @@ import { AddEditCategoryComponent } from './category/add-edit-category/add-edit-
     SearchProductComponent,
     CategoryComponent,
     AddEditCategoryComponent,
+    PopUpSuccessComponent,
   ],
 })
 export class ShareModule {}

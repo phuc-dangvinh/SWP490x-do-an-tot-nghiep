@@ -15,21 +15,23 @@ import lombok.RequiredArgsConstructor;
 public class EmailConfig {
     @Value("${spring.mail.host}")
     private String mailServerHost;
-
     @Value("${spring.mail.port}")
     private Integer mailServerPort;
-
     @Value("${spring.mail.username}")
     private String mailServerUsername;
-
     @Value("${spring.mail.password}")
     private String mailServerPassword;
-
     @Value("${spring.mail.properties.mail.smtp.auth}")
-    private String mailServerAuth;
-
+    private boolean mailServerAuth;
     @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
-    private String mailServerStartTls;
+    private boolean mailServerStartTls;
+
+    // private String mailServerHost = "smtp.gmail.com";
+    // private Integer mailServerPort = 587;
+    // private String mailServerUsername = "vinhphuc989@gmail.com";
+    // private String mailServerPassword = "pawlnoaatukbclbr";
+    // private boolean mailServerAuth = true;
+    // private boolean mailServerStartTls = true;
 
     @Bean
     public JavaMailSender getJavaMailSender() {

@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { EToastClass } from 'src/app/const/EToastClass';
@@ -14,6 +20,9 @@ import { HttpService } from 'src/app/service/http.service';
 import { MenuService } from 'src/app/service/menu.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
+import { PopUpSuccessComponent } from '../../share/pop-up-success/pop-up-success.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { EContentPopupSuccess } from 'src/app/interface/content-popup-success.enum';
 
 @Component({
   selector: 'app-cart-management',
@@ -21,9 +30,12 @@ import { UserService } from 'src/app/service/user.service';
   styleUrls: ['./cart-management.component.scss'],
 })
 export class CartManagementComponent implements OnInit, OnDestroy {
+  @ViewChild('orderSuccess')
+  orderSuccess!: TemplateRef<PopUpSuccessComponent>;
   public readonly gender = Gender;
   public readonly methodShipment = MethodShipment;
   public readonly quantityAction = QuantityAction;
+  public readonly contentPopupSuccess = EContentPopupSuccess;
   private destroy$: Subject<void> = new Subject<void>();
   public formShipment!: FormGroup;
   public formFields = {
@@ -47,7 +59,8 @@ export class CartManagementComponent implements OnInit, OnDestroy {
     private _userService: UserService,
     private _toastService: ToastService,
     private _menuService: MenuService,
-    private _cartService: CartService
+    private _cartService: CartService,
+    private _modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -172,10 +185,7 @@ export class CartManagementComponent implements OnInit, OnDestroy {
     this._httpService.post('/cart/delete', idChecked).subscribe((res) => {
       if (res) {
         this.refreshCart();
-        this._toastService.showMessage(
-          EToastClass.SUCCESS,
-          EToastMessage.ORDER_SUCCESS
-        );
+        this._modalService.open(this.orderSuccess);
       }
     });
   }
@@ -188,6 +198,10 @@ export class CartManagementComponent implements OnInit, OnDestroy {
       this.emailFormControl.setValue(this.user.email);
       this.addressFormControl.setValue(this.user.address);
     }
+  }
+
+  public finish() {
+    this._modalService.dismissAll();
   }
 
   get genderFormControl(): AbstractControl {
