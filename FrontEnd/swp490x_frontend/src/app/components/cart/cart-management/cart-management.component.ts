@@ -7,8 +7,6 @@ import {
 } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-import { EToastClass } from 'src/app/const/EToastClass';
-import { EToastMessage } from 'src/app/const/EToastMessage';
 import { Gender, MethodShipment } from 'src/app/const/shipment-const';
 import { rootApi } from 'src/app/enviroments/environment';
 import { CartItem, QuantityAction } from 'src/app/interface/cart';
@@ -180,14 +178,22 @@ export class CartManagementComponent implements OnInit, OnDestroy {
   }
 
   public processOrder() {
-    this.formShipment.markAllAsTouched();
-    let idChecked = this.itemChecked.map((item) => item.id);
-    this._httpService.post('/cart/delete', idChecked).subscribe((res) => {
-      if (res) {
-        this.refreshCart();
+    if (this.formShipment.invalid) {
+      this.formShipment.markAllAsTouched();
+    } else {
+      let idChecked = this.itemChecked.map((item) => item.id);
+      if (this.user) {
+        this._httpService.post('/cart/delete', idChecked).subscribe((res) => {
+          if (res) {
+            this.refreshCart();
+            this._modalService.open(this.orderSuccess);
+          }
+        });
+      } else {
+        this._cartService.removeItemsBuyNow(idChecked);
         this._modalService.open(this.orderSuccess);
       }
-    });
+    }
   }
 
   private fillForm() {

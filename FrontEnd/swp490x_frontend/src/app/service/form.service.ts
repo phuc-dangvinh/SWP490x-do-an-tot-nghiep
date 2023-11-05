@@ -185,9 +185,9 @@ export class FormService {
       gender: [Gender.MALE, [Validators.required]],
       fullname: ['', [Validators.required]],
       phone: ['', [Validators.required]],
-      email: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
       methodShipment: [MethodShipment.DELIVERY, [Validators.required]],
-      address: [''],
+      address: ['',[Validators.required]],
       otherRequire: [''],
     });
   }

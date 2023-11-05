@@ -43,6 +43,14 @@ export class CartService {
     }
   }
 
+  public removeItemsBuyNow(productIds: string[]) {
+    let items = this.itemsBuyNow$.getValue();
+    productIds.forEach((id) => {
+      items = items.filter((item) => item.product.id !== id);
+    });
+    this.itemsBuyNow$.next(items);
+  }
+
   public addItemToCart(item: ItemAddToCart) {
     return this._httpService.post('/cart/add-to-cart', item);
   }

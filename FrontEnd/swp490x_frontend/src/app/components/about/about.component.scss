@@ -1,0 +1,40 @@
+.wrapper-about {
+  display: flex;
+  margin-top: 100px;
+  justify-content: center;
+  font-style: italic;
+
+  img {
+    height: 160px;
+  }
+
+  ul {
+    list-style-type: none;
+    margin-top: 10px;
+
+    li {
+      display: flex;
+      align-items: center;
+
+      .icon {
+        margin-right: 10px;
+        font-size: 20px;
+        color: #E1783C;
+      }
+
+      .copyright {
+        font-size: 1em;
+        color: black;
+      }
+
+      a {
+        text-decoration: none;
+        color: black;
+      }
+
+      span {
+        color: black;
+      }
+    }
+  }
+}
