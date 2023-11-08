@@ -11,30 +11,29 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
-@RequiredArgsConstructor
 public class EmailConfig {
-    // @Value("${spring.mail.host}")
-    // private String mailServerHost;
-    // @Value("${spring.mail.port}")
-    // private Integer mailServerPort;
-    // @Value("${spring.mail.username}")
-    // private String mailServerUsername;
-    // @Value("${spring.mail.password}")
-    // private String mailServerPassword;
-    // @Value("${spring.mail.properties.mail.smtp.auth}")
-    // private boolean mailServerAuth;
-    // @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
-    // private boolean mailServerStartTls;
-    // @Value("${spring.mail.properties.debug}")
-    // private boolean debug;
+    @Value("${spring.mail.host}")
+    private String mailServerHost;
+    @Value("${spring.mail.port}")
+    private Integer mailServerPort;
+    @Value("${spring.mail.username}")
+    private String mailServerUsername;
+    @Value("${spring.mail.password}")
+    private String mailServerPassword;
+    @Value("${spring.mail.properties.mail.smtp.auth}")
+    private boolean mailServerAuth;
+    @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
+    private boolean mailServerStartTls;
+    @Value("${spring.mail.properties.debug}")
+    private boolean debug;
 
-    private String mailServerHost = "smtp.gmail.com";
-    private Integer mailServerPort = 587;
-    private String mailServerUsername = "vinhphuc989@gmail.com";
-    private String mailServerPassword = "pawlnoaatukbclbr";
-    private boolean mailServerAuth = true;
-    private boolean mailServerStartTls = true;
-    private boolean debug = true;
+    // private String mailServerHost = "smtp.gmail.com";
+    // private Integer mailServerPort = 587;
+    // private String mailServerUsername = "vinhphuc989@gmail.com";
+    // private String mailServerPassword = "pawlnoaatukbclbr";
+    // private boolean mailServerAuth = true;
+    // private boolean mailServerStartTls = true;
+    // private boolean debug = true;
 
     @Bean
     public JavaMailSender getJavaMailSender() {

@@ -173,7 +173,13 @@
           </app-form-control>
         </div>
         <div class="mt-3">
-          <app-form-control label="Address">
+          <app-form-control
+            label="Address"
+            [touchedOrDirty]="
+            addressFormControl.touched || addressFormControl.dirty
+            "
+            [errorMessages]="addressErrorMessages"
+          >
             <input
               class="width-100"
               type="text"

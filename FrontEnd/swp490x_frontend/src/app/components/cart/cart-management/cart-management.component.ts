@@ -16,7 +16,6 @@ import { CartService } from 'src/app/service/cart.service';
 import { FormService } from 'src/app/service/form.service';
 import { HttpService } from 'src/app/service/http.service';
 import { MenuService } from 'src/app/service/menu.service';
-import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 import { PopUpSuccessComponent } from '../../share/pop-up-success/pop-up-success.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -55,7 +54,6 @@ export class CartManagementComponent implements OnInit, OnDestroy {
     private _formService: FormService,
     private _httpService: HttpService,
     private _userService: UserService,
-    private _toastService: ToastService,
     private _menuService: MenuService,
     private _cartService: CartService,
     private _modalService: NgbModal
@@ -87,6 +85,7 @@ export class CartManagementComponent implements OnInit, OnDestroy {
       if (res) {
         this.listCartItems = res;
         this.listCartItems.forEach((item) => (item.product.checked = true));
+        this.collectChecked();
         this._cartService.setTotalItems(
           this._cartService.calTotalItems(this.listCartItems)
         );
@@ -102,6 +101,7 @@ export class CartManagementComponent implements OnInit, OnDestroy {
         if (res) {
           this.listCartItems = res.map((item) => ({ ...item, id: '' }));
           this.listCartItems.forEach((item) => (item.product.checked = true));
+          this.collectChecked();
         }
       });
   }
@@ -174,6 +174,7 @@ export class CartManagementComponent implements OnInit, OnDestroy {
   public changeCheckedAll() {
     this.listCartItems.forEach((item) => {
       item.product.checked = this.checkedAll;
+      this.collectChecked();
     });
   }
 
@@ -181,16 +182,18 @@ export class CartManagementComponent implements OnInit, OnDestroy {
     if (this.formShipment.invalid) {
       this.formShipment.markAllAsTouched();
     } else {
-      let idChecked = this.itemChecked.map((item) => item.id);
+      let idsChecked: string[];
       if (this.user) {
-        this._httpService.post('/cart/delete', idChecked).subscribe((res) => {
+        idsChecked = this.itemChecked.map((item) => item.id);
+        this._httpService.post('/cart/delete', idsChecked).subscribe((res) => {
           if (res) {
             this.refreshCart();
             this._modalService.open(this.orderSuccess);
           }
         });
       } else {
-        this._cartService.removeItemsBuyNow(idChecked);
+        idsChecked = this.itemChecked.map((item) => item.product.id);
+        this._cartService.removeItemsBuyNow(idsChecked);
         this._modalService.open(this.orderSuccess);
       }
     }
@@ -277,6 +280,13 @@ export class CartManagementComponent implements OnInit, OnDestroy {
     return this._formService.getErrorMessage(
       this.formShipment,
       this.formFields.email
+    );
+  }
+
+  get addressErrorMessages() {
+    return this._formService.getErrorMessage(
+      this.formShipment,
+      this.formFields.address
     );
   }
 
