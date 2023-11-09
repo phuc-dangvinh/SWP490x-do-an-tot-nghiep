@@ -63,7 +63,6 @@ export class CartManagementComponent implements OnInit, OnDestroy {
     this._menuService.setActiveMenu(ItemMenuName.CART);
     this.formShipment = this._formService.buildFormShipment();
     this.getUserAndCart();
-    this.fillForm();
   }
 
   private getUserAndCart() {
@@ -73,6 +72,7 @@ export class CartManagementComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         if (res) {
           this.user = res;
+          this.fillForm();
           this.refreshCart();
         } else {
           this.getItemsBuyNow();

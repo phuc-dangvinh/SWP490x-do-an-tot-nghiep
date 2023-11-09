@@ -106,7 +106,6 @@ export class ChangePasswordComponent implements OnInit {
         newPassword: this.newPasswordControl.value,
       };
       this._httpService.post(url, payload).subscribe((res) => {
-        console.log('subscribe', res);
         if (res) {
           this._toastService.show({
             content: EToastMessage.CHANGE_PASSWORD_SUCCESS,

@@ -1,6 +1,8 @@
 .wrapper {
   display: flex;
   justify-content: center;
+  max-height: calc(100vh - 70px);
+  overflow: auto;
 
   form {
     margin-top: 50px;

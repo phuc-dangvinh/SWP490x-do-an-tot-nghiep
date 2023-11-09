@@ -16,6 +16,7 @@ import { CartService } from 'src/app/service/cart.service';
 import { ItemAddToCart } from 'src/app/interface/cart';
 import { MenuService } from 'src/app/service/menu.service';
 import { ItemMenuName } from 'src/app/interface/menu-item.interface';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-sign-in',
@@ -62,47 +63,54 @@ export class SignInComponent implements OnInit, OnDestroy {
       const url = '/auth/login';
       this._httpService
         .post<SignInResponse>(url, this.signInForm.value)
-        .subscribe((res) => {
-          if (res) {
-            const userId = res.user.id;
-            this._localStorageService.saveData(
-              EKeyCredentials.TOKEN,
-              res.token
-            );
-            this._userService.setCurrentUser(res.user);
-            this._toastService.show({
-              content: EToastMessage.SIGN_IN_SUCCES,
-              classname: EToastClass.SUCCESS,
-              delay: 3000,
-            });
-            this._cartService.setItemBuyNow(null);
-            if (this.itemPedingAddCart) {
-              this.itemPedingAddCart.userId = res.user.id;
-              this._cartService
-                .addItemToCart(this.itemPedingAddCart)
-                .subscribe((res) => {
-                  if (res) {
-                    this._toastService.showMessage(
-                      EToastClass.SUCCESS,
-                      `You added ${this.itemPedingAddCart.quantity} products to cart`
-                    );
-                    this._cartService.refreshTotalItems(userId);
-                    this._cartService.setItemPedingAddCart(null);
-                  }
-                });
-              this._router.navigate(['cart']);
-            } else {
-              this._router.navigate(
-                res.user.authorities.some(
-                  (item) => item.authority == ROLE.ADMIN
-                )
-                  ? ['/admin/user-management']
-                  : ['/home']
+        .subscribe({
+          next: (res) => {
+            if (res) {
+              const userId = res.user.id;
+              this._localStorageService.saveData(
+                EKeyCredentials.TOKEN,
+                res.token
               );
+              this._userService.setCurrentUser(res.user);
+              this._toastService.show({
+                content: EToastMessage.SIGN_IN_SUCCES,
+                classname: EToastClass.SUCCESS,
+                delay: 3000,
+              });
+              this._cartService.setItemBuyNow(null);
+              if (this.itemPedingAddCart) {
+                this.itemPedingAddCart.userId = res.user.id;
+                this._cartService
+                  .addItemToCart(this.itemPedingAddCart)
+                  .subscribe((res) => {
+                    if (res) {
+                      this._toastService.showMessage(
+                        EToastClass.SUCCESS,
+                        `You added ${this.itemPedingAddCart.quantity} products to cart`
+                      );
+                      this._cartService.refreshTotalItems(userId);
+                      this._cartService.setItemPedingAddCart(null);
+                    }
+                  });
+                this._router.navigate(['cart']);
+              } else {
+                this._router.navigate(
+                  res.user.authorities.some(
+                    (item) => item.authority == ROLE.ADMIN
+                  )
+                    ? ['/admin/user-management']
+                    : ['/home']
+                );
+              }
             }
-          } else {
-            this.isInvalid = true;
-          }
+          },
+          error: (err) => {
+            if (err instanceof HttpErrorResponse) {
+              if (err.status == 401) {
+                this.isInvalid = true;
+              }
+            }
+          },
         });
     }
   }
