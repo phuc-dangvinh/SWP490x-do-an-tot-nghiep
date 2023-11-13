@@ -76,9 +76,9 @@
               </div>
             </td>
             <td>
-              <span *ngIf="product.category" class="category">{{
-                product.category.name
-              }}</span>
+              <div *ngIf="product.category" class="category">
+                {{ product.category.name }}
+              </div>
             </td>
             <td class="td-action">
               <div class="buttons-action">
