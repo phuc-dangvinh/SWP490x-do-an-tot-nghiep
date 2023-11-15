@@ -20,19 +20,18 @@
       <div>{{ product.price | number }} đ</div>
       <div class="include-vat">Price includes VAT</div>
     </div>
-    <div class="quantity">
-      <span class="quantity-label">Quantity</span>
-      <button (click)="reduceQuantity()">
-        <i class="bi bi-chevron-down"></i>
-      </button>
-      <div class="quantity-value">{{ quantity }}</div>
-      <button (click)="increaseQuantity()">
-        <i class="bi bi-chevron-up"></i>
-      </button>
-    </div>
-    <div class="action">
-      <button (click)="buyNow()" class="buy-now">BUY NOW</button>
-      <button (click)="addToCart()" class="add-to-cart">ADD TO CART</button>
+    <div class="add-to-cart">
+      <div class="quantity">
+        <span class="quantity-label">Quantity</span>
+        <button class="change-quantity-btn" (click)="reduceQuantity()">
+          <i class="bi bi-chevron-down"></i>
+        </button>
+        <div class="quantity-value">{{ quantity }}</div>
+        <button class="change-quantity-btn" (click)="increaseQuantity()">
+          <i class="bi bi-chevron-up"></i>
+        </button>
+      </div>
+      <button (click)="addToCart()" class="add-to-cart-btn">ADD TO CART</button>
     </div>
   </div>
 </div>

@@ -43,71 +43,59 @@
       }
     }
 
-    .quantity {
+    .add-to-cart {
       margin-top: 30px;
       display: flex;
       align-items: center;
+      justify-content: center;
 
-      .quantity-label {
-        font-size: 16px;
-        font-weight: 400;
-        color: rgb(119, 119, 119);
-        margin-right: 15px;
-      }
+      .quantity {
+        display: flex;
+        align-items: center;
 
-      button {
-        background-color: white;
-        border: 1px solid #D9D9D9;
-        width: 40px;
-        height: 40px;
-        color: #BFBFBF;
+        .quantity-label {
+          font-size: 16px;
+          font-weight: 400;
+          color: rgb(119, 119, 119);
+          margin-right: 15px;
+        }
 
-        &:hover {
-          color: black;
+        .change-quantity-btn {
+          background-color: white;
+          border: 1px solid #D9D9D9;
+          width: 40px;
+          height: 40px;
+          color: #BFBFBF;
+
+          &:hover {
+            color: black;
+          }
+        }
+
+        .quantity-value {
+          border: 1px solid #D9D9D9;
+          width: 50px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: bold;
         }
       }
 
-      .quantity-value {
-        border: 1px solid #D9D9D9;
-        width: 50px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-      }
-    }
-
-    .action {
-      margin-top: 30px;
-
-      button {
+      .add-to-cart-btn {
+        margin-left: 30px;
         width: 230px;
-        height: 50px;
+        height: 40px;
         border-radius: 5px;
         font-weight: 700;
         font-size: 16px;
-      }
-
-      .buy-now {
         background-color: rgb(189, 0, 0);
         color: white;
         border: none;
 
         &:hover {
           background-color: red;
-          transition: 0.4s;
-        }
-      }
-
-      .add-to-cart {
-        margin-left: 10px;
-        border: 1px solid rgb(189, 0, 0);
-        background-color: white;
-        color: rgb(189, 0, 0);
-
-        &:hover {
-          background-color: #FBCFD0;
           transition: 0.4s;
         }
       }
