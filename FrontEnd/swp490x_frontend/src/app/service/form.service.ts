@@ -17,6 +17,7 @@ import { FormControlError } from '../interface/form-control-error';
 import { IPasswordStrengthMeterService } from 'angular-password-strength-meter';
 import { checkStrengthPassword } from './sync-validator-fn';
 import { UserService } from './user.service';
+import { Gender, MethodShipment } from '../const/shipment-const';
 
 @Injectable({
   providedIn: 'root',
@@ -45,7 +46,7 @@ export class FormService {
     },
     {
       error: 'priceEqualZero',
-      message: 'Price must be greater than 0',
+      message: 'Price > 0',
     },
     {
       error: 'invalidPriceTo',
@@ -67,6 +68,7 @@ export class FormService {
   public buildSignUpForm(): FormGroup {
     return this._formBuilder.group({
       avatar: [''],
+      gender: [Gender.MALE, [Validators.required]],
       fullname: ['', [Validators.required]],
       email: [
         '',
@@ -74,6 +76,7 @@ export class FormService {
         checkExistEmail(this._httpService),
       ],
       phone: ['', [Validators.required]],
+      address: ['', [Validators.required]],
     });
   }
 
@@ -81,6 +84,22 @@ export class FormService {
     return this._formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
+    });
+  }
+
+  public buildFormUser(): FormGroup {
+    return this._formBuilder.group({
+      avatar: [''],
+      gender: [Gender.MALE, [Validators.required]],
+      fullname: ['', [Validators.required]],
+      email: [
+        '',
+        [Validators.required, Validators.email],
+        checkExistEmail(this._httpService),
+      ],
+      phone: ['', [Validators.required]],
+      address: ['', [Validators.required]],
+      isAdmin: [false, [Validators.required]],
     });
   }
 
@@ -158,6 +177,18 @@ export class FormService {
         [Validators.required],
         checkExistCategoryName(this._httpService),
       ],
+    });
+  }
+
+  public buildFormShipment(): FormGroup {
+    return this._formBuilder.group({
+      gender: [Gender.MALE, [Validators.required]],
+      fullname: ['', [Validators.required]],
+      phone: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      methodShipment: [MethodShipment.DELIVERY, [Validators.required]],
+      address: ['',[Validators.required]],
+      otherRequire: [''],
     });
   }
 

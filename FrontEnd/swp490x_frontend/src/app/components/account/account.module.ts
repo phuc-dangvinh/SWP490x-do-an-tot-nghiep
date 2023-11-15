@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SignUpSuccessComponent } from './sign-up-success/sign-up-success.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
@@ -15,7 +14,6 @@ import { ShareModule } from '../share/share.module';
   declarations: [
     SignUpComponent,
     SignInComponent,
-    SignUpSuccessComponent,
     ForgotPasswordComponent,
     ChangePasswordComponent,
   ],
@@ -26,7 +24,7 @@ import { ShareModule } from '../share/share.module';
     NgbModule,
     AppRoutingModule,
     PasswordStrengthMeterModule.forRoot(),
-    ShareModule
+    ShareModule,
   ],
 })
 export class AccountModule {}

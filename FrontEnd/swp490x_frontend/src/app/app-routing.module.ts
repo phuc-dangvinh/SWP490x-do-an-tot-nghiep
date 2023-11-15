@@ -8,6 +8,9 @@ import { SignUpComponent } from './components/account/sign-up/sign-up.component'
 import { SignInComponent } from './components/account/sign-in/sign-in.component';
 import { ForgotPasswordComponent } from './components/account/forgot-password/forgot-password.component';
 import { ChangePasswordComponent } from './components/account/change-password/change-password.component';
+import { ProductDetailComponent } from './components/home/components/product-detail/product-detail.component';
+import { CartManagementComponent } from './components/cart/cart-management/cart-management.component';
+import { AboutComponent } from './components/about/about.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -17,6 +20,9 @@ const routes: Routes = [
   { path: 'account/sign-in', component: SignInComponent },
   { path: 'account/forgot-password', component: ForgotPasswordComponent },
   { path: 'account/change-password', component: ChangePasswordComponent },
+  { path: 'product/detail/:id', component: ProductDetailComponent },
+  { path: 'cart', component: CartManagementComponent },
+  { path: 'about', component: AboutComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent },
 ];

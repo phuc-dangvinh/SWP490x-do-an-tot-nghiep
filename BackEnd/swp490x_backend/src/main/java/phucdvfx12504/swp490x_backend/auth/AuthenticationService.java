@@ -2,6 +2,7 @@ package phucdvfx12504.swp490x_backend.auth;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Set;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,6 +43,8 @@ public class AuthenticationService {
         .phone(request.getPhone().trim())
         .password(passwordEncoder.encode(rawPasswordGenerate))
         .roles(Set.of(roleRepository.findByName(request.getIsAdmin() ? ERoleName.ADMIN : ERoleName.USER).get()))
+        .gender(request.getGender())
+        .address(request.getAddress())
         .build();
     User userSaveSuccess = userRepository.save(userRequest);
     // send email

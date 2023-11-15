@@ -31,41 +31,49 @@
         >
           <input type="text" [formControlName]="formFields.name" />
         </app-form-control>
-        <app-form-control
-          label="Price"
-          [touchedOrDirty]="priceFormControl.touched || priceFormControl.dirty"
-          [errorMessages]="priceErrorMessages"
-        >
-          <input type="number" [formControlName]="formFields.price" />
-        </app-form-control>
-        <app-form-control
-          label="Category"
-          [touchedOrDirty]="
-            categoryIdFormControl.touched || categoryIdFormControl.dirty
-          "
-          [errorMessages]="categoryIdErrorMessages"
-        >
-          <ng-select
-            class="ng-select-category"
-            [formControlName]="formFields.categoryId"
-            [items]="listCategories"
-            bindLabel="name"
-            bindValue="id"
-            [clearable]="false"
-            notFoundText="No category found"
-            dropdownPosition="bottom"
+        <div class="mt-3">
+          <app-form-control
+            label="Price"
+            [touchedOrDirty]="
+              priceFormControl.touched || priceFormControl.dirty
+            "
+            [errorMessages]="priceErrorMessages"
           >
-          </ng-select>
-        </app-form-control>
-        <app-form-control
-          label="Description"
-          [touchedOrDirty]="
-            descriptionFormControl.touched || descriptionFormControl.dirty
-          "
-          [errorMessages]="descriptionErrorMessages"
-        >
-          <textarea [formControlName]="formFields.description"></textarea>
-        </app-form-control>
+            <input type="number" [formControlName]="formFields.price" />
+          </app-form-control>
+        </div>
+        <div class="mt-3">
+          <app-form-control
+            label="Category"
+            [touchedOrDirty]="
+              categoryIdFormControl.touched || categoryIdFormControl.dirty
+            "
+            [errorMessages]="categoryIdErrorMessages"
+          >
+            <ng-select
+              class="ng-select-category"
+              [formControlName]="formFields.categoryId"
+              [items]="listCategories"
+              bindLabel="name"
+              bindValue="id"
+              [clearable]="false"
+              notFoundText="No category found"
+              dropdownPosition="bottom"
+            >
+            </ng-select>
+          </app-form-control>
+        </div>
+        <div class="mt-3">
+          <app-form-control
+            label="Description"
+            [touchedOrDirty]="
+              descriptionFormControl.touched || descriptionFormControl.dirty
+            "
+            [errorMessages]="descriptionErrorMessages"
+          >
+            <textarea [formControlName]="formFields.description"></textarea>
+          </app-form-control>
+        </div>
       </div>
     </div>
   </form>

@@ -53,4 +53,9 @@ public class ProductController {
   public List<Product> getByCategory(@RequestParam(required = false) String id) {
     return productService.getByCategory(id);
   }
+
+  @GetMapping("/get-by-id")
+  public Product getById(@RequestParam String id) {
+    return productService.getById(id);
+  }
 }

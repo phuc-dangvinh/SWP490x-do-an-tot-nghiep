@@ -4,6 +4,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   TemplateRef,
@@ -11,12 +12,14 @@ import {
 } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Subject, takeUntil } from 'rxjs';
 import { ConfirmDeleteComponent } from 'src/app/components/share/pop-up-dialog/confirm-delete/confirm-delete.component';
 import { EToastClass } from 'src/app/const/EToastClass';
 import { EToastMessage } from 'src/app/const/EToastMessage';
 import { rootApi } from 'src/app/enviroments/environment';
 import { Category } from 'src/app/interface/category.interface';
 import { ImageProduct, Product } from 'src/app/interface/product.interface';
+import { CategoryService } from 'src/app/service/category.service';
 import { FormService } from 'src/app/service/form.service';
 import { HttpService } from 'src/app/service/http.service';
 import { ToastService } from 'src/app/service/toast.service';
@@ -26,14 +29,17 @@ import { ToastService } from 'src/app/service/toast.service';
   templateUrl: './add-edit-product.component.html',
   styleUrls: ['./add-edit-product.component.scss'],
 })
-export class AddEditProductComponent implements OnInit, AfterContentChecked {
+export class AddEditProductComponent
+  implements OnInit, AfterContentChecked, OnDestroy
+{
   @Input() isEdit: boolean = false;
   @Input() productEdit!: Product;
-  @Input() listCategories: Category[] = [];
   @Output() clickSave = new EventEmitter<void>();
   @ViewChild('confirmDelete') confirmDelete:
     | TemplateRef<ConfirmDeleteComponent>
     | undefined;
+  private unSubcribe$: Subject<void> = new Subject<void>();
+  public listCategories: Category[] = [];
   public formAddOrEditProduct!: FormGroup;
   public formFields = {
     name: 'name',
@@ -52,16 +58,28 @@ export class AddEditProductComponent implements OnInit, AfterContentChecked {
     private _formService: FormService,
     private _modalService: NgbModal,
     private _changeDetector: ChangeDetectorRef,
-    private _toastService: ToastService
+    private _toastService: ToastService,
+    private _categoryService: CategoryService
   ) {}
 
   ngOnInit(): void {
+    this.getListCategories();
     this.formAddOrEditProduct = this._formService.buildFormAddOrEditProduct();
     this.fillForm();
   }
 
   ngAfterContentChecked(): void {
     this._changeDetector.detectChanges();
+  }
+
+  private getListCategories() {
+    this._categoryService.getCategoriesList
+      .pipe(takeUntil(this.unSubcribe$))
+      .subscribe((res) => {
+        if (res) {
+          this.listCategories = res;
+        }
+      });
   }
 
   public onHasResultUploadFile(event: ImageProduct) {
@@ -76,6 +94,7 @@ export class AddEditProductComponent implements OnInit, AfterContentChecked {
   }
 
   public onSave() {
+    this.formAddOrEditProduct.markAllAsTouched();
     if (this.formAddOrEditProduct.valid) {
       if (this.isEdit) {
         const url = '/product/manage/update';
@@ -204,5 +223,10 @@ export class AddEditProductComponent implements OnInit, AfterContentChecked {
       this.formAddOrEditProduct,
       this.formFields.categoryId
     );
+  }
+
+  ngOnDestroy(): void {
+    this.unSubcribe$.next();
+    this.unSubcribe$.complete();
   }
 }

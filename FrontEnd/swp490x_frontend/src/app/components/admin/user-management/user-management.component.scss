@@ -8,7 +8,7 @@ th {
 }
 
 th {
-  background-color: #CDD4DA;
+  background-color: #D9D9D9;
 }
 
 tr {
@@ -33,15 +33,20 @@ td {
   color: #A6A6A6;
 }
 
+// column width
 .check-box {
-  width: 5%;
+  width: 3%;
 }
 
 .full-name {
-  width: 30%;
+  width: 18%;
 }
 
 .email {
+  width: 18%;
+}
+
+.address {
   width: 25%;
 }
 
@@ -50,13 +55,14 @@ td {
 }
 
 .admin {
-  width: 10%;
+  width: 8%;
 }
 
 .action {
-  width: 15%;
+  width: 13%;
 }
 
+//
 .search-box {
   float: right;
 }

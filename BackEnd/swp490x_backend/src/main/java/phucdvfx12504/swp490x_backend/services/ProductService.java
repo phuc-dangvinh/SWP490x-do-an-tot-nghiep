@@ -23,4 +23,6 @@ public interface ProductService {
   Product add(NewProductRequest request);
 
   List<Product> getByCategory(String categoryId);
+
+  Product getById(String id);
 }

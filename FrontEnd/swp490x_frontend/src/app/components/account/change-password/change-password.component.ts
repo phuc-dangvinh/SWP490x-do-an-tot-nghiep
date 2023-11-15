@@ -3,9 +3,11 @@ import { AbstractControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EToastClass } from 'src/app/const/EToastClass';
 import { EToastMessage } from 'src/app/const/EToastMessage';
+import { ItemMenuName } from 'src/app/interface/menu-item.interface';
 import { ChangePasswordRequest } from 'src/app/interface/request.interface';
 import { FormService } from 'src/app/service/form.service';
 import { HttpService } from 'src/app/service/http.service';
+import { MenuService } from 'src/app/service/menu.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 
@@ -29,10 +31,12 @@ export class ChangePasswordComponent implements OnInit {
     private _httpService: HttpService,
     private _router: Router,
     private _userService: UserService,
-    private _toastService: ToastService
+    private _toastService: ToastService,
+    private _menuService: MenuService
   ) {}
 
   ngOnInit(): void {
+    this._menuService.setActiveMenu(ItemMenuName.LOGIN_NAME);
     this.formChangePassword = this._formService.buildChangePasswordForm();
   }
 
@@ -93,6 +97,7 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   public submitForm() {
+    this.formChangePassword.markAllAsTouched();
     if (this.formChangePassword.valid) {
       const url = '/user/change-password';
       const payload: ChangePasswordRequest = {
@@ -101,7 +106,6 @@ export class ChangePasswordComponent implements OnInit {
         newPassword: this.newPasswordControl.value,
       };
       this._httpService.post(url, payload).subscribe((res) => {
-        console.log('subscribe', res);
         if (res) {
           this._toastService.show({
             content: EToastMessage.CHANGE_PASSWORD_SUCCESS,

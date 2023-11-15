@@ -2,15 +2,9 @@ package phucdvfx12504.swp490x_backend.dto.product;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
 public class UpdateProductRequest {
   private String id;
   private String name;

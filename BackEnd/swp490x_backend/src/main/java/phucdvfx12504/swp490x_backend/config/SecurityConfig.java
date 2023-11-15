@@ -35,17 +35,20 @@ public class SecurityConfig {
 			new AntPathRequestMatcher("/**/file/get/**"),
 			new AntPathRequestMatcher("/**/product/get-all/**"),
 			new AntPathRequestMatcher("/**/product/get-by-category/**"),
-			new AntPathRequestMatcher("/**/product/search/**")
+			new AntPathRequestMatcher("/**/product/get-by-id/**"),
+			new AntPathRequestMatcher("/**/product/search/**"),
+			new AntPathRequestMatcher("/**/file/upload/**"),
+			new AntPathRequestMatcher("/**/user/check-exist/**"),
 	};
 	private final AntPathRequestMatcher[] ADMIN_ROLE_URL = {
-			new AntPathRequestMatcher("/**/manage/**")
+			new AntPathRequestMatcher("/**/manage/**"),
 	};
 
 	private final AntPathRequestMatcher[] USER_ROLE_URL = {
 			new AntPathRequestMatcher("/**/user/change-password/**"),
-			new AntPathRequestMatcher("/**/user/check-exist/**"),
 			new AntPathRequestMatcher("/**/user/check-current-password/**"),
-			new AntPathRequestMatcher("/**/file/upload/**"),
+			new AntPathRequestMatcher("/**/cart/**"),
+			new AntPathRequestMatcher("/**/check-valid-token/**"),
 	};
 
 	@Bean

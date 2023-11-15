@@ -1,4 +1,8 @@
-import { MenuItem, GroupMenu, ItemMenuName } from '../interface/menu-item.interface';
+import {
+  MenuItem,
+  GroupMenu,
+  ItemMenuName,
+} from '../interface/menu-item.interface';
 
 export const menuItems: MenuItem[] = [
   {
@@ -39,7 +43,7 @@ export const menuItems: MenuItem[] = [
     itemName: ItemMenuName.CART,
     displayName: ItemMenuName.CART,
     icon: 'bi-cart',
-    routerLink: '',
+    routerLink: '/cart',
     isMainItem: true,
     isActive: true,
   },
@@ -97,5 +101,13 @@ export const menuItems: MenuItem[] = [
     routerLink: '',
     isMainItem: false,
     isActive: false,
+  },
+  {
+    group: GroupMenu.ABOUT,
+    itemName: ItemMenuName.ABOUT,
+    displayName: ItemMenuName.ABOUT,
+    routerLink: '/about',
+    isMainItem: true,
+    isActive: true,
   },
 ];

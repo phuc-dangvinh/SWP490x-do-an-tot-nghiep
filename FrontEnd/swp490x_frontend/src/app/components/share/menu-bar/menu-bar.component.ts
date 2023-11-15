@@ -8,9 +8,9 @@ import {
   ItemMenuName,
   MenuItem,
 } from 'src/app/interface/menu-item.interface';
-import { EKeyCredentials } from 'src/app/interface/key-credentials.enum';
 import { User } from 'src/app/interface/user';
-import { LocalStorageService } from 'src/app/service/local-storage.service';
+import { CartService } from 'src/app/service/cart.service';
+import { MenuService } from 'src/app/service/menu.service';
 import { UserService } from 'src/app/service/user.service';
 
 @Component({
@@ -19,27 +19,43 @@ import { UserService } from 'src/app/service/user.service';
   styleUrls: ['./menu-bar.component.scss'],
 })
 export class MenuBarComponent implements OnInit, OnDestroy {
-  private isAdminUser: boolean = false;
-  public currentUser!: User;
-  private unsubscribe$: Subject<void> = new Subject<void>();
+  private destroy$: Subject<void> = new Subject<void>();
+  public readonly itemName = ItemMenuName;
+  public currentUser: User | undefined;
   private menuItems: MenuItem[] = menuItems;
-  private isLogin: boolean = false;
+  public rootApiRequest = rootApi;
+  public selectedToggleItem: string = '';
+  public activeItem: string = '';
+  public totalCartItems: number = 0;
+  private stateOpen: boolean = false;
 
   constructor(
-    private _localStorageService: LocalStorageService,
-    private _userService: UserService
+    private _userService: UserService,
+    private _menuService: MenuService,
+    private _cartService: CartService
   ) {}
 
   ngOnInit(): void {
     this._userService
-      .getIsUserLogin()
-      .pipe(takeUntil(this.unsubscribe$))
+      .getCurrentUser()
+      .pipe(takeUntil(this.destroy$))
       .subscribe((res) => {
-        this.isLogin = res;
-        if (this.isLogin) {
-          this.getInfoFromLocal();
-        }
+        this.currentUser = res ?? undefined;
         this.changeMenu();
+      });
+    this._menuService
+      .getActiveMenu()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        if (res) {
+          this.activeItem = res;
+        }
+      });
+    this._cartService
+      .getTotalItems()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        this.totalCartItems = res;
       });
   }
 
@@ -54,17 +70,25 @@ export class MenuBarComponent implements OnInit, OnDestroy {
   }
 
   private changeMenu() {
-    if (this.isAdminUser) {
-      this.toggleItem(ItemMenuName.MANAGEMENT, this.isLogin);
+    let isAdmin = false;
+    let isLogin = false;
+    let displayName = '';
+    if (this.currentUser) {
+      isAdmin = this.currentUser.authorities.some(
+        (item) => item.authority == ROLE.ADMIN
+      );
+      isLogin = true;
+      displayName = this.currentUser.fullname;
     }
-    this.toggleItem(ItemMenuName.ACCOUNT, !this.isLogin);
-    this.toggleItem(ItemMenuName.SIGN_IN, !this.isLogin);
-    this.toggleItem(ItemMenuName.SIGN_UP, !this.isLogin);
-    this.setDisplayName(this.isLogin ? this.currentUser.fullname : '');
-    this.toggleItem(ItemMenuName.LOGIN_NAME, this.isLogin);
-    this.toggleItem(ItemMenuName.MY_PROFILE, this.isLogin);
-    this.toggleItem(ItemMenuName.CHANGE_PASSWORD, this.isLogin);
-    this.toggleItem(ItemMenuName.SIGN_OUT, this.isLogin);
+    this.toggleItem(ItemMenuName.MANAGEMENT, isAdmin);
+    this.toggleItem(ItemMenuName.ACCOUNT, !isLogin);
+    this.toggleItem(ItemMenuName.SIGN_IN, !isLogin);
+    this.toggleItem(ItemMenuName.SIGN_UP, !isLogin);
+    this.setDisplayName(displayName);
+    this.toggleItem(ItemMenuName.LOGIN_NAME, isLogin);
+    // this.toggleItem(ItemMenuName.MY_PROFILE, isLogin);
+    this.toggleItem(ItemMenuName.CHANGE_PASSWORD, isLogin);
+    this.toggleItem(ItemMenuName.SIGN_OUT, isLogin);
   }
 
   private toggleItem(itemName: ItemMenuName, state: boolean) {
@@ -83,37 +107,31 @@ export class MenuBarComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getInfoFromLocal() {
-    const sessionUser: User = this._localStorageService.getData(
-      EKeyCredentials.USER
-    );
-    if (sessionUser) {
-      this.currentUser = {
-        ...sessionUser,
-        avatar: sessionUser.avatar
-          ? `${rootApi}/file/get/${sessionUser.avatar}`
-          : '',
-      };
-      this.isAdminUser = sessionUser.authorities.some(
-        (item) => item.authority == ROLE.ADMIN
-      );
+  public onSelectSubItem(subItem: MenuItem) {
+    switch (subItem.itemName) {
+      case ItemMenuName.SIGN_OUT:
+        this._userService.setCurrentUser(null);
+        break;
+      default:
+        break;
     }
   }
 
-  private handleLogout() {
-    this._localStorageService.clearAllData();
-    this._userService.setIsUserLogin(false);
+  public onSelectMainItem(item: MenuItem) {
+    if (this.stateOpen) {
+      this.selectedToggleItem = item.itemName;
+    }
   }
 
-  public clickSubItem(menuItem: MenuItem) {
-    switch (menuItem.itemName) {
-      case ItemMenuName.SIGN_OUT:
-        this.handleLogout();
+  public toggleMainItem(state: boolean) {
+    this.stateOpen = state;
+    if (!this.stateOpen) {
+      this.selectedToggleItem = '';
     }
   }
 
   ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

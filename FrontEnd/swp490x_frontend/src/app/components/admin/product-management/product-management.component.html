@@ -1,9 +1,6 @@
 <div class="wrapper">
   <div class="wrapper-left-side">
-    <app-category
-      (emitListCategories)="getListCategories($event)"
-      (emitSelectedCategory)="onCategorySelected($event)"
-    ></app-category>
+    <app-category></app-category>
   </div>
   <div class="wrapper-main ms-5">
     <div class="header-action">
@@ -17,7 +14,7 @@
         </button>
       </div>
       <app-search-product
-        (clickReset)="getListProductByCategory()"
+        (clickReset)="refreshListProducts()"
         (clickSearch)="searchProduct($event)"
       ></app-search-product>
     </div>
@@ -57,7 +54,11 @@
               />
             </td>
             <td>
-              <ng-container *ngIf="product.imageProducts.length > 0">
+              <ng-container
+                *ngIf="
+                  product.imageProducts && product.imageProducts.length > 0
+                "
+              >
                 <img
                   [src]="
                     rootApiRequest +
@@ -69,22 +70,30 @@
             </td>
             <td class="product-name">{{ product.name }}</td>
             <td class="product-price">{{ product.price | number }} VND</td>
-            <td>{{ product.description }}</td>
             <td>
-              <span class="category">{{ product.category.name }}</span>
+              <div class="product-description">
+                {{ product.description }}
+              </div>
+            </td>
+            <td>
+              <div *ngIf="product.category" class="category">
+                {{ product.category.name }}
+              </div>
             </td>
             <td class="td-action">
-              <div
-                class="td-button-edit"
-                (click)="showPopupEditProduct(product)"
-              >
-                <i class="bi bi-pencil"></i>
-              </div>
-              <div
-                class="td-button-delete ms-2"
-                (click)="showPopupConfirmDeleteSingle(product)"
-              >
-                <i class="bi bi-trash3"></i>
+              <div class="buttons-action">
+                <div
+                  class="td-button-edit"
+                  (click)="showPopupEditProduct(product)"
+                >
+                  <i class="bi bi-pencil"></i>
+                </div>
+                <div
+                  class="td-button-delete ms-2"
+                  (click)="showPopupConfirmDeleteSingle(product)"
+                >
+                  <i class="bi bi-trash3"></i>
+                </div>
               </div>
             </td>
           </tr>
@@ -100,10 +109,9 @@
 </div>
 <ng-template #addOrEditProduct>
   <app-add-edit-product
-    [listCategories]="listCategories"
     [isEdit]="isEdit"
     [productEdit]="productEdit"
-    (clickSave)="getListProductByCategory()"
+    (clickSave)="refreshListProducts()"
   >
   </app-add-edit-product>
 </ng-template>

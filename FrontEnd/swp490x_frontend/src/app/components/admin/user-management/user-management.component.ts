@@ -13,6 +13,9 @@ import { ToastService } from 'src/app/service/toast.service';
 import { EToastClass } from 'src/app/const/EToastClass';
 import { DeleteResponse } from 'src/app/interface/delete-response';
 import { EToastMessage } from 'src/app/const/EToastMessage';
+import { Gender } from 'src/app/const/shipment-const';
+import { MenuService } from 'src/app/service/menu.service';
+import { ItemMenuName } from 'src/app/interface/menu-item.interface';
 
 @Component({
   selector: 'app-user-management',
@@ -21,6 +24,8 @@ import { EToastMessage } from 'src/app/const/EToastMessage';
 })
 export class UserManagementComponent implements OnInit {
   public readonly BUTTON = BUTTON;
+  public readonly gender = Gender;
+  public rootApiRequest = rootApi;
   public users: User[] = [];
   public userEdit!: User;
   public isEdit: boolean = false;
@@ -48,10 +53,12 @@ export class UserManagementComponent implements OnInit {
   constructor(
     private httpService: HttpService,
     private _modalService: NgbModal,
-    private _toastService: ToastService
+    private _toastService: ToastService,
+    private _menuService: MenuService
   ) {}
 
   ngOnInit(): void {
+    this._menuService.setActiveMenu(ItemMenuName.MANAGEMENT);
     this.getUser();
   }
 
@@ -81,7 +88,7 @@ export class UserManagementComponent implements OnInit {
       ? [this.selectedTmpUserId]
       : this.selectedUserIds;
     this.httpService
-      .deleteByPost<DeleteResponse>(url, payload)
+      .post<DeleteResponse>(url, payload)
       .subscribe((res) => {
         if (res) {
           let toastContent = '';
@@ -148,10 +155,10 @@ export class UserManagementComponent implements OnInit {
         if (user) {
           this.userEdit = user;
         }
-        this._modalService.open(this.userDetailPopup, { size: 'md' });
+        this._modalService.open(this.userDetailPopup, { size: 'lg' });
         break;
       case BUTTON.NEW:
-        this._modalService.open(this.userDetailPopup, { size: 'md' });
+        this._modalService.open(this.userDetailPopup, { size: 'lg' });
         break;
       case BUTTON.DELETE:
         if (user) {
@@ -257,7 +264,6 @@ export class UserManagementComponent implements OnInit {
       ...user,
       checked: false,
       isAdmin: user.authorities.some((item) => item.authority == ROLE.ADMIN),
-      avatar: user.avatar ? `${rootApi}/file/get/${user.avatar}` : '',
     }));
   }
 }

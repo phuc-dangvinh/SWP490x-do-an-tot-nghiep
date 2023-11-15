@@ -1,20 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { BUTTON } from 'src/app/const/EButton';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  ValidationErrors,
-  Validators,
-} from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 import { HttpService } from 'src/app/service/http.service';
 import { TextMessage } from 'src/app/interface/text-message';
-import { FormControlError } from 'src/app/interface/form-control-error';
-import { checkExistEmail } from 'src/app/service/async-validator-fn';
 import { User } from 'src/app/interface/user';
-import { ROLE } from 'src/app/const/ERole';
 import { rootApi } from 'src/app/enviroments/environment';
 import { EToastMessage } from 'src/app/const/EToastMessage';
+import { FormService } from 'src/app/service/form.service';
+import { Gender } from 'src/app/const/shipment-const';
 
 @Component({
   selector: 'app-user-detail',
@@ -23,37 +16,37 @@ import { EToastMessage } from 'src/app/const/EToastMessage';
 })
 export class UserDetailComponent implements OnInit {
   @Input() isEdit: boolean = false;
-  @Output() clickCancelButton = new EventEmitter<boolean>();
+  @Output() clickCancelButton = new EventEmitter<void>();
   @Output() clickSaveButton = new EventEmitter<EToastMessage>();
   @Input() userEdit!: User;
   public readonly BUTTON = BUTTON;
+  public readonly gender = Gender;
+  public rootApiRequest = rootApi;
   public formUser!: FormGroup;
-  private controlErrors: FormControlError[] = [
-    { error: 'required', message: 'Required field' },
-    { error: 'email', message: 'Email is not valid' },
-    { error: 'passwordNotMatch', message: 'Repeat password is incorrect' },
-    { error: 'emailExist', message: 'This email is taken' },
-  ];
-  public fileName: string = '';
-  public srcFile: string = '';
+  public formFields = {
+    avatar: 'avatar',
+    gender: 'gender',
+    fullname: 'fullname',
+    email: 'email',
+    phone: 'phone',
+    address: 'address',
+    isAdmin: 'isAdmin',
+  };
 
   constructor(
-    private formBuilder: FormBuilder,
-    private httpService: HttpService
+    private httpService: HttpService,
+    private _formService: FormService
   ) {}
 
   ngOnInit(): void {
-    this.createForm();
-    if (this.isEdit && this.userEdit) {
-      this.srcFile = this.userEdit.avatar;
-      this.fillEditForm(this.userEdit);
-    }
+    this.formUser = this._formService.buildFormUser();
+    this.fillEditForm();
   }
 
   public onClick(button: BUTTON) {
     switch (button) {
       case BUTTON.CANCEL:
-        this.clickCancelButton.emit(true);
+        this.clickCancelButton.emit();
         break;
       case BUTTON.SAVE:
         this.submitForm();
@@ -63,21 +56,8 @@ export class UserDetailComponent implements OnInit {
     this.formUser.reset();
   }
 
-  private createForm() {
-    this.formUser = this.formBuilder.group({
-      avatar: [''],
-      fullname: ['', [Validators.required]],
-      email: [
-        '',
-        [Validators.required, Validators.email],
-        checkExistEmail(this.httpService),
-      ],
-      phone: ['', [Validators.required]],
-      isAdmin: [false, [Validators.required]],
-    });
-  }
-
   private submitForm() {
+    this.formUser.markAllAsTouched();
     if (this.formUser.valid) {
       if (this.isEdit) {
         //update
@@ -96,76 +76,114 @@ export class UserDetailComponent implements OnInit {
         this.httpService.post<TextMessage>(url, payload).subscribe((res) => {
           if (res) {
             this.clickSaveButton.emit(EToastMessage.ADD_USER_SUCCESS);
+            this.formUser.reset();
           }
         });
       }
     }
   }
 
-  public getErrorMessage(parentControlName: string, subControlName?: string) {
-    const parentErrors: ValidationErrors | null =
-      this.formUser.controls[parentControlName].errors;
-    let subErrors: ValidationErrors | null = null;
-    if (subControlName) {
-      subErrors = (this.formUser.controls[parentControlName] as FormGroup)
-        .controls[subControlName].errors;
-    }
-    let errors: ValidationErrors | null = null;
-    if (subControlName == 'repeatPassword') {
-      errors = { ...parentErrors, ...subErrors };
-    } else {
-      subControlName ? (errors = subErrors) : (errors = parentErrors);
-    }
-    if (errors) {
-      return Object.keys(errors)
-        .map((errorKey) =>
-          this.controlErrors.find(
-            (controlError) => controlError.error == errorKey
-          )
-        )
-        .map((errorObj) => errorObj?.message);
-    } else {
-      return null;
+  private fillEditForm() {
+    if (this.isEdit && this.userEdit) {
+      this.avatarFormControl.setValue(this.userEdit.avatar);
+      this.fullnameFormControl.setValue(this.userEdit.fullname);
+      this.genderFormControl.setValue(this.userEdit.gender);
+      this.addressFormControl.setValue(this.userEdit.address);
+      this.emailFormControl.setValue(this.userEdit.email);
+      this.emailFormControl.disable();
+      this.phoneFormControl.setValue(this.userEdit.phone);
+      this.isAdminFormControl.setValue(this.userEdit.isAdmin);
+      if (this.isAdminFormControl.value == true) {
+        this.isAdminFormControl.disable();
+      }
     }
   }
 
-  public getFormControl(
-    parentControlName: string,
-    subControlName?: string
-  ): AbstractControl {
-    if (subControlName) {
-      return (this.formUser.controls[parentControlName] as FormGroup).controls[
-        subControlName
-      ];
-    } else {
-      return this.formUser.controls[parentControlName];
-    }
+  public onHasResultUploadFile(file: TextMessage) {
+    this.avatarFormControl.setValue(file.info);
   }
 
-  private fillEditForm(user: User) {
-    this.formUser.controls['fullname'].setValue(user.fullname);
-    this.formUser.controls['email'].setValue(user.email);
-    this.formUser.controls['email'].disable();
-    this.formUser.controls['phone'].setValue(user.phone);
-    this.formUser.controls['isAdmin'].setValue(
-      user.authorities.some((item) => item.authority == ROLE.ADMIN)
+  get avatarFormControl(): AbstractControl {
+    return this._formService.getFormControl(
+      this.formUser,
+      this.formFields.avatar
     );
-    if (this.formUser.controls['isAdmin'].value == true) {
-      this.formUser.controls['isAdmin'].disable();
-    }
   }
 
-  public onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-    if (file) {
-      this.fileName = file.name;
-      const url = '/file/upload';
-      this.httpService.uploadFile<TextMessage>(url, file).subscribe((res) => {
-        if (res) {
-          this.srcFile = `${rootApi}/file/get/${res.info}`;
-          this.formUser.controls['avatar'].setValue(res.info);
-        }
-      });
-    }
+  get genderFormControl(): AbstractControl {
+    return this._formService.getFormControl(
+      this.formUser,
+      this.formFields.gender
+    );
+  }
+
+  get genderErrorMessages() {
+    return this._formService.getErrorMessage(
+      this.formUser,
+      this.formFields.gender
+    );
+  }
+
+  get fullnameFormControl(): AbstractControl {
+    return this._formService.getFormControl(
+      this.formUser,
+      this.formFields.fullname
+    );
+  }
+
+  get fullnameErrorMessages() {
+    return this._formService.getErrorMessage(
+      this.formUser,
+      this.formFields.fullname
+    );
+  }
+
+  get emailFormControl(): AbstractControl {
+    return this._formService.getFormControl(
+      this.formUser,
+      this.formFields.email
+    );
+  }
+
+  get emailErrorMessages() {
+    return this._formService.getErrorMessage(
+      this.formUser,
+      this.formFields.email
+    );
+  }
+
+  get phoneFormControl(): AbstractControl {
+    return this._formService.getFormControl(
+      this.formUser,
+      this.formFields.phone
+    );
+  }
+
+  get phoneErrorMessages() {
+    return this._formService.getErrorMessage(
+      this.formUser,
+      this.formFields.phone
+    );
+  }
+
+  get addressFormControl(): AbstractControl {
+    return this._formService.getFormControl(
+      this.formUser,
+      this.formFields.address
+    );
+  }
+
+  get addressErrorMessages() {
+    return this._formService.getErrorMessage(
+      this.formUser,
+      this.formFields.address
+    );
+  }
+
+  get isAdminFormControl(): AbstractControl {
+    return this._formService.getFormControl(
+      this.formUser,
+      this.formFields.isAdmin
+    );
   }
 }

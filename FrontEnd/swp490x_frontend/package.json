@@ -26,8 +26,6 @@
     "angular-password-strength-meter": "^6.0.0",
     "bootstrap": "^5.3.0",
     "bootstrap-icons": "^1.10.5",
-    "primeicons": "^6.0.1",
-    "primeng": "^16.3.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.6.2",
     "zone.js": "~0.13.1"

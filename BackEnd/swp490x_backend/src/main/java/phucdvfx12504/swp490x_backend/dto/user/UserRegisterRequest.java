@@ -1,18 +1,15 @@
 package phucdvfx12504.swp490x_backend.dto.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import phucdvfx12504.swp490x_backend.constant.Gender;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
 public class UserRegisterRequest {
     private String avatar;
     private String fullname;
     private String email;
     private String phone;
     private Boolean isAdmin;
+    private Gender gender;
+    private String address;
 }

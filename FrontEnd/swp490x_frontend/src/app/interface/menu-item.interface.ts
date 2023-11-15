@@ -1,7 +1,7 @@
 export interface MenuItem {
   group: GroupMenu;
   icon?: string;
-  itemName: ItemMenuName
+  itemName: ItemMenuName;
   displayName: string;
   horizontalLine?: boolean;
   routerLink?: string;
@@ -14,6 +14,7 @@ export enum GroupMenu {
   MANAGEMENT = 'MANAGEMENT',
   CART = 'CART',
   ACCOUNT = 'ACCOUNT',
+  ABOUT = 'ABOUT',
 }
 
 export enum ItemMenuName {
@@ -30,4 +31,5 @@ export enum ItemMenuName {
   SIGN_IN = 'Sign in',
   SIGN_UP = 'Sign up',
   SIGN_OUT = 'Sign out',
+  ABOUT = 'About',
 }

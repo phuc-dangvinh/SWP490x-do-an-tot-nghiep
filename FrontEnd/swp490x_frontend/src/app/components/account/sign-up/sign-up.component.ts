@@ -5,9 +5,12 @@ import { rootApi } from 'src/app/enviroments/environment';
 import { User } from 'src/app/interface/user';
 import { FormService } from 'src/app/service/form.service';
 import { HttpService } from 'src/app/service/http.service';
-import { SignUpSuccessComponent } from '../sign-up-success/sign-up-success.component';
 import { Router } from '@angular/router';
 import { TextMessage } from 'src/app/interface/text-message';
+import { MenuService } from 'src/app/service/menu.service';
+import { ItemMenuName } from 'src/app/interface/menu-item.interface';
+import { Gender } from 'src/app/const/shipment-const';
+import { PopUpSuccessComponent } from '../../share/pop-up-success/pop-up-success.component';
 
 @Component({
   selector: 'app-sign-up',
@@ -16,13 +19,17 @@ import { TextMessage } from 'src/app/interface/text-message';
 })
 export class SignUpComponent implements OnInit {
   @ViewChild('signUpSuccesPopup')
-  signUpSuccesPopup!: TemplateRef<SignUpSuccessComponent>;
+  signUpSuccesPopup!: TemplateRef<PopUpSuccessComponent>;
+  public readonly gender = Gender;
+  public rootApiRequest = rootApi;
   public signUpForm!: FormGroup;
-  private formFields = {
+  public formFields = {
     avatar: 'avatar',
     fullname: 'fullname',
     email: 'email',
     phone: 'phone',
+    gender: 'gender',
+    address: 'address',
   };
   public avatarFileName: string = '';
   public avatarSrc: string = '';
@@ -31,10 +38,12 @@ export class SignUpComponent implements OnInit {
     private _formService: FormService,
     private _httpService: HttpService,
     private _modalService: NgbModal,
-    private _router: Router
+    private _router: Router,
+    private _menuService: MenuService
   ) {}
 
   ngOnInit(): void {
+    this._menuService.setActiveMenu(ItemMenuName.ACCOUNT);
     this.signUpForm = this._formService.buildSignUpForm();
   }
 
@@ -43,11 +52,11 @@ export class SignUpComponent implements OnInit {
   }
 
   public onHasSrcFile(event: TextMessage) {
-    this.avatarSrc = `${rootApi}/file/get/${event.info}`;
     this.signUpForm.controls['avatar'].setValue(event.info);
   }
 
   public submitForm() {
+    this.signUpForm.markAllAsTouched();
     if (this.signUpForm.valid) {
       const url = '/auth/register';
       const payload = { ...this.signUpForm.value, isAdmin: false };
@@ -112,6 +121,34 @@ export class SignUpComponent implements OnInit {
     return this._formService.getErrorMessage(
       this.signUpForm,
       this.formFields.phone
+    );
+  }
+
+  get genderFormControl(): AbstractControl {
+    return this._formService.getFormControl(
+      this.signUpForm,
+      this.formFields.gender
+    );
+  }
+
+  get genderErrorMessages() {
+    return this._formService.getErrorMessage(
+      this.signUpForm,
+      this.formFields.gender
+    );
+  }
+
+  get addressFormControl(): AbstractControl {
+    return this._formService.getFormControl(
+      this.signUpForm,
+      this.formFields.address
+    );
+  }
+
+  get addressErrorMessages() {
+    return this._formService.getErrorMessage(
+      this.signUpForm,
+      this.formFields.address
     );
   }
 }

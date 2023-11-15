@@ -1,63 +1,61 @@
-.outter-wrapper {
-  color: white;
+.wrapper-menu {
   position: sticky;
   top: 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 15vh;
+  height: 60px;
   background-color: black;
 
-  .inner-wrapper {
-    width: 80vw;
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    justify-content: space-between;
-    height: 60px;
+  .logo {
+    height: 45px;
+  }
 
-    .logo {
+  ul {
+    height: 100%;
+
+    li {
+      list-style-type: none;
+      list-style-position: inside;
+      cursor: pointer;
       height: 100%;
-      display: flex;
-      align-items: center;
-      align-content: center;
+      padding-left: 5px;
 
-      img {
-        border-radius: 50%;
-        width: 45px;
-        height: 45px;
-      }
-    }
-
-    ul {
-      height: 100%;
-
-      li {
-        list-style-type: none;
-        list-style-position: inside;
-        cursor: pointer;
+      .main-item {
+        padding: 0px 15px;
+        color: white;
         height: 100%;
+        display: flex;
+        align-items: center;
+        column-gap: 5px;
 
         &:hover {
+          background-color: #262626;
           color: red;
         }
 
-        span {
-          height: 100%;
-          display: flex;
-          align-items: center;
-          align-content: center;
+        img {
+          border-radius: 50%;
+          height: 35px;
+          width: 35px;
+        }
 
-          img {
-            border-radius: 50%;
-            height: 35px;
-            width: 35px;
-          }
-
-          .item-name {
-            margin-left: 5px;
-          }
+        .cart {
+          background-color: red;
+          color: white;
+          border-radius: 10px;
+          padding: 3px 8px;
+          font-size: 12px;
+          font-weight: bolder;
+          line-height: 12px;
+          margin-top: -15px;
         }
       }
 
-      .main-item {
-        margin: 0px 15px;
+      .selected {
+        background-color: #262626;
+        color: red;
       }
     }
   }

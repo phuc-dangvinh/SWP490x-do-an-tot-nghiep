@@ -1,55 +1,70 @@
-<div class="outter-wrapper">
-  <div class="inner-wrapper">
-    <span class="logo">
-      <img src="../../../../assets/images/we-re-growing.jpg" />
-    </span>
-    <ul ngbNav>
-      <ng-container *ngFor="let mainItem of mainItems">
-        <li
-          *ngIf="getSubItems(mainItem.group).length == 0"
-          ngbNavItem
+<div class="wrapper-menu">
+  <a href="https://www.funix.edu.vn" target="_blank">
+    <img class="logo" src="../../../../assets/icon/FUNiX-full-logo-crop.png" />
+  </a>
+  <ul ngbNav>
+    <ng-container *ngFor="let mainItem of mainItems">
+      <li *ngIf="getSubItems(mainItem.group).length == 0" ngbNavItem>
+        <div
           class="main-item"
+          [ngClass]="{
+            selected: mainItem.itemName == activeItem
+          }"
+          [routerLink]="mainItem.routerLink"
         >
-          <span [routerLink]="mainItem.routerLink">
-            <ng-container *ngTemplateOutlet="mainMenuDisplay"></ng-container>
-          </span>
-        </li>
-        <li
-          *ngIf="getSubItems(mainItem.group).length > 0"
-          ngbDropdown
+          <ng-container *ngTemplateOutlet="mainMenuDisplay"></ng-container>
+          <span
+            *ngIf="mainItem.itemName == itemName.CART && totalCartItems > 0"
+            class="cart"
+            >{{ totalCartItems }}</span
+          >
+        </div>
+      </li>
+      <li
+        *ngIf="getSubItems(mainItem.group).length > 0"
+        ngbDropdown
+        (openChange)="toggleMainItem($event)"
+      >
+        <div
+          ngbDropdownToggle
           class="main-item"
+          [ngClass]="{
+            selected:
+              mainItem.itemName == selectedToggleItem ||
+              mainItem.itemName == activeItem
+          }"
+          (click)="onSelectMainItem(mainItem)"
         >
-          <span ngbDropdownToggle>
-            <ng-container *ngTemplateOutlet="mainMenuDisplay"></ng-container>
-          </span>
-          <div ngbDropdownMenu>
-            <button
-              ngbDropdownItem
-              *ngFor="let subItem of getSubItems(mainItem.group)"
-              [routerLink]="subItem.routerLink"
-              (click)="clickSubItem(subItem)"
-            >
-              {{ subItem.displayName }}
-            </button>
-          </div>
-        </li>
-        <ng-template #mainMenuDisplay>
-          <i
-            *ngIf="mainItem.icon"
-            class="bi"
-            [class]="mainItem.icon"
-            style="font-size: 22px"
-          ></i>
-          <img
-            *ngIf="
-              currentUser?.avatar &&
-              mainItem.displayName == currentUser.fullname
-            "
-            [src]="currentUser.avatar"
-          />
-          <span class="item-name">{{ mainItem.displayName }}</span>
-        </ng-template>
-      </ng-container>
-    </ul>
-  </div>
+          <ng-container *ngTemplateOutlet="mainMenuDisplay"></ng-container>
+        </div>
+        <div ngbDropdownMenu>
+          <button
+            ngbDropdownItem
+            *ngFor="let subItem of getSubItems(mainItem.group)"
+            [routerLink]="subItem.routerLink"
+            (click)="onSelectSubItem(subItem)"
+          >
+            {{ subItem.displayName }}
+          </button>
+        </div>
+      </li>
+      <ng-template #mainMenuDisplay>
+        <i
+          *ngIf="mainItem.icon"
+          class="bi"
+          [class]="mainItem.icon"
+          style="font-size: 22px"
+        ></i>
+        <img
+          *ngIf="
+            currentUser &&
+            mainItem.displayName == currentUser.fullname &&
+            currentUser.avatar
+          "
+          [src]="rootApiRequest + '/file/get/' + currentUser.avatar"
+        />
+        <span class="item-name">{{ mainItem.displayName | uppercase }}</span>
+      </ng-template>
+    </ng-container>
+  </ul>
 </div>

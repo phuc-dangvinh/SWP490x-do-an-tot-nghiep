@@ -73,7 +73,6 @@ export class SearchProductComponent implements OnInit {
   }
 
   public onSearch() {
-    console.log('form value', this.formSearch.value);
     this.clickSearch.emit({
       keyword: this.formSearch.value.keyword,
       priceFrom: this.formSearch.value.price.priceFrom,

@@ -1,27 +1,38 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subject, takeUntil } from 'rxjs';
 import { EToastClass } from 'src/app/const/EToastClass';
 import { EToastMessage } from 'src/app/const/EToastMessage';
 import { rootApi } from 'src/app/enviroments/environment';
 import { Category } from 'src/app/interface/category.interface';
 import { Product } from 'src/app/interface/product.interface';
+import { CategoryService } from 'src/app/service/category.service';
 import { HttpService } from 'src/app/service/http.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { ConfirmDeleteComponent } from '../../share/pop-up-dialog/confirm-delete/confirm-delete.component';
 import { AddEditProductComponent } from '../pop-up/add-edit-product/add-edit-product.component';
+import { MenuService } from 'src/app/service/menu.service';
+import { ItemMenuName } from 'src/app/interface/menu-item.interface';
 
 @Component({
   selector: 'app-product-management',
   templateUrl: './product-management.component.html',
   styleUrls: ['./product-management.component.scss'],
 })
-export class ProductManagementComponent implements OnInit {
+export class ProductManagementComponent implements OnInit, OnDestroy {
   @ViewChild('addOrEditProduct') addOrEditProduct:
     | TemplateRef<AddEditProductComponent>
     | undefined;
   @ViewChild('confirmDeletePopup') confirmDeletePopup:
     | TemplateRef<ConfirmDeleteComponent>
     | undefined;
+  private unSubcribe$: Subject<void> = new Subject<void>();
   public productList: Product[] = [];
   public listCategories: Category[] = [];
   public isEdit: boolean = false;
@@ -39,15 +50,15 @@ export class ProductManagementComponent implements OnInit {
   constructor(
     private _httpService: HttpService,
     private _modalService: NgbModal,
-    private _toastService: ToastService
+    private _toastService: ToastService,
+    private _categoryService: CategoryService,
+    private _menuService: MenuService
   ) {}
 
   ngOnInit(): void {
-    this.getListProductByCategory();
-  }
-
-  public getListCategories(list: Category[]) {
-    this.listCategories = list;
+    this._menuService.setActiveMenu(ItemMenuName.MANAGEMENT);
+    this._categoryService.setCategorySelected = null;
+    this.getListProductsByCategorySelected();
   }
 
   public showPopupAddProduct() {
@@ -61,15 +72,21 @@ export class ProductManagementComponent implements OnInit {
     this._modalService.open(this.addOrEditProduct, { size: 'xl' });
   }
 
-  public onCategorySelected(category: Category) {
-    this.categorySelected = category;
-    this.getListProductByCategory();
+  private getListProductsByCategorySelected() {
+    this._categoryService.getCategorySelected
+      .pipe(takeUntil(this.unSubcribe$))
+      .subscribe((res) => {
+        if (res) {
+          this.categorySelected = res;
+        }
+        this.refreshListProducts();
+      });
   }
 
-  public getListProductByCategory() {
-    const url = `/product/get-by-category?id=${
-      this.categorySelected ? this.categorySelected.id : ''
-    }`;
+  public refreshListProducts() {
+    const url = this.categorySelected
+      ? `/product/get-by-category?id=${this.categorySelected.id}`
+      : '/product/get-all';
     this._httpService.get<Product[]>(url).subscribe((res) => {
       if (res) {
         this.productList = res.map((item) => ({
@@ -87,7 +104,6 @@ export class ProductManagementComponent implements OnInit {
     };
     const url = '/product/search';
     this._httpService.post<Product[]>(url, payload).subscribe((res) => {
-      console.log('res search', res);
       if (res) {
         this.productList = res.map((item) => ({
           ...item,
@@ -119,7 +135,7 @@ export class ProductManagementComponent implements OnInit {
       : [this.singleProductPendingDelete.id];
     this._httpService.post(url, payload).subscribe((res) => {
       if (res) {
-        this.getListProductByCategory();
+        this.refreshListProducts();
         this._modalService.dismissAll();
         this._toastService.showMessage(
           EToastClass.SUCCESS,
@@ -145,7 +161,10 @@ export class ProductManagementComponent implements OnInit {
 
   get checkedCheckAll(): boolean {
     this.getItemsOfPage();
-    return !this.itemsOfPage.some((item) => !item.checked);
+    return (
+      !this.itemsOfPage.some((item) => !item.checked) &&
+      this.itemsOfPage.length > 0
+    );
   }
 
   public changeCheckedCheckAll() {
@@ -158,5 +177,10 @@ export class ProductManagementComponent implements OnInit {
 
   public collectChecked() {
     this.listProductChecked = this.productList.filter((item) => item.checked);
+  }
+
+  ngOnDestroy(): void {
+    this.unSubcribe$.next();
+    this.unSubcribe$.complete();
   }
 }

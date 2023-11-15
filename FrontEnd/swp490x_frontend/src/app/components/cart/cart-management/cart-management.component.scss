@@ -1,0 +1,177 @@
+.cart-management {
+  display: flex;
+  column-gap: 50px;
+  max-height: calc(100vh - 100px);
+  overflow: auto;
+
+  .title {
+    font-size: 26px;
+    line-height: 34px;
+    font-weight: 500;
+  }
+
+  .total-amount {
+    color: rgb(189, 0, 0);
+    font-weight: bold;
+  }
+
+  .left {
+    width: 80%;
+
+    table {
+      width: 100%;
+
+      tr {
+        display: flex;
+        align-items: center;
+      }
+
+      td {
+        padding: 15px 8px;
+      }
+
+      .checkbox {
+        width: 5%;
+        display: flex;
+        justify-content: center;
+
+        input {
+          cursor: pointer;
+        }
+      }
+
+      .product-name {
+        width: 40%;
+      }
+
+      .unit-price {
+        width: 15%;
+      }
+
+      .quantity {
+        width: 15%;
+      }
+
+      .total-amount {
+        width: 15%;
+      }
+
+      .delete {
+        width: 10%;
+        display: flex;
+        justify-content: center;
+      }
+
+      thead {
+        background-color: #F8F8F8;
+
+        td {
+          font-size: 14px;
+          font-weight: bold;
+        }
+      }
+
+      tbody {
+
+        button {
+          width: 30px;
+          height: 30px;
+          background-color: white;
+        }
+
+        .product-name {
+          display: flex;
+          align-items: center;
+
+          img {
+            width: 50px;
+            margin-right: 10px;
+          }
+        }
+
+        .quantity {
+          display: flex;
+
+          button {
+            color: #BFBFBF;
+            border: 1px solid #D9D9D9;
+
+            &:hover {
+              color: black;
+            }
+          }
+
+          .quantity-value {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            border: 1px solid #D9D9D9;
+          }
+        }
+
+        .unit-price {
+          font-weight: bold;
+        }
+
+        .delete {
+          button {
+            color: rgb(119, 119, 119);
+            border: none;
+
+            &:hover {
+              color: black;
+            }
+          }
+        }
+      }
+    }
+
+    form {
+      .width-100 {
+        width: 100%;
+      }
+
+      .width-45 {
+        width: 45%;
+      }
+
+      .phone-email {
+        display: flex;
+        align-items: flex-end;
+        column-gap: 20px;
+      }
+
+      input[type="text"] {
+        height: 40px;
+      }
+
+      input[type="radio"] {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .right {
+    width: 20%;
+    padding-right: 20px;
+
+    .info-payment {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .order-btn {
+      width: 100%;
+      height: 50px;
+      background-color: rgb(189, 0, 0);
+      color: white;
+      border: none;
+
+      &:hover {
+        background-color: red;
+        transition: 0.4s;
+      }
+    }
+  }
+}

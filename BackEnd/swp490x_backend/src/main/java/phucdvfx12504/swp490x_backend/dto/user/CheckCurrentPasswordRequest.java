@@ -1,14 +1,8 @@
 package phucdvfx12504.swp490x_backend.dto.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
 public class CheckCurrentPasswordRequest {
   private String email;
   private String password;
