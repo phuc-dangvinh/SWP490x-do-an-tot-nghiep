@@ -1,1 +1,1 @@
-export const rootApi = 'http://localhost:8080/api';
+export const rootApi = 'http://localhost:8080/phucdv-fx12504/api';
