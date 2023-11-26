@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { assetsPath } from 'src/app/enviroments/environment';
 import { ItemMenuName } from 'src/app/interface/menu-item.interface';
 import { MenuService } from 'src/app/service/menu.service';
 
@@ -8,6 +9,8 @@ import { MenuService } from 'src/app/service/menu.service';
   styleUrls: ['./about.component.scss'],
 })
 export class AboutComponent implements OnInit {
+  public assetsPath = assetsPath;
+  
   constructor(private _menuService: MenuService) {}
 
   ngOnInit(): void {

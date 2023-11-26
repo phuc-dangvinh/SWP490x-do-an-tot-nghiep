@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ROLE } from 'src/app/const/ERole';
 import { menuItems } from 'src/app/const/menu-items';
-import { rootApi } from 'src/app/enviroments/environment';
+import { assetsPath, rootApi } from 'src/app/enviroments/environment';
 import {
   GroupMenu,
   ItemMenuName,
@@ -24,6 +24,7 @@ export class MenuBarComponent implements OnInit, OnDestroy {
   public currentUser: User | undefined;
   private menuItems: MenuItem[] = menuItems;
   public rootApiRequest = rootApi;
+  public assetsPath = assetsPath;
   public selectedToggleItem: string = '';
   public activeItem: string = '';
   public totalCartItems: number = 0;
